@@ -1,0 +1,7 @@
+class MockProductFinalize {
+  json() {
+    return '''
+      {}
+    ''';
+  }
+}
