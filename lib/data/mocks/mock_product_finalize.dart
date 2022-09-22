@@ -1,7 +1,0 @@
-class MockProductFinalize {
-  json() {
-    return '''
-      {}
-    ''';
-  }
-}

@@ -1,4 +1,4 @@
-class MockUserData {
+class MockMyWords {
   json() {
     return '''
       [

@@ -1,4 +1,4 @@
-class MockUserData {
+class MockUserFlow {
   json() {
     return '''
       [

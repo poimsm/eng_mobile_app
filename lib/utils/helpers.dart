@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'dart:math';
@@ -57,4 +59,20 @@ DjangoError extractErrorFromDjangoHTML(String? html) {
   }
 
   return DjangoError(title: title, message: errorMsg);
+}
+
+printInfo(String text) {
+  print('\x1B[37m 👻 $text\x1B[0m');
+}
+
+printDebug(String text) {
+  print('\x1B[32m 🐛 $text\x1B[0m');
+}
+
+printWarning(String text) {
+  print('\x1B[33m ⚠️ $text\x1B[0m');
+}
+
+printError(String text) {
+  print('\x1B[31m ⛔ $text\x1B[0m');
 }

@@ -31,12 +31,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_riverpod: ^1.0.4
   provider: ^6.0.3
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  freezed_annotation: ^2.1.0
+  json_annotation: ^4.6.0
+  shared_preferences: ^2.0.15
+  get_it: ^7.2.0
+  flutter_native_splash: ^2.2.9
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +50,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.2.1
+  freezed: ^2.1.0+1
+  json_serializable: ^6.3.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,6 +64,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -90,3 +98,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/fox.png
+  branding: assets/user.png
+  fullscreen: false
+  web: false
+  ios: false
