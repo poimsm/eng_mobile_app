@@ -23,8 +23,9 @@ mixin _$Activity {
   String get type => throw _privateConstructorUsedError;
   Question? get question => throw _privateConstructorUsedError;
   Word? get word => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_activity')
   ImageActivity? get imageActivity => throw _privateConstructorUsedError;
-  Design? get design => throw _privateConstructorUsedError;
+  Design get design => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,13 +41,13 @@ abstract class $ActivityCopyWith<$Res> {
       {String type,
       Question? question,
       Word? word,
-      ImageActivity? imageActivity,
-      Design? design});
+      @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
+      Design design});
 
   $QuestionCopyWith<$Res>? get question;
   $WordCopyWith<$Res>? get word;
   $ImageActivityCopyWith<$Res>? get imageActivity;
-  $DesignCopyWith<$Res>? get design;
+  $DesignCopyWith<$Res> get design;
 }
 
 /// @nodoc
@@ -85,7 +86,7 @@ class _$ActivityCopyWithImpl<$Res> implements $ActivityCopyWith<$Res> {
       design: design == freezed
           ? _value.design
           : design // ignore: cast_nullable_to_non_nullable
-              as Design?,
+              as Design,
     ));
   }
 
@@ -123,12 +124,8 @@ class _$ActivityCopyWithImpl<$Res> implements $ActivityCopyWith<$Res> {
   }
 
   @override
-  $DesignCopyWith<$Res>? get design {
-    if (_value.design == null) {
-      return null;
-    }
-
-    return $DesignCopyWith<$Res>(_value.design!, (value) {
+  $DesignCopyWith<$Res> get design {
+    return $DesignCopyWith<$Res>(_value.design, (value) {
       return _then(_value.copyWith(design: value));
     });
   }
@@ -144,8 +141,8 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
       {String type,
       Question? question,
       Word? word,
-      ImageActivity? imageActivity,
-      Design? design});
+      @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
+      Design design});
 
   @override
   $QuestionCopyWith<$Res>? get question;
@@ -154,7 +151,7 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
   @override
   $ImageActivityCopyWith<$Res>? get imageActivity;
   @override
-  $DesignCopyWith<$Res>? get design;
+  $DesignCopyWith<$Res> get design;
 }
 
 /// @nodoc
@@ -195,7 +192,7 @@ class __$$_ActivityCopyWithImpl<$Res> extends _$ActivityCopyWithImpl<$Res>
       design: design == freezed
           ? _value.design
           : design // ignore: cast_nullable_to_non_nullable
-              as Design?,
+              as Design,
     ));
   }
 }
@@ -207,8 +204,8 @@ class _$_Activity implements _Activity {
       {required this.type,
       this.question,
       this.word,
-      this.imageActivity,
-      this.design});
+      @JsonKey(name: 'image_activity') this.imageActivity,
+      required this.design});
 
   factory _$_Activity.fromJson(Map<String, dynamic> json) =>
       _$$_ActivityFromJson(json);
@@ -220,9 +217,10 @@ class _$_Activity implements _Activity {
   @override
   final Word? word;
   @override
+  @JsonKey(name: 'image_activity')
   final ImageActivity? imageActivity;
   @override
-  final Design? design;
+  final Design design;
 
   @override
   String toString() {
@@ -270,8 +268,8 @@ abstract class _Activity implements Activity {
       {required final String type,
       final Question? question,
       final Word? word,
-      final ImageActivity? imageActivity,
-      final Design? design}) = _$_Activity;
+      @JsonKey(name: 'image_activity') final ImageActivity? imageActivity,
+      required final Design design}) = _$_Activity;
 
   factory _Activity.fromJson(Map<String, dynamic> json) = _$_Activity.fromJson;
 
@@ -282,9 +280,10 @@ abstract class _Activity implements Activity {
   @override
   Word? get word;
   @override
+  @JsonKey(name: 'image_activity')
   ImageActivity? get imageActivity;
   @override
-  Design? get design;
+  Design get design;
   @override
   @JsonKey(ignore: true)
   _$$_ActivityCopyWith<_$_Activity> get copyWith =>
@@ -299,6 +298,7 @@ Word _$WordFromJson(Map<String, dynamic> json) {
 mixin _$Word {
   int get id => throw _privateConstructorUsedError;
   String get word => throw _privateConstructorUsedError;
+  String? get meaning => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -309,7 +309,7 @@ mixin _$Word {
 abstract class $WordCopyWith<$Res> {
   factory $WordCopyWith(Word value, $Res Function(Word) then) =
       _$WordCopyWithImpl<$Res>;
-  $Res call({int id, String word});
+  $Res call({int id, String word, String? meaning});
 }
 
 /// @nodoc
@@ -324,6 +324,7 @@ class _$WordCopyWithImpl<$Res> implements $WordCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? word = freezed,
+    Object? meaning = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -334,6 +335,10 @@ class _$WordCopyWithImpl<$Res> implements $WordCopyWith<$Res> {
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
+      meaning: meaning == freezed
+          ? _value.meaning
+          : meaning // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -343,7 +348,7 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
   factory _$$_WordCopyWith(_$_Word value, $Res Function(_$_Word) then) =
       __$$_WordCopyWithImpl<$Res>;
   @override
-  $Res call({int id, String word});
+  $Res call({int id, String word, String? meaning});
 }
 
 /// @nodoc
@@ -359,6 +364,7 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? word = freezed,
+    Object? meaning = freezed,
   }) {
     return _then(_$_Word(
       id: id == freezed
@@ -369,6 +375,10 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res>
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
+      meaning: meaning == freezed
+          ? _value.meaning
+          : meaning // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -376,7 +386,7 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Word implements _Word {
-  const _$_Word({required this.id, required this.word});
+  const _$_Word({required this.id, required this.word, this.meaning});
 
   factory _$_Word.fromJson(Map<String, dynamic> json) => _$$_WordFromJson(json);
 
@@ -384,10 +394,12 @@ class _$_Word implements _Word {
   final int id;
   @override
   final String word;
+  @override
+  final String? meaning;
 
   @override
   String toString() {
-    return 'Word(id: $id, word: $word)';
+    return 'Word(id: $id, word: $word, meaning: $meaning)';
   }
 
   @override
@@ -396,7 +408,8 @@ class _$_Word implements _Word {
         (other.runtimeType == runtimeType &&
             other is _$_Word &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.word, word));
+            const DeepCollectionEquality().equals(other.word, word) &&
+            const DeepCollectionEquality().equals(other.meaning, meaning));
   }
 
   @JsonKey(ignore: true)
@@ -404,7 +417,8 @@ class _$_Word implements _Word {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(word));
+      const DeepCollectionEquality().hash(word),
+      const DeepCollectionEquality().hash(meaning));
 
   @JsonKey(ignore: true)
   @override
@@ -420,8 +434,10 @@ class _$_Word implements _Word {
 }
 
 abstract class _Word implements Word {
-  const factory _Word({required final int id, required final String word}) =
-      _$_Word;
+  const factory _Word(
+      {required final int id,
+      required final String word,
+      final String? meaning}) = _$_Word;
 
   factory _Word.fromJson(Map<String, dynamic> json) = _$_Word.fromJson;
 
@@ -429,6 +445,8 @@ abstract class _Word implements Word {
   int get id;
   @override
   String get word;
+  @override
+  String? get meaning;
   @override
   @JsonKey(ignore: true)
   _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
@@ -442,6 +460,8 @@ Design _$DesignFromJson(Map<String, dynamic> json) {
 mixin _$Design {
   @JsonKey(name: 'background_color')
   String get backgroundColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'word_background_color')
+  String get wordBackgroundColor => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -452,7 +472,9 @@ mixin _$Design {
 abstract class $DesignCopyWith<$Res> {
   factory $DesignCopyWith(Design value, $Res Function(Design) then) =
       _$DesignCopyWithImpl<$Res>;
-  $Res call({@JsonKey(name: 'background_color') String backgroundColor});
+  $Res call(
+      {@JsonKey(name: 'background_color') String backgroundColor,
+      @JsonKey(name: 'word_background_color') String wordBackgroundColor});
 }
 
 /// @nodoc
@@ -466,11 +488,16 @@ class _$DesignCopyWithImpl<$Res> implements $DesignCopyWith<$Res> {
   @override
   $Res call({
     Object? backgroundColor = freezed,
+    Object? wordBackgroundColor = freezed,
   }) {
     return _then(_value.copyWith(
       backgroundColor: backgroundColor == freezed
           ? _value.backgroundColor
           : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as String,
+      wordBackgroundColor: wordBackgroundColor == freezed
+          ? _value.wordBackgroundColor
+          : wordBackgroundColor // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -481,7 +508,9 @@ abstract class _$$_DesignCopyWith<$Res> implements $DesignCopyWith<$Res> {
   factory _$$_DesignCopyWith(_$_Design value, $Res Function(_$_Design) then) =
       __$$_DesignCopyWithImpl<$Res>;
   @override
-  $Res call({@JsonKey(name: 'background_color') String backgroundColor});
+  $Res call(
+      {@JsonKey(name: 'background_color') String backgroundColor,
+      @JsonKey(name: 'word_background_color') String wordBackgroundColor});
 }
 
 /// @nodoc
@@ -496,11 +525,16 @@ class __$$_DesignCopyWithImpl<$Res> extends _$DesignCopyWithImpl<$Res>
   @override
   $Res call({
     Object? backgroundColor = freezed,
+    Object? wordBackgroundColor = freezed,
   }) {
     return _then(_$_Design(
       backgroundColor: backgroundColor == freezed
           ? _value.backgroundColor
           : backgroundColor // ignore: cast_nullable_to_non_nullable
+              as String,
+      wordBackgroundColor: wordBackgroundColor == freezed
+          ? _value.wordBackgroundColor
+          : wordBackgroundColor // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -510,7 +544,10 @@ class __$$_DesignCopyWithImpl<$Res> extends _$DesignCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Design implements _Design {
   const _$_Design(
-      {@JsonKey(name: 'background_color') required this.backgroundColor});
+      {@JsonKey(name: 'background_color')
+          required this.backgroundColor,
+      @JsonKey(name: 'word_background_color')
+          required this.wordBackgroundColor});
 
   factory _$_Design.fromJson(Map<String, dynamic> json) =>
       _$$_DesignFromJson(json);
@@ -518,10 +555,13 @@ class _$_Design implements _Design {
   @override
   @JsonKey(name: 'background_color')
   final String backgroundColor;
+  @override
+  @JsonKey(name: 'word_background_color')
+  final String wordBackgroundColor;
 
   @override
   String toString() {
-    return 'Design(backgroundColor: $backgroundColor)';
+    return 'Design(backgroundColor: $backgroundColor, wordBackgroundColor: $wordBackgroundColor)';
   }
 
   @override
@@ -530,13 +570,17 @@ class _$_Design implements _Design {
         (other.runtimeType == runtimeType &&
             other is _$_Design &&
             const DeepCollectionEquality()
-                .equals(other.backgroundColor, backgroundColor));
+                .equals(other.backgroundColor, backgroundColor) &&
+            const DeepCollectionEquality()
+                .equals(other.wordBackgroundColor, wordBackgroundColor));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(backgroundColor));
+      runtimeType,
+      const DeepCollectionEquality().hash(backgroundColor),
+      const DeepCollectionEquality().hash(wordBackgroundColor));
 
   @JsonKey(ignore: true)
   @override
@@ -554,13 +598,18 @@ class _$_Design implements _Design {
 abstract class _Design implements Design {
   const factory _Design(
       {@JsonKey(name: 'background_color')
-          required final String backgroundColor}) = _$_Design;
+          required final String backgroundColor,
+      @JsonKey(name: 'word_background_color')
+          required final String wordBackgroundColor}) = _$_Design;
 
   factory _Design.fromJson(Map<String, dynamic> json) = _$_Design.fromJson;
 
   @override
   @JsonKey(name: 'background_color')
   String get backgroundColor;
+  @override
+  @JsonKey(name: 'word_background_color')
+  String get wordBackgroundColor;
   @override
   @JsonKey(ignore: true)
   _$$_DesignCopyWith<_$_Design> get copyWith =>

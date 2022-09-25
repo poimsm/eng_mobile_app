@@ -2,8 +2,8 @@
 
 abstract class Routes {
   static const HOME = '/home';
-  static const WORDS = '/words';
-  static const NEW_WORD = '/new-word';
+  static const WORD_LIST = '/word-list';
+  static const WORD_DETAIL = '/word-detail';
   static const LOGIN = '/login';
   static const CHALLENGE = '/challenge';
 }

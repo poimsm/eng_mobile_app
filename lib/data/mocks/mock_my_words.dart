@@ -4,27 +4,33 @@ class MockMyWords {
       [
         {
             "id": 1,
-            "word": "Awkward"
+            "word": "Awkward",
+            "meaning": null
         },
         {
             "id": 2,
-            "word": "Bye"
+            "word": "Bye",
+            "meaning": "Stuff like icon, set the border with"
         },
         {
             "id": 3,
-            "word": "Hey There Fully"
+            "word": "Hey There Fully",
+            "meaning": null
         },
         {
             "id": 4,
-            "word": "Morning"
+            "word": "Morning",
+            "meaning": "Stuff like icon, set the border with"
         },
         {
             "id": 5,
-            "word": "Afternoon"
+            "word": "Afternoon",
+            "meaning": "Stuff like icon, set the border with"
         },
         {
             "id": 6,
-            "word": "Lunch"
+            "word": "Lunch",
+            "meaning": "Stuff like icon, set the border with"
         }
       ]
   ''';

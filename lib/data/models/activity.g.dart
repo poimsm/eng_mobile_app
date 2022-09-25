@@ -14,13 +14,11 @@ _$_Activity _$$_ActivityFromJson(Map<String, dynamic> json) => _$_Activity(
       word: json['word'] == null
           ? null
           : Word.fromJson(json['word'] as Map<String, dynamic>),
-      imageActivity: json['imageActivity'] == null
+      imageActivity: json['image_activity'] == null
           ? null
           : ImageActivity.fromJson(
-              json['imageActivity'] as Map<String, dynamic>),
-      design: json['design'] == null
-          ? null
-          : Design.fromJson(json['design'] as Map<String, dynamic>),
+              json['image_activity'] as Map<String, dynamic>),
+      design: Design.fromJson(json['design'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
@@ -28,26 +26,30 @@ Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
       'type': instance.type,
       'question': instance.question,
       'word': instance.word,
-      'imageActivity': instance.imageActivity,
+      'image_activity': instance.imageActivity,
       'design': instance.design,
     };
 
 _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
       id: json['id'] as int,
       word: json['word'] as String,
+      meaning: json['meaning'] as String?,
     );
 
 Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'id': instance.id,
       'word': instance.word,
+      'meaning': instance.meaning,
     };
 
 _$_Design _$$_DesignFromJson(Map<String, dynamic> json) => _$_Design(
       backgroundColor: json['background_color'] as String,
+      wordBackgroundColor: json['word_background_color'] as String,
     );
 
 Map<String, dynamic> _$$_DesignToJson(_$_Design instance) => <String, dynamic>{
       'background_color': instance.backgroundColor,
+      'word_background_color': instance.wordBackgroundColor,
     };
 
 _$_ImageActivity _$$_ImageActivityFromJson(Map<String, dynamic> json) =>

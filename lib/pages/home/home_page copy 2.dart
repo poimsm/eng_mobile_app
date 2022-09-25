@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
-import 'package:eng_mobile_app/pages/progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
@@ -28,7 +27,7 @@ class HomePageState extends ConsumerState<HomePage> {
 
   List<Activity> acts = [];
 
-  late HomeState homeState;
+  late HomeState state;
 
   @override
   void initState() {
@@ -47,12 +46,12 @@ class HomePageState extends ConsumerState<HomePage> {
     print('build <---');
     // final counter = ref.watch(homeProvider); 0xff726396
     size = MediaQuery.of(context).size;
-    homeState = ref.watch(homeProvider);
+    state = ref.watch(homeProvider);
     return Container(
         height: size.height,
         width: size.width,
-        color: homeState.isLoading ? Colors.black : homeState.activity!.design.backgroundColor.toColor(),
-        child: homeState.isLoading
+        color: state.isLoading ? Colors.black : state.activity!.design.backgroundColor.toColor(),
+        child: state.isLoading
             ? _loader()
             : SafeArea(
                 child: Stack(
@@ -64,14 +63,13 @@ class HomePageState extends ConsumerState<HomePage> {
                     // Text('${counter.isLoading} HEEEEEY'),
                     // if(false)_loadingBar(),
                     // _image(),
-                    if (homeState.isRecording)
+                    if (state.isRecording)
                       Positioned(
                         right: 0,
                         top: 10,
-                        child: ProgressBar(),
-                        // child: _loadingBar(),
+                        child: _loadingBar(),
                       ),
-                    if (!homeState.isRecording && false)
+                    if (!state.isRecording && false)
                       Positioned(
                         right: 20,
                         top: 20,
@@ -87,7 +85,7 @@ class HomePageState extends ConsumerState<HomePage> {
                       left: 0,
                       child: _question(),
                     ),
-                    if (!homeState.isRecording && homeState.activity!.word != null && homeState.showChallenge)
+                    if (!state.isRecording && state.activity!.word != null && state.showChallenge)
                       Positioned(
                         left: 20,
                         top: 40,
@@ -106,12 +104,12 @@ class HomePageState extends ConsumerState<HomePage> {
                       bottom: 10,
                       child: _ctrlBtns(),
                     ),
-                    if(homeState.isRecording && homeState.challengeState == ChallengeStates.accepted)Positioned(
+                    if(state.isRecording && state.challengeState == ChallengeStates.accepted)Positioned(
                       left: size.width*0.4,
                       bottom: 120,
                       child: _challengeWord(),
                     ),
-                    if(homeState.hasAudioSaved)Positioned(
+                    if(state.hasAudioSaved)Positioned(
                       right: 20,
                       top: size.height*0.6,
                       child: _audioBtn(),
@@ -171,7 +169,7 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   _challenge() {
-    final accepted = homeState.challengeState == ChallengeStates.accepted;
+    final accepted = state.challengeState == ChallengeStates.accepted;
     return InkWell(
       onTap: () {
         _presentActionSheet();
@@ -184,7 +182,7 @@ class HomePageState extends ConsumerState<HomePage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           // color: Color(0xff44546A),
-          color: homeState.activity!.design.wordBackgroundColor.toColor(),
+          color: state.activity!.design.wordBackgroundColor.toColor(),
 
           // boxShadow: [
           //           BoxShadow(
@@ -201,7 +199,7 @@ class HomePageState extends ConsumerState<HomePage> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
-            accepted ? '  ${homeState.activity!.word!.word}' : '  #Challenge',
+            accepted ? '  ${state.activity!.word!.word}' : '  #Challenge',
             style: TextStyle(
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -272,8 +270,9 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   _question() {
+    print('_question <-----');
     // final isLoading = ref.watch(homeProvider.select((state) => state.isLoading));
-    Activity activity = homeState.activity!;
+    Activity activity = state.activity!;
     String msg = activity.type == 'question'
         ? activity.question!.question
         : 'Describe the picture!';
@@ -281,7 +280,7 @@ class HomePageState extends ConsumerState<HomePage> {
         color: Colors.black.withOpacity(0.4),
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
         width: size.width,
-        child: homeState.loadingNextActivity?  SpinKitThreeBounce(
+        child: state.loadingNextActivity?  SpinKitThreeBounce(
   color: Colors.white,
   size: 35.0,
 ): Text(
@@ -323,7 +322,7 @@ class HomePageState extends ConsumerState<HomePage> {
   _image() {
     print('_image <---');
     // final isLoading = ref.watch(homeProvider.select((state) => state.isLoading));
-    final act = homeState.activity!;
+    final act = state.activity!;
     final isQuestion = act.type == 'question';
     final imageUrl = isQuestion ? act.question!.imageUrl : act.imageActivity!.imageUrl;
     return SizedBox(
@@ -367,6 +366,42 @@ class HomePageState extends ConsumerState<HomePage> {
         _micBtn(),
         _onNextBtn(),
       ]),
+    );
+  }
+
+  _ctrlBtns2() {
+    return Stack(
+      children: [
+        Container(
+          // color: Colors.yellow,
+          width: size.width,
+          height: size.height * 0.15,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            _myWordsBtn(),
+            // Container(
+            //   padding: EdgeInsets.only(bottom: 80),
+            //   child: _micBtn(),
+            // ),
+            // Stack(
+            //   children: [
+            //     _micBtn(),
+            //     Positioned(
+            //               left: 0,
+            //               bottom: 10,
+            //               child: _challengeWord(),
+            //             )
+            //   ],
+            // ),
+            _micBtn(),
+            _onNextBtn(),
+          ]),
+        ),
+          Positioned(
+            left: size.width*0.5,
+            bottom: 100,
+            child: _challengeWord(),
+          )
+      ],
     );
   }
 
@@ -448,7 +483,7 @@ class HomePageState extends ConsumerState<HomePage> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             // borderRadius: BorderRadius.circular(30),
-            color: Color(0xff8D57FF).withOpacity(homeState.isRecording ? 0.65 : 0.8),
+            color: Color(0xff8D57FF).withOpacity(state.isRecording ? 0.65 : 0.8),
           ),
           child: Icon(Icons.mic, color: Colors.white, size: 70),
         ),
@@ -465,18 +500,48 @@ class HomePageState extends ConsumerState<HomePage> {
         // setState(() {});
       },
       child: Container(
-        padding: EdgeInsets.all(homeState.isRecording ? 27 : 12),
+        padding: EdgeInsets.all(state.isRecording ? 27 : 12),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           // borderRadius: BorderRadius.circular(30),
-          color: Color(0xff8D57FF).withOpacity(homeState.isRecording ? 0.65 : 0.8),
+          color: Color(0xff8D57FF).withOpacity(state.isRecording ? 0.65 : 0.8),
         ),
-        child: Icon(homeState.isRecording ? Icons.pause : Icons.mic, color: Colors.white, size: homeState.isRecording ? 40 : 70),
+        child: Icon(state.isRecording ? Icons.pause : Icons.mic, color: Colors.white, size: state.isRecording ? 40 : 70),
       ),
     );
   }
 
-
+  _micBtn3() {
+    return InkWell(
+      onLongPress: () {
+        print('onTapDown');
+        ref.read(homeProvider.notifier).startRecording();
+        // isRecording = true;        
+        // setState(() {});
+      },
+      onTapUp: (_) {
+        print('onTapUp');
+        ref.read(homeProvider.notifier).stopRecording();
+        // isRecording = false;        
+        // setState(() {});
+      },
+      onTapCancel: () {
+        print('onTapCancel');
+        ref.read(homeProvider.notifier).stopRecording();
+        // isRecording = false;
+        // setState(() {});        
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          // borderRadius: BorderRadius.circular(30),
+          color: Color(0xff8D57FF).withOpacity(state.isRecording ? 0.65 : 0.8),
+        ),
+        child: Icon(Icons.mic, color: Colors.white, size: 70),
+      ),
+    );
+  }
 
   void _presentActionSheet() async {
     showModalBottomSheet(
@@ -503,6 +568,14 @@ class HomePageState extends ConsumerState<HomePage> {
             child: Stack(
               children: [
                 SizedBox(),
+                // Text('Try to use this word in your answer 👇', style: TextStyle(
+                //   fontSize: 19,
+                //   color: Color(0xff555555)
+                // ),),
+                // Text('MEANING:', style: TextStyle(
+                //   fontSize: 18,
+                //   color: Color(0xff777777)
+                // ),),
                 Container(
                     width: size.width - 80,
                     height: 220,
@@ -514,6 +587,19 @@ class HomePageState extends ConsumerState<HomePage> {
                       ),),
                     ),
                   ),
+                // Positioned(
+                //   top: 50,
+                //   child: Container(
+                //     width: size.width - 120,
+                //     height: 100,
+                //     child: Center(
+                //       child: Text('Speeding Up in the morning after today', textAlign: TextAlign.center, style: TextStyle(
+                //         fontSize: 24,
+                //         color: Color(0xff6E5AA0)
+                //       ),),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   top: 10,
                   left: 0,
@@ -576,7 +662,9 @@ _infoBoxMeaning(Size size) {
 
 _infoBoxWord(Size size) {
   return Container(
+            // width: size.width*0.96,
             padding: EdgeInsets.symmetric(vertical:40, horizontal: 60),
+            // height: 220,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -585,84 +673,46 @@ _infoBoxWord(Size size) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-                if(state == ChallengeStates.instructions) Text('Try to use this word in your answer 👇', style: TextStyle(
+                Text('Try to use this word in your answer 👇', style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff555555)
                 ),),
-
-                if(state == ChallengeStates.meaning) SizedBox(
-                  width: double.infinity,
-                  child: Text('MEANING:', style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff777777)
-                  ),),
-                ), 
-               
-                if(state == ChallengeStates.example) Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('EXAMPLE', style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff777777)
-                  ),),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      // shape: BoxShape.circle,
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey.withOpacity(0.1)
-                    ),
-                    child: Icon(Icons.pause, color: Color(0xff9889BD), size: 25))
-                  ],
-                ),                              
-                SizedBox(height: 25,),
-                Text(state == ChallengeStates.instructions? homeState.activity!.word!.word : homeState.activity!.word!.meaning!, textAlign: TextAlign.center, style: TextStyle(
-                        fontSize: state == ChallengeStates.example? 24 : 26,
-                        color: state == ChallengeStates.example? Color(0xff6E5AA0): Colors.black87
+                // Text('MEANING:', style: TextStyle(
+                //   fontSize: 18,
+                //   color: Color(0xff777777)
+                // ),),
+                SizedBox(height: 15,),
+                Text('Speeding Up right now!', textAlign: TextAlign.center, style: TextStyle(
+                        fontSize: 26,
+                        color: Colors.black87
                       ),),
 
                 SizedBox(height: 35,),
 
-                if(state == ChallengeStates.instructions) InkWell(
-                  onTap: () {
-                    state = ChallengeStates.example;
-                    setState(() {});
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                    child: Text('EXAMPLE', textAlign: TextAlign.center, style: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xff6E5AA0),
-                            fontWeight: FontWeight.normal
-                          ),),
-                  ),
-                ),
+                Text('EXAMPLE', textAlign: TextAlign.center, style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff6E5AA0),
+                        fontWeight: FontWeight.bold
+                      ),),
               ],
             )
           );
 }
 
 _meaningBtn() {
-          return InkWell(
-            onTap: () {
-              state = ChallengeStates.meaning;
-              setState(() {});
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white,),
-                borderRadius: BorderRadius.circular(5)
-              ),
-              child: Text('MEANING', style: TextStyle(
-                color: Colors.white,
-                fontSize: 15
-              ),),
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white,),
+              borderRadius: BorderRadius.circular(5)
             ),
+            child: Text('MEANING', style: TextStyle(
+              color: Colors.white,
+              fontSize: 15
+            ),),
           );
         }
-        _header() {
+        _head() {
           return Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -680,7 +730,7 @@ _meaningBtn() {
                   fontSize: 16,
                 ),),
               ],),
-              if(homeState.activity!.word!.meaning != null)_meaningBtn()
+              _meaningBtn()
             ],),
           );
         }
@@ -696,13 +746,11 @@ _meaningBtn() {
         // ),
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          _header(),
+          _head(),
           SizedBox(height: 6,),
-          // if(state == ChallengeStates.instructions) _infoBoxWord(size),
-          _infoBoxWord(size),
-          // _infoBoxMeaning(size),
+          if(state == ChallengeStates.instructions) _infoBoxWord(size),
           // if(wordStep == WordActionStep.meaning) _infoBoxMeaning(size),
-          // if(state == ChallengeStates.example) _infoBoxExample(size),
+          if(state == ChallengeStates.example) _infoBoxExample(size),
 
           InkWell(
             onTap: () {
