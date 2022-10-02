@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/progress_bar.dart';
+import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
@@ -51,7 +52,7 @@ class HomePageState extends ConsumerState<HomePage> {
     return Container(
         height: size.height,
         width: size.width,
-        color: homeState.isLoading ? Colors.black : homeState.activity!.design.backgroundColor.toColor(),
+        color: homeState.isLoading ? Colors.black : homeState.activity!.style.backgroundScreen.toColor(),
         child: homeState.isLoading
             ? _loader()
             : SafeArea(
@@ -130,15 +131,20 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   _audioBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      // padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        // shape: BoxShape.circle,
-        color: Colors.black.withOpacity(0.3)
+    return InkWell(
+      onTap: () {
+        ref.read(homeProvider.notifier).playAudio();
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        // padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          // shape: BoxShape.circle,
+          color: Colors.black.withOpacity(0.3)
+        ),
+        child: Image.asset('assets/audio.png', width: 35, color: Colors.white),
       ),
-      child: Image.asset('assets/audio.png', width: 35, color: Colors.white),
     );
   }
 
@@ -154,7 +160,7 @@ class HomePageState extends ConsumerState<HomePage> {
             borderRadius: BorderRadius.circular(6),
             border: Border.all(color: Color(0xff8497B0))
           ),
-          child: Text('Speed up!', style: TextStyle(
+          child: Text(homeState.activity!.word!.word, style: TextStyle(
             color: Colors.white,
             fontSize: 18,        
           ),),
@@ -184,7 +190,7 @@ class HomePageState extends ConsumerState<HomePage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           // color: Color(0xff44546A),
-          color: homeState.activity!.design.wordBackgroundColor.toColor(),
+          color: homeState.activity!.style.backgroundWord.toColor(),
 
           // boxShadow: [
           //           BoxShadow(
@@ -277,6 +283,7 @@ class HomePageState extends ConsumerState<HomePage> {
     String msg = activity.type == 'question'
         ? activity.question!.question
         : 'Describe the picture!';
+
     return Container(
         color: Colors.black.withOpacity(0.4),
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
@@ -389,6 +396,7 @@ class HomePageState extends ConsumerState<HomePage> {
   _onNextBtn() {
     return InkWell(
       onTap: () {
+        // ref.read(homeProvider.notifier).playAudio();
         ref.read(homeProvider.notifier).onNextActivity();
       },
       child: Container(
@@ -402,65 +410,15 @@ class HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  _micBtn2() {
-
-    void onStop() {
-      print('onStop---------🔵🔵🔵');
-      ref.read(homeProvider.notifier).stopRecording();
-      // if (!audioProvider.isTalking) return;
-      // timer.cancel();
-      // _time = 0;
-      // if (!isRecording) return;
-      // timerProvider.stop();
-      // audioProvider.stopRecording();
-    }
-
-    Future<void> onStart() async {
-      print('onStart---------');
-      ref.read(homeProvider.notifier).startRecording();
-      // timer = Timer.periodic(Duration(milliseconds: 500), (timer) {
-      //   _time += 1;
-      //   if (_time >= 120) onStop();
-      // });
-      // audioProvider.reset(setState: true);
-      // isRecording = await audioProvider.startRecording();
-      // if (!isRecording) return;
-      // timerProvider.start();
-    }
-
-
-    return InkWell(
-      onTapDown: (_) {
-        onStart();
-      },
-      onTapUp: (_) {
-        print('onStop---------🟠🟠🟠');
-        ref.read(homeProvider.notifier).stopRecording();
-      },
-      // onTapCancel: () {
-      //   print('onTapCancel');
-      //   ref.read(homeProvider.notifier).stopRecording();       
-      // },
-      child: Listener(
-        onPointerUp: (e) => onStop(),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            // borderRadius: BorderRadius.circular(30),
-            color: Color(0xff8D57FF).withOpacity(homeState.isRecording ? 0.65 : 0.8),
-          ),
-          child: Icon(Icons.mic, color: Colors.white, size: 70),
-        ),
-      ),
-    );
-  }
-
   _micBtn() {
     return InkWell(
       onTap: () {
         print('onTapDown');
         ref.read(homeProvider.notifier).toggleRecording();
+        // ref.read(homeProvider.notifier).playAudio();
+        // ref.read(homeProvider.notifier).recordMic();
+
+        // ref.read(homeProvider.notifier).speaplayAudiok('heeey');
         // isRecording = true;        
         // setState(() {});
       },
@@ -485,96 +443,86 @@ class HomePageState extends ConsumerState<HomePage> {
         builder: (context) {
 
           ChallengeStates state = ChallengeStates.instructions;
+          List<Map> example = [
+              {
+                'text': 'Hello this is me oscar the great!',
+                'duration': 3000,
+              },
+              {
+                'text': "I live in the city of hello Valdivia but I'm from",
+                'duration': 5000,
+              },
+              {
+                'text': 'a small island called Mancera. This has a fortres!',
+                'duration': 5000,
+              }
+            ];
+
+            String example_voice = '''
+            Hello this is me oscar the great!
+            Hmmm I live in the city of hello Valdivia but I'm from
+            a small island called Mancera. This has a fortres!
+            ''';
+
+            String exampleExtract = '';
+
+            List<Map> words = [];
+
+            // bool closed = false;
+
+            // readExample();
         return StatefulBuilder(
           
           
           builder: (BuildContext context, StateSetter setState) {
 
-            _infoBoxExample(Size size) {
-  return Container(
-            // width: size.width*0.96,
-            padding: EdgeInsets.symmetric(vertical:20, horizontal: 30),
-            height: 220,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            child: Stack(
-              children: [
-                SizedBox(),
-                Container(
-                    width: size.width - 80,
-                    height: 220,
-                    padding: EdgeInsets.only(top: 20),
-                    child: Center(
-                      child: Text('Speeding Up in the morning after today', textAlign: TextAlign.center, style: TextStyle(
-                        fontSize: 24,
-                        color: Color(0xff6E5AA0)
-                      ),),
-                    ),
-                  ),
-                Positioned(
-                  top: 10,
-                  left: 0,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.05),
-                          shape: BoxShape.circle
-                        ),
-                        child: Icon(Icons.pause, size: 30, color: Colors.black.withOpacity(0.35))
-                        ),
-                        SizedBox(width: 15),
-                        Text('EXAMPLE', style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff777777)
-                        ),),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          );
-}
+            _wordList() {
+            return List.generate(words.length, (i) {
+              return TextSpan(
+                  text: ' ' + words[i]['text'],
+                  style: TextStyle(
+                    color: Color(0xff6E5AA0),
+                    fontWeight: words[i]['bold'] ? FontWeight.bold : FontWeight.normal,
+                    fontSize: words[i]['bold'] ? 24 : 21,
+                  ));
+            });
+          }
 
-_infoBoxMeaning(Size size) {
-  return Container(
-            // width: size.width*0.96,
-            padding: EdgeInsets.symmetric(vertical:30, horizontal: 50),
-            height: 220,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            child: Stack(
-              children: [
-                Text('MEANING', style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xff777777)
-                ),),
-                Positioned(
-                  top: 40,
-                  child: Container(
-                    width: size.width - 120,
-                    height: 100,
-                    child: Center(
-                      child: Text('Speeding Up in', textAlign: TextAlign.center, style: TextStyle(
-                        fontSize: 24,
-                        color: Color(0xff6E5AA0)
-                      ),),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          );
-}
+          _generateWords(String text, String keyword) {
+            words = [];            
+            // RegExp exp = RegExp(r'(\w+)');
+            // Iterable<RegExpMatch> matches = exp.allMatches(text);
+            // final matches = exp.allMatches(text).map((z) => z.group(0)).toList();
+
+            List<String> matches = text.split(' ');
+            for (final m in matches) {
+              Map word = {
+                'bold': m.toLowerCase() == keyword.toLowerCase() ? true : false,
+                'text': m
+              };
+
+              words.add(word);              
+            }
+          }
+
+
 
 _infoBoxWord(Size size) {
+
+  String msg = '';
+
+  if(state == ChallengeStates.instructions) {
+    msg= homeState.activity!.word!.word;
+  }
+
+  if(state == ChallengeStates.meaning) {
+    msg= homeState.activity!.word!.meaning!;
+  }
+
+  if(state == ChallengeStates.example) {
+    msg= exampleExtract;
+  }
+
   return Container(
             padding: EdgeInsets.symmetric(vertical:40, horizontal: 60),
             width: double.infinity,
@@ -617,17 +565,38 @@ _infoBoxWord(Size size) {
                   ],
                 ),                              
                 SizedBox(height: 25,),
-                Text(state == ChallengeStates.instructions? homeState.activity!.word!.word : homeState.activity!.word!.meaning!, textAlign: TextAlign.center, style: TextStyle(
+                if(state != ChallengeStates.example)Text(msg, textAlign: TextAlign.center, style: TextStyle(
                         fontSize: state == ChallengeStates.example? 24 : 26,
                         color: state == ChallengeStates.example? Color(0xff6E5AA0): Colors.black87
                       ),),
 
+                if(state == ChallengeStates.example)RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: _wordList())),
+                      SizedBox(
+                    height: 20,
+                  ),
+
                 SizedBox(height: 35,),
 
                 if(state == ChallengeStates.instructions) InkWell(
-                  onTap: () {
+                  onTap: () async {
                     state = ChallengeStates.example;
-                    setState(() {});
+                    // example_voice
+                    ref.read(homeProvider.notifier).speak(example_voice);
+                    for (var el in example) {
+                      exampleExtract = el['text'];
+                      _generateWords(el['text'], 'hello');
+                      // if(!closed) {
+                      //   setState(() {});
+                      // }
+                      try {
+                        setState(() {});
+                      } catch(_){
+
+                      }
+                      await sleep(el['duration']);
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
@@ -707,6 +676,7 @@ _meaningBtn() {
           InkWell(
             onTap: () {
               ref.read(homeProvider.notifier).onWordClicked(ChallengeStates.accepted);
+              ref.read(homeProvider.notifier).speak('Challenge accepted!');
               Navigator.pop(context);
             },
             child: Container(

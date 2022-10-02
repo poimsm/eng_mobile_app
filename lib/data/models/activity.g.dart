@@ -18,7 +18,7 @@ _$_Activity _$$_ActivityFromJson(Map<String, dynamic> json) => _$_Activity(
           ? null
           : ImageActivity.fromJson(
               json['image_activity'] as Map<String, dynamic>),
-      design: Design.fromJson(json['design'] as Map<String, dynamic>),
+      style: Style.fromJson(json['style'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
@@ -27,7 +27,7 @@ Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
       'question': instance.question,
       'word': instance.word,
       'image_activity': instance.imageActivity,
-      'design': instance.design,
+      'style': instance.style,
     };
 
 _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
@@ -42,14 +42,14 @@ Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'meaning': instance.meaning,
     };
 
-_$_Design _$$_DesignFromJson(Map<String, dynamic> json) => _$_Design(
-      backgroundColor: json['background_color'] as String,
-      wordBackgroundColor: json['word_background_color'] as String,
+_$_Style _$$_StyleFromJson(Map<String, dynamic> json) => _$_Style(
+      backgroundScreen: json['background_screen'] as String,
+      backgroundWord: json['background_word'] as String,
     );
 
-Map<String, dynamic> _$$_DesignToJson(_$_Design instance) => <String, dynamic>{
-      'background_color': instance.backgroundColor,
-      'word_background_color': instance.wordBackgroundColor,
+Map<String, dynamic> _$$_StyleToJson(_$_Style instance) => <String, dynamic>{
+      'background_screen': instance.backgroundScreen,
+      'background_word': instance.backgroundWord,
     };
 
 _$_ImageActivity _$$_ImageActivityFromJson(Map<String, dynamic> json) =>
@@ -67,6 +67,7 @@ Map<String, dynamic> _$$_ImageActivityToJson(_$_ImageActivity instance) =>
 _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
       id: json['id'] as int,
       imageUrl: json['image_url'] as String,
+      questionVoice: json['question_voice'] as String,
       question: json['question'] as String,
     );
 
@@ -74,5 +75,6 @@ Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
     <String, dynamic>{
       'id': instance.id,
       'image_url': instance.imageUrl,
+      'question_voice': instance.questionVoice,
       'question': instance.question,
     };

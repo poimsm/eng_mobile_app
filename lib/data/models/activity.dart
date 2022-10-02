@@ -12,7 +12,7 @@ class Activity with _$Activity {
     Question? question,
     Word? word,
     @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
-    required Design design,
+    required Style style,
   }) = _Activity;
 
   factory Activity.fromJson(Map<String, Object?> json) =>
@@ -31,13 +31,13 @@ class Word with _$Word {
 }
 
 @freezed
-class Design with _$Design {
-  const factory Design({
-    @JsonKey(name: 'background_color') required String backgroundColor,
-    @JsonKey(name: 'word_background_color') required String wordBackgroundColor,
-  }) = _Design;
+class Style with _$Style {
+  const factory Style({
+    @JsonKey(name: 'background_screen') required String backgroundScreen,
+    @JsonKey(name: 'background_word') required String backgroundWord,
+  }) = _Style;
 
-  factory Design.fromJson(Map<String, Object?> json) => _$DesignFromJson(json);
+  factory Style.fromJson(Map<String, Object?> json) => _$StyleFromJson(json);
 }
 
 @freezed
@@ -55,6 +55,7 @@ class Question with _$Question {
   const factory Question(
       {required int id,
       @JsonKey(name: 'image_url') required String imageUrl,
+      @JsonKey(name: 'question_voice') required String questionVoice,
       required String question}) = _Question;
 
   factory Question.fromJson(Map<String, Object?> json) =>

@@ -25,7 +25,7 @@ mixin _$Activity {
   Word? get word => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_activity')
   ImageActivity? get imageActivity => throw _privateConstructorUsedError;
-  Design get design => throw _privateConstructorUsedError;
+  Style get style => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,12 +42,12 @@ abstract class $ActivityCopyWith<$Res> {
       Question? question,
       Word? word,
       @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
-      Design design});
+      Style style});
 
   $QuestionCopyWith<$Res>? get question;
   $WordCopyWith<$Res>? get word;
   $ImageActivityCopyWith<$Res>? get imageActivity;
-  $DesignCopyWith<$Res> get design;
+  $StyleCopyWith<$Res> get style;
 }
 
 /// @nodoc
@@ -64,7 +64,7 @@ class _$ActivityCopyWithImpl<$Res> implements $ActivityCopyWith<$Res> {
     Object? question = freezed,
     Object? word = freezed,
     Object? imageActivity = freezed,
-    Object? design = freezed,
+    Object? style = freezed,
   }) {
     return _then(_value.copyWith(
       type: type == freezed
@@ -83,10 +83,10 @@ class _$ActivityCopyWithImpl<$Res> implements $ActivityCopyWith<$Res> {
           ? _value.imageActivity
           : imageActivity // ignore: cast_nullable_to_non_nullable
               as ImageActivity?,
-      design: design == freezed
-          ? _value.design
-          : design // ignore: cast_nullable_to_non_nullable
-              as Design,
+      style: style == freezed
+          ? _value.style
+          : style // ignore: cast_nullable_to_non_nullable
+              as Style,
     ));
   }
 
@@ -124,9 +124,9 @@ class _$ActivityCopyWithImpl<$Res> implements $ActivityCopyWith<$Res> {
   }
 
   @override
-  $DesignCopyWith<$Res> get design {
-    return $DesignCopyWith<$Res>(_value.design, (value) {
-      return _then(_value.copyWith(design: value));
+  $StyleCopyWith<$Res> get style {
+    return $StyleCopyWith<$Res>(_value.style, (value) {
+      return _then(_value.copyWith(style: value));
     });
   }
 }
@@ -142,7 +142,7 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
       Question? question,
       Word? word,
       @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
-      Design design});
+      Style style});
 
   @override
   $QuestionCopyWith<$Res>? get question;
@@ -151,7 +151,7 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
   @override
   $ImageActivityCopyWith<$Res>? get imageActivity;
   @override
-  $DesignCopyWith<$Res> get design;
+  $StyleCopyWith<$Res> get style;
 }
 
 /// @nodoc
@@ -170,7 +170,7 @@ class __$$_ActivityCopyWithImpl<$Res> extends _$ActivityCopyWithImpl<$Res>
     Object? question = freezed,
     Object? word = freezed,
     Object? imageActivity = freezed,
-    Object? design = freezed,
+    Object? style = freezed,
   }) {
     return _then(_$_Activity(
       type: type == freezed
@@ -189,10 +189,10 @@ class __$$_ActivityCopyWithImpl<$Res> extends _$ActivityCopyWithImpl<$Res>
           ? _value.imageActivity
           : imageActivity // ignore: cast_nullable_to_non_nullable
               as ImageActivity?,
-      design: design == freezed
-          ? _value.design
-          : design // ignore: cast_nullable_to_non_nullable
-              as Design,
+      style: style == freezed
+          ? _value.style
+          : style // ignore: cast_nullable_to_non_nullable
+              as Style,
     ));
   }
 }
@@ -205,7 +205,7 @@ class _$_Activity implements _Activity {
       this.question,
       this.word,
       @JsonKey(name: 'image_activity') this.imageActivity,
-      required this.design});
+      required this.style});
 
   factory _$_Activity.fromJson(Map<String, dynamic> json) =>
       _$$_ActivityFromJson(json);
@@ -220,11 +220,11 @@ class _$_Activity implements _Activity {
   @JsonKey(name: 'image_activity')
   final ImageActivity? imageActivity;
   @override
-  final Design design;
+  final Style style;
 
   @override
   String toString() {
-    return 'Activity(type: $type, question: $question, word: $word, imageActivity: $imageActivity, design: $design)';
+    return 'Activity(type: $type, question: $question, word: $word, imageActivity: $imageActivity, style: $style)';
   }
 
   @override
@@ -237,7 +237,7 @@ class _$_Activity implements _Activity {
             const DeepCollectionEquality().equals(other.word, word) &&
             const DeepCollectionEquality()
                 .equals(other.imageActivity, imageActivity) &&
-            const DeepCollectionEquality().equals(other.design, design));
+            const DeepCollectionEquality().equals(other.style, style));
   }
 
   @JsonKey(ignore: true)
@@ -248,7 +248,7 @@ class _$_Activity implements _Activity {
       const DeepCollectionEquality().hash(question),
       const DeepCollectionEquality().hash(word),
       const DeepCollectionEquality().hash(imageActivity),
-      const DeepCollectionEquality().hash(design));
+      const DeepCollectionEquality().hash(style));
 
   @JsonKey(ignore: true)
   @override
@@ -269,7 +269,7 @@ abstract class _Activity implements Activity {
       final Question? question,
       final Word? word,
       @JsonKey(name: 'image_activity') final ImageActivity? imageActivity,
-      required final Design design}) = _$_Activity;
+      required final Style style}) = _$_Activity;
 
   factory _Activity.fromJson(Map<String, dynamic> json) = _$_Activity.fromJson;
 
@@ -283,7 +283,7 @@ abstract class _Activity implements Activity {
   @JsonKey(name: 'image_activity')
   ImageActivity? get imageActivity;
   @override
-  Design get design;
+  Style get style;
   @override
   @JsonKey(ignore: true)
   _$$_ActivityCopyWith<_$_Activity> get copyWith =>
@@ -452,89 +452,89 @@ abstract class _Word implements Word {
   _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
 }
 
-Design _$DesignFromJson(Map<String, dynamic> json) {
-  return _Design.fromJson(json);
+Style _$StyleFromJson(Map<String, dynamic> json) {
+  return _Style.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Design {
-  @JsonKey(name: 'background_color')
-  String get backgroundColor => throw _privateConstructorUsedError;
-  @JsonKey(name: 'word_background_color')
-  String get wordBackgroundColor => throw _privateConstructorUsedError;
+mixin _$Style {
+  @JsonKey(name: 'background_screen')
+  String get backgroundScreen => throw _privateConstructorUsedError;
+  @JsonKey(name: 'background_word')
+  String get backgroundWord => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $DesignCopyWith<Design> get copyWith => throw _privateConstructorUsedError;
+  $StyleCopyWith<Style> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $DesignCopyWith<$Res> {
-  factory $DesignCopyWith(Design value, $Res Function(Design) then) =
-      _$DesignCopyWithImpl<$Res>;
+abstract class $StyleCopyWith<$Res> {
+  factory $StyleCopyWith(Style value, $Res Function(Style) then) =
+      _$StyleCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(name: 'background_color') String backgroundColor,
-      @JsonKey(name: 'word_background_color') String wordBackgroundColor});
+      {@JsonKey(name: 'background_screen') String backgroundScreen,
+      @JsonKey(name: 'background_word') String backgroundWord});
 }
 
 /// @nodoc
-class _$DesignCopyWithImpl<$Res> implements $DesignCopyWith<$Res> {
-  _$DesignCopyWithImpl(this._value, this._then);
+class _$StyleCopyWithImpl<$Res> implements $StyleCopyWith<$Res> {
+  _$StyleCopyWithImpl(this._value, this._then);
 
-  final Design _value;
+  final Style _value;
   // ignore: unused_field
-  final $Res Function(Design) _then;
+  final $Res Function(Style) _then;
 
   @override
   $Res call({
-    Object? backgroundColor = freezed,
-    Object? wordBackgroundColor = freezed,
+    Object? backgroundScreen = freezed,
+    Object? backgroundWord = freezed,
   }) {
     return _then(_value.copyWith(
-      backgroundColor: backgroundColor == freezed
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+      backgroundScreen: backgroundScreen == freezed
+          ? _value.backgroundScreen
+          : backgroundScreen // ignore: cast_nullable_to_non_nullable
               as String,
-      wordBackgroundColor: wordBackgroundColor == freezed
-          ? _value.wordBackgroundColor
-          : wordBackgroundColor // ignore: cast_nullable_to_non_nullable
+      backgroundWord: backgroundWord == freezed
+          ? _value.backgroundWord
+          : backgroundWord // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
 }
 
 /// @nodoc
-abstract class _$$_DesignCopyWith<$Res> implements $DesignCopyWith<$Res> {
-  factory _$$_DesignCopyWith(_$_Design value, $Res Function(_$_Design) then) =
-      __$$_DesignCopyWithImpl<$Res>;
+abstract class _$$_StyleCopyWith<$Res> implements $StyleCopyWith<$Res> {
+  factory _$$_StyleCopyWith(_$_Style value, $Res Function(_$_Style) then) =
+      __$$_StyleCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(name: 'background_color') String backgroundColor,
-      @JsonKey(name: 'word_background_color') String wordBackgroundColor});
+      {@JsonKey(name: 'background_screen') String backgroundScreen,
+      @JsonKey(name: 'background_word') String backgroundWord});
 }
 
 /// @nodoc
-class __$$_DesignCopyWithImpl<$Res> extends _$DesignCopyWithImpl<$Res>
-    implements _$$_DesignCopyWith<$Res> {
-  __$$_DesignCopyWithImpl(_$_Design _value, $Res Function(_$_Design) _then)
-      : super(_value, (v) => _then(v as _$_Design));
+class __$$_StyleCopyWithImpl<$Res> extends _$StyleCopyWithImpl<$Res>
+    implements _$$_StyleCopyWith<$Res> {
+  __$$_StyleCopyWithImpl(_$_Style _value, $Res Function(_$_Style) _then)
+      : super(_value, (v) => _then(v as _$_Style));
 
   @override
-  _$_Design get _value => super._value as _$_Design;
+  _$_Style get _value => super._value as _$_Style;
 
   @override
   $Res call({
-    Object? backgroundColor = freezed,
-    Object? wordBackgroundColor = freezed,
+    Object? backgroundScreen = freezed,
+    Object? backgroundWord = freezed,
   }) {
-    return _then(_$_Design(
-      backgroundColor: backgroundColor == freezed
-          ? _value.backgroundColor
-          : backgroundColor // ignore: cast_nullable_to_non_nullable
+    return _then(_$_Style(
+      backgroundScreen: backgroundScreen == freezed
+          ? _value.backgroundScreen
+          : backgroundScreen // ignore: cast_nullable_to_non_nullable
               as String,
-      wordBackgroundColor: wordBackgroundColor == freezed
-          ? _value.wordBackgroundColor
-          : wordBackgroundColor // ignore: cast_nullable_to_non_nullable
+      backgroundWord: backgroundWord == freezed
+          ? _value.backgroundWord
+          : backgroundWord // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -542,77 +542,75 @@ class __$$_DesignCopyWithImpl<$Res> extends _$DesignCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Design implements _Design {
-  const _$_Design(
-      {@JsonKey(name: 'background_color')
-          required this.backgroundColor,
-      @JsonKey(name: 'word_background_color')
-          required this.wordBackgroundColor});
+class _$_Style implements _Style {
+  const _$_Style(
+      {@JsonKey(name: 'background_screen') required this.backgroundScreen,
+      @JsonKey(name: 'background_word') required this.backgroundWord});
 
-  factory _$_Design.fromJson(Map<String, dynamic> json) =>
-      _$$_DesignFromJson(json);
+  factory _$_Style.fromJson(Map<String, dynamic> json) =>
+      _$$_StyleFromJson(json);
 
   @override
-  @JsonKey(name: 'background_color')
-  final String backgroundColor;
+  @JsonKey(name: 'background_screen')
+  final String backgroundScreen;
   @override
-  @JsonKey(name: 'word_background_color')
-  final String wordBackgroundColor;
+  @JsonKey(name: 'background_word')
+  final String backgroundWord;
 
   @override
   String toString() {
-    return 'Design(backgroundColor: $backgroundColor, wordBackgroundColor: $wordBackgroundColor)';
+    return 'Style(backgroundScreen: $backgroundScreen, backgroundWord: $backgroundWord)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Design &&
+            other is _$_Style &&
             const DeepCollectionEquality()
-                .equals(other.backgroundColor, backgroundColor) &&
+                .equals(other.backgroundScreen, backgroundScreen) &&
             const DeepCollectionEquality()
-                .equals(other.wordBackgroundColor, wordBackgroundColor));
+                .equals(other.backgroundWord, backgroundWord));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(backgroundColor),
-      const DeepCollectionEquality().hash(wordBackgroundColor));
+      const DeepCollectionEquality().hash(backgroundScreen),
+      const DeepCollectionEquality().hash(backgroundWord));
 
   @JsonKey(ignore: true)
   @override
-  _$$_DesignCopyWith<_$_Design> get copyWith =>
-      __$$_DesignCopyWithImpl<_$_Design>(this, _$identity);
+  _$$_StyleCopyWith<_$_Style> get copyWith =>
+      __$$_StyleCopyWithImpl<_$_Style>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_DesignToJson(
+    return _$$_StyleToJson(
       this,
     );
   }
 }
 
-abstract class _Design implements Design {
-  const factory _Design(
-      {@JsonKey(name: 'background_color')
-          required final String backgroundColor,
-      @JsonKey(name: 'word_background_color')
-          required final String wordBackgroundColor}) = _$_Design;
+abstract class _Style implements Style {
+  const factory _Style(
+      {@JsonKey(name: 'background_screen')
+          required final String backgroundScreen,
+      @JsonKey(name: 'background_word')
+          required final String backgroundWord}) = _$_Style;
 
-  factory _Design.fromJson(Map<String, dynamic> json) = _$_Design.fromJson;
+  factory _Style.fromJson(Map<String, dynamic> json) = _$_Style.fromJson;
 
   @override
-  @JsonKey(name: 'background_color')
-  String get backgroundColor;
+  @JsonKey(name: 'background_screen')
+  String get backgroundScreen;
   @override
-  @JsonKey(name: 'word_background_color')
-  String get wordBackgroundColor;
+  @JsonKey(name: 'background_word')
+  String get backgroundWord;
   @override
   @JsonKey(ignore: true)
-  _$$_DesignCopyWith<_$_Design> get copyWith =>
+  _$$_StyleCopyWith<_$_Style> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -784,6 +782,8 @@ mixin _$Question {
   int get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'question_voice')
+  String get questionVoice => throw _privateConstructorUsedError;
   String get question => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -797,7 +797,10 @@ abstract class $QuestionCopyWith<$Res> {
   factory $QuestionCopyWith(Question value, $Res Function(Question) then) =
       _$QuestionCopyWithImpl<$Res>;
   $Res call(
-      {int id, @JsonKey(name: 'image_url') String imageUrl, String question});
+      {int id,
+      @JsonKey(name: 'image_url') String imageUrl,
+      @JsonKey(name: 'question_voice') String questionVoice,
+      String question});
 }
 
 /// @nodoc
@@ -812,6 +815,7 @@ class _$QuestionCopyWithImpl<$Res> implements $QuestionCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? imageUrl = freezed,
+    Object? questionVoice = freezed,
     Object? question = freezed,
   }) {
     return _then(_value.copyWith(
@@ -822,6 +826,10 @@ class _$QuestionCopyWithImpl<$Res> implements $QuestionCopyWith<$Res> {
       imageUrl: imageUrl == freezed
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      questionVoice: questionVoice == freezed
+          ? _value.questionVoice
+          : questionVoice // ignore: cast_nullable_to_non_nullable
               as String,
       question: question == freezed
           ? _value.question
@@ -838,7 +846,10 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
       __$$_QuestionCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id, @JsonKey(name: 'image_url') String imageUrl, String question});
+      {int id,
+      @JsonKey(name: 'image_url') String imageUrl,
+      @JsonKey(name: 'question_voice') String questionVoice,
+      String question});
 }
 
 /// @nodoc
@@ -855,6 +866,7 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? imageUrl = freezed,
+    Object? questionVoice = freezed,
     Object? question = freezed,
   }) {
     return _then(_$_Question(
@@ -865,6 +877,10 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
       imageUrl: imageUrl == freezed
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      questionVoice: questionVoice == freezed
+          ? _value.questionVoice
+          : questionVoice // ignore: cast_nullable_to_non_nullable
               as String,
       question: question == freezed
           ? _value.question
@@ -880,6 +896,7 @@ class _$_Question implements _Question {
   const _$_Question(
       {required this.id,
       @JsonKey(name: 'image_url') required this.imageUrl,
+      @JsonKey(name: 'question_voice') required this.questionVoice,
       required this.question});
 
   factory _$_Question.fromJson(Map<String, dynamic> json) =>
@@ -891,11 +908,14 @@ class _$_Question implements _Question {
   @JsonKey(name: 'image_url')
   final String imageUrl;
   @override
+  @JsonKey(name: 'question_voice')
+  final String questionVoice;
+  @override
   final String question;
 
   @override
   String toString() {
-    return 'Question(id: $id, imageUrl: $imageUrl, question: $question)';
+    return 'Question(id: $id, imageUrl: $imageUrl, questionVoice: $questionVoice, question: $question)';
   }
 
   @override
@@ -905,6 +925,8 @@ class _$_Question implements _Question {
             other is _$_Question &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.questionVoice, questionVoice) &&
             const DeepCollectionEquality().equals(other.question, question));
   }
 
@@ -914,6 +936,7 @@ class _$_Question implements _Question {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(imageUrl),
+      const DeepCollectionEquality().hash(questionVoice),
       const DeepCollectionEquality().hash(question));
 
   @JsonKey(ignore: true)
@@ -933,6 +956,7 @@ abstract class _Question implements Question {
   const factory _Question(
       {required final int id,
       @JsonKey(name: 'image_url') required final String imageUrl,
+      @JsonKey(name: 'question_voice') required final String questionVoice,
       required final String question}) = _$_Question;
 
   factory _Question.fromJson(Map<String, dynamic> json) = _$_Question.fromJson;
@@ -942,6 +966,9 @@ abstract class _Question implements Question {
   @override
   @JsonKey(name: 'image_url')
   String get imageUrl;
+  @override
+  @JsonKey(name: 'question_voice')
+  String get questionVoice;
   @override
   String get question;
   @override

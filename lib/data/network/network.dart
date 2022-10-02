@@ -124,6 +124,115 @@ class Network {
     }
   }
 
+  Future<Response> put(path, {required data, bool showErrorMsg = true}) async {
+    try {
+      final payload = data;
+
+      printInfo('REQUEST -->>> | POST | $path | $payload');
+
+      int statusCode = 0;
+      String reply = '';
+
+      if (Config.MOCK) {
+        final mockResp = await MockServer(path).post(payload);
+        reply = mockResp.data;
+        statusCode = mockResp.statusCode;
+      } else {
+        final httpClient = HttpClient();
+        HttpClientRequest request =
+            await httpClient.putUrl(Uri.parse(apiURL + path));
+        request.headers.set('content-type', 'application/json');
+        request.headers.set('Authorization', 'Bearer ${_authService.token}');
+        request.headers.contentLength =
+            utf8.encode(json.encode(payload)).length;
+        request.add(utf8.encode(json.encode(payload)));
+        HttpClientResponse response =
+            await request.close().timeout(Duration(milliseconds: timeout));
+        reply = await response.transform(utf8.decoder).join();
+        statusCode = response.statusCode;
+        httpClient.close();
+      }
+
+      if (authErrorHandler(statusCode, path)) return Response(ok: false);
+
+      if (serverErrorHandler(reply, statusCode, path, 'post', showErrorMsg)) {
+        return Response(ok: false);
+      }
+
+      final jsonData = reply != '' ? jsonDecode(reply) : '';
+
+      printDebug('RESPONSE <<<-- | $statusCode | $path | $jsonData');
+
+      return Response(ok: true, data: jsonData);
+    } on TimeoutException catch (_) {
+      printError('Network --> post($path) | Server connection timed out');
+      return Response(ok: false);
+    } on SocketException catch (_) {
+      printError("Network --> post($path) | You aren't connected to internet");
+      return Response(ok: false);
+    } catch (e, s) {
+      printError("Network --> post($path) | Connection Lost");
+      printError(e.toString());
+      printError(s.toString());
+      return Response(ok: false);
+    }
+  }
+
+  Future<Response> delete(path,
+      {required data, bool showErrorMsg = true}) async {
+    try {
+      final payload = data;
+
+      printInfo('REQUEST -->>> | POST | $path | $payload');
+
+      int statusCode = 0;
+      String reply = '';
+
+      if (Config.MOCK) {
+        final mockResp = await MockServer(path).post(payload);
+        reply = mockResp.data;
+        statusCode = mockResp.statusCode;
+      } else {
+        final httpClient = HttpClient();
+        HttpClientRequest request =
+            await httpClient.deleteUrl(Uri.parse(apiURL + path));
+        request.headers.set('content-type', 'application/json');
+        request.headers.set('Authorization', 'Bearer ${_authService.token}');
+        request.headers.contentLength =
+            utf8.encode(json.encode(payload)).length;
+        request.add(utf8.encode(json.encode(payload)));
+        HttpClientResponse response =
+            await request.close().timeout(Duration(milliseconds: timeout));
+        reply = await response.transform(utf8.decoder).join();
+        statusCode = response.statusCode;
+        httpClient.close();
+      }
+
+      if (authErrorHandler(statusCode, path)) return Response(ok: false);
+
+      if (serverErrorHandler(reply, statusCode, path, 'post', showErrorMsg)) {
+        return Response(ok: false);
+      }
+
+      final jsonData = reply != '' ? jsonDecode(reply) : '';
+
+      printDebug('RESPONSE <<<-- | $statusCode | $path | $jsonData');
+
+      return Response(ok: true, data: jsonData);
+    } on TimeoutException catch (_) {
+      printError('Network --> post($path) | Server connection timed out');
+      return Response(ok: false);
+    } on SocketException catch (_) {
+      printError("Network --> post($path) | You aren't connected to internet");
+      return Response(ok: false);
+    } catch (e, s) {
+      printError("Network --> post($path) | Connection Lost");
+      printError(e.toString());
+      printError(s.toString());
+      return Response(ok: false);
+    }
+  }
+
   bool authErrorHandler(int statusCode, String path) {
     if (statusCode == 401 || statusCode == 403) {
       if (!path.contains('token')) {

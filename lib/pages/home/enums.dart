@@ -17,3 +17,8 @@ enum Audio {
   meaning,
   example,
 }
+
+enum ActivityTypes {
+  question,
+  describeImage
+}

@@ -119,7 +119,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
              maxLines: 2,
              maxLength: 20,
             textCapitalization: TextCapitalization.sentences,
-            style: TextStyle(fontSize: 19),
+            style: TextStyle(fontSize: widget.isNewWord? 19 : 24),
             decoration: InputDecoration(          
                 hintText: 'Example: Riding',
                 counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
@@ -162,7 +162,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           width: size.width*0.8,
           child: TextField(
             maxLines: 3,
-            maxLength: 50,
+            maxLength: 100,
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: 19),
             decoration: InputDecoration(
