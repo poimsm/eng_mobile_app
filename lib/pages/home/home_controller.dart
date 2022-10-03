@@ -94,7 +94,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(isLoading: false);
 
     if (state.activity!.type == 'question') {
-      speak(state.activity!.question!.questionVoice);
+      speak(state.activity!.question!.voiceUrl);
     } else {
       speak('Describe the picture!');
     }
@@ -134,7 +134,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     await sleep(1000);
     state = state.copyWith(loadingNextActivity: false);
     if (state.activity!.type == 'question') {
-      speak(state.activity!.question!.questionVoice);
+      speak(state.activity!.question!.voiceUrl);
     } else {
       speak('Describe the picture!');
     }

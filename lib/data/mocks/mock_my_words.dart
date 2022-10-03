@@ -4,32 +4,62 @@ class MockMyWords {
       [
         {
             "id": 1,
-            "word": "Awkward",
+            "sentence": "Awkward",
             "meaning": null
         },
         {
             "id": 2,
-            "word": "Bye",
+            "sentence": "Bye",
             "meaning": "Stuff like icon, set the border with"
         },
         {
             "id": 3,
-            "word": "Hey There Fully",
+            "sentence": "Hey There Fully",
             "meaning": null
         },
         {
             "id": 4,
-            "word": "Morning",
+            "sentence": "Morning",
             "meaning": "Stuff like icon, set the border with"
         },
         {
             "id": 5,
-            "word": "Afternoon",
+            "sentence": "Afternoon",
             "meaning": "Stuff like icon, set the border with"
         },
         {
             "id": 6,
-            "word": "Lunch",
+            "sentence": "Lunch",
+            "meaning": "Stuff like icon, set the border with"
+        },
+        {
+            "id": 7,
+            "sentence": "Lunch 1",
+            "meaning": "Stuff like icon, set the border with"
+        },
+        {
+            "id": 8,
+            "sentence": "Lunch 2",
+            "meaning": "Stuff like icon, set the border with"
+        },
+        {
+            "id": 9,
+            "sentence": "Lunch 3",
+            "meaning": "Stuff like icon, set the border with"
+        },
+        {
+            "id": 7,
+            "sentence": "Lunch 4",
+            "meaning": "Stuff like icon, set the border with"
+        },
+        {
+            "id": 8,
+            "sentence": "Lunch 5",
+            "meaning": "Stuff like icon, set the border with"
+        },
+        {
+            "id": 9,
+            "sentence": "Lunch 6",
             "meaning": "Stuff like icon, set the border with"
         }
       ]

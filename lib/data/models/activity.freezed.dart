@@ -23,7 +23,7 @@ mixin _$Activity {
   String get type => throw _privateConstructorUsedError;
   Question? get question => throw _privateConstructorUsedError;
   Word? get word => throw _privateConstructorUsedError;
-  @JsonKey(name: 'image_activity')
+  @JsonKey(name: 'image')
   ImageActivity? get imageActivity => throw _privateConstructorUsedError;
   Style get style => throw _privateConstructorUsedError;
 
@@ -41,7 +41,7 @@ abstract class $ActivityCopyWith<$Res> {
       {String type,
       Question? question,
       Word? word,
-      @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
+      @JsonKey(name: 'image') ImageActivity? imageActivity,
       Style style});
 
   $QuestionCopyWith<$Res>? get question;
@@ -141,7 +141,7 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
       {String type,
       Question? question,
       Word? word,
-      @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
+      @JsonKey(name: 'image') ImageActivity? imageActivity,
       Style style});
 
   @override
@@ -204,7 +204,7 @@ class _$_Activity implements _Activity {
       {required this.type,
       this.question,
       this.word,
-      @JsonKey(name: 'image_activity') this.imageActivity,
+      @JsonKey(name: 'image') this.imageActivity,
       required this.style});
 
   factory _$_Activity.fromJson(Map<String, dynamic> json) =>
@@ -217,7 +217,7 @@ class _$_Activity implements _Activity {
   @override
   final Word? word;
   @override
-  @JsonKey(name: 'image_activity')
+  @JsonKey(name: 'image')
   final ImageActivity? imageActivity;
   @override
   final Style style;
@@ -268,7 +268,7 @@ abstract class _Activity implements Activity {
       {required final String type,
       final Question? question,
       final Word? word,
-      @JsonKey(name: 'image_activity') final ImageActivity? imageActivity,
+      @JsonKey(name: 'image') final ImageActivity? imageActivity,
       required final Style style}) = _$_Activity;
 
   factory _Activity.fromJson(Map<String, dynamic> json) = _$_Activity.fromJson;
@@ -280,7 +280,7 @@ abstract class _Activity implements Activity {
   @override
   Word? get word;
   @override
-  @JsonKey(name: 'image_activity')
+  @JsonKey(name: 'image')
   ImageActivity? get imageActivity;
   @override
   Style get style;
@@ -297,6 +297,7 @@ Word _$WordFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Word {
   int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sentence')
   String get word => throw _privateConstructorUsedError;
   String? get meaning => throw _privateConstructorUsedError;
 
@@ -309,7 +310,7 @@ mixin _$Word {
 abstract class $WordCopyWith<$Res> {
   factory $WordCopyWith(Word value, $Res Function(Word) then) =
       _$WordCopyWithImpl<$Res>;
-  $Res call({int id, String word, String? meaning});
+  $Res call({int id, @JsonKey(name: 'sentence') String word, String? meaning});
 }
 
 /// @nodoc
@@ -348,7 +349,7 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
   factory _$$_WordCopyWith(_$_Word value, $Res Function(_$_Word) then) =
       __$$_WordCopyWithImpl<$Res>;
   @override
-  $Res call({int id, String word, String? meaning});
+  $Res call({int id, @JsonKey(name: 'sentence') String word, String? meaning});
 }
 
 /// @nodoc
@@ -386,13 +387,17 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Word implements _Word {
-  const _$_Word({required this.id, required this.word, this.meaning});
+  const _$_Word(
+      {required this.id,
+      @JsonKey(name: 'sentence') required this.word,
+      this.meaning});
 
   factory _$_Word.fromJson(Map<String, dynamic> json) => _$$_WordFromJson(json);
 
   @override
   final int id;
   @override
+  @JsonKey(name: 'sentence')
   final String word;
   @override
   final String? meaning;
@@ -436,7 +441,7 @@ class _$_Word implements _Word {
 abstract class _Word implements Word {
   const factory _Word(
       {required final int id,
-      required final String word,
+      @JsonKey(name: 'sentence') required final String word,
       final String? meaning}) = _$_Word;
 
   factory _Word.fromJson(Map<String, dynamic> json) = _$_Word.fromJson;
@@ -444,6 +449,7 @@ abstract class _Word implements Word {
   @override
   int get id;
   @override
+  @JsonKey(name: 'sentence')
   String get word;
   @override
   String? get meaning;
@@ -782,8 +788,8 @@ mixin _$Question {
   int get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'question_voice')
-  String get questionVoice => throw _privateConstructorUsedError;
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl => throw _privateConstructorUsedError;
   String get question => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -799,7 +805,7 @@ abstract class $QuestionCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'image_url') String imageUrl,
-      @JsonKey(name: 'question_voice') String questionVoice,
+      @JsonKey(name: 'voice_url') String voiceUrl,
       String question});
 }
 
@@ -815,7 +821,7 @@ class _$QuestionCopyWithImpl<$Res> implements $QuestionCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? imageUrl = freezed,
-    Object? questionVoice = freezed,
+    Object? voiceUrl = freezed,
     Object? question = freezed,
   }) {
     return _then(_value.copyWith(
@@ -827,9 +833,9 @@ class _$QuestionCopyWithImpl<$Res> implements $QuestionCopyWith<$Res> {
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      questionVoice: questionVoice == freezed
-          ? _value.questionVoice
-          : questionVoice // ignore: cast_nullable_to_non_nullable
+      voiceUrl: voiceUrl == freezed
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
       question: question == freezed
           ? _value.question
@@ -848,7 +854,7 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'image_url') String imageUrl,
-      @JsonKey(name: 'question_voice') String questionVoice,
+      @JsonKey(name: 'voice_url') String voiceUrl,
       String question});
 }
 
@@ -866,7 +872,7 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? imageUrl = freezed,
-    Object? questionVoice = freezed,
+    Object? voiceUrl = freezed,
     Object? question = freezed,
   }) {
     return _then(_$_Question(
@@ -878,9 +884,9 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      questionVoice: questionVoice == freezed
-          ? _value.questionVoice
-          : questionVoice // ignore: cast_nullable_to_non_nullable
+      voiceUrl: voiceUrl == freezed
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
       question: question == freezed
           ? _value.question
@@ -896,7 +902,7 @@ class _$_Question implements _Question {
   const _$_Question(
       {required this.id,
       @JsonKey(name: 'image_url') required this.imageUrl,
-      @JsonKey(name: 'question_voice') required this.questionVoice,
+      @JsonKey(name: 'voice_url') required this.voiceUrl,
       required this.question});
 
   factory _$_Question.fromJson(Map<String, dynamic> json) =>
@@ -908,14 +914,14 @@ class _$_Question implements _Question {
   @JsonKey(name: 'image_url')
   final String imageUrl;
   @override
-  @JsonKey(name: 'question_voice')
-  final String questionVoice;
+  @JsonKey(name: 'voice_url')
+  final String voiceUrl;
   @override
   final String question;
 
   @override
   String toString() {
-    return 'Question(id: $id, imageUrl: $imageUrl, questionVoice: $questionVoice, question: $question)';
+    return 'Question(id: $id, imageUrl: $imageUrl, voiceUrl: $voiceUrl, question: $question)';
   }
 
   @override
@@ -925,8 +931,7 @@ class _$_Question implements _Question {
             other is _$_Question &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
-            const DeepCollectionEquality()
-                .equals(other.questionVoice, questionVoice) &&
+            const DeepCollectionEquality().equals(other.voiceUrl, voiceUrl) &&
             const DeepCollectionEquality().equals(other.question, question));
   }
 
@@ -936,7 +941,7 @@ class _$_Question implements _Question {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(imageUrl),
-      const DeepCollectionEquality().hash(questionVoice),
+      const DeepCollectionEquality().hash(voiceUrl),
       const DeepCollectionEquality().hash(question));
 
   @JsonKey(ignore: true)
@@ -956,7 +961,7 @@ abstract class _Question implements Question {
   const factory _Question(
       {required final int id,
       @JsonKey(name: 'image_url') required final String imageUrl,
-      @JsonKey(name: 'question_voice') required final String questionVoice,
+      @JsonKey(name: 'voice_url') required final String voiceUrl,
       required final String question}) = _$_Question;
 
   factory _Question.fromJson(Map<String, dynamic> json) = _$_Question.fromJson;
@@ -967,8 +972,8 @@ abstract class _Question implements Question {
   @JsonKey(name: 'image_url')
   String get imageUrl;
   @override
-  @JsonKey(name: 'question_voice')
-  String get questionVoice;
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl;
   @override
   String get question;
   @override

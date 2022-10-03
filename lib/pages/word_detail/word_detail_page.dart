@@ -51,7 +51,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
             children: [
           _appbar(),
           // SizedBox(height: size.height*0.1),
-          SizedBox(height: 70),
+          SizedBox(height: 40),
           _wordInput(),
            SizedBox(height: 5),
           Divider(color: Colors.black26),
@@ -75,7 +75,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
     return Container(
       height: 70,
       decoration: BoxDecoration(
-        color: Color(0xff333333),
+        // color: Color(0xff333333),
         // borderRadius: BorderRadius.circular(40),
         // borderRadius: BorderRadius.only(
         //   bottomLeft: Radius.circular(40),
@@ -86,11 +86,11 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
         children: [
           Row(children: [
             IconButton(onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back, size: 30, color: Colors.white),),
+            icon: Icon(Icons.arrow_back, size: 30, color: Colors.black87),),
             Text(widget.isNewWord? 'New word' : 'Word', style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white
+              color: Colors.black87
             ),)
           ]),
           if(!widget.isNewWord) IconButton(onPressed: () {            

@@ -11,7 +11,7 @@ class Activity with _$Activity {
     required String type,
     Question? question,
     Word? word,
-    @JsonKey(name: 'image_activity') ImageActivity? imageActivity,
+    @JsonKey(name: 'image') ImageActivity? imageActivity,
     required Style style,
   }) = _Activity;
 
@@ -23,7 +23,8 @@ class Activity with _$Activity {
 class Word with _$Word {
   const factory Word({
     required int id,
-    required String word,
+    // @JsonKey(fromJson: User._addressFromJson,toJson: User._addressToJson) Address? address,
+    @JsonKey(name: 'sentence') required String word,
     String? meaning,
   }) = _Word;
 
@@ -55,7 +56,7 @@ class Question with _$Question {
   const factory Question(
       {required int id,
       @JsonKey(name: 'image_url') required String imageUrl,
-      @JsonKey(name: 'question_voice') required String questionVoice,
+      @JsonKey(name: 'voice_url') required String voiceUrl,
       required String question}) = _Question;
 
   factory Question.fromJson(Map<String, Object?> json) =>

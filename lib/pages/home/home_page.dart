@@ -180,6 +180,7 @@ class HomePageState extends ConsumerState<HomePage> {
     final accepted = homeState.challengeState == ChallengeStates.accepted;
     return InkWell(
       onTap: () {
+        // print(homeState.activity!.word!.toJson());
         _presentActionSheet();
         // Navigator.pushNamed(context, Routes.CHALLENGE);
       },

@@ -12,7 +12,7 @@ class MockActivities {
           },
           "word": {
             "id": 101,
-            "word": "Speeding up!",
+            "sentence": "Speeding up!",
             "meaning": "When you speed up car!"
           },
           "example": {
@@ -53,8 +53,8 @@ class MockActivities {
           }
         },
         {
-          "type": "describe_the_picture",
-          "image_activity": {
+          "type": "describe_image",
+          "image": {
             "id": 4,
             "image_url": "https://i.pinimg.com/564x/ca/f0/20/caf0208f3c88aeb64e5caec5e64aebd6.jpg"
           },
@@ -106,7 +106,7 @@ class MockActivities {
           },
           "word": {
             "id": 102,
-            "word": "Lastly 2",
+            "sentence": "Lastly 2",
             "meaning": "This should be a long meaning when you entered this word"
           },
           "example": {
@@ -147,8 +147,8 @@ class MockActivities {
           }
         },
         {
-          "type": "describe_the_picture",
-          "image_activity": {
+          "type": "describe_image",
+          "image": {
             "id": 4,
             "image_url": "https://i.pinimg.com/564x/ca/f0/20/caf0208f3c88aeb64e5caec5e64aebd6.jpg"
           },

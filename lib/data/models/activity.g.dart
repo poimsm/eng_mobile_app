@@ -14,10 +14,9 @@ _$_Activity _$$_ActivityFromJson(Map<String, dynamic> json) => _$_Activity(
       word: json['word'] == null
           ? null
           : Word.fromJson(json['word'] as Map<String, dynamic>),
-      imageActivity: json['image_activity'] == null
+      imageActivity: json['image'] == null
           ? null
-          : ImageActivity.fromJson(
-              json['image_activity'] as Map<String, dynamic>),
+          : ImageActivity.fromJson(json['image'] as Map<String, dynamic>),
       style: Style.fromJson(json['style'] as Map<String, dynamic>),
     );
 
@@ -26,19 +25,19 @@ Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
       'type': instance.type,
       'question': instance.question,
       'word': instance.word,
-      'image_activity': instance.imageActivity,
+      'image': instance.imageActivity,
       'style': instance.style,
     };
 
 _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
       id: json['id'] as int,
-      word: json['word'] as String,
+      word: json['sentence'] as String,
       meaning: json['meaning'] as String?,
     );
 
 Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'id': instance.id,
-      'word': instance.word,
+      'sentence': instance.word,
       'meaning': instance.meaning,
     };
 
@@ -67,7 +66,7 @@ Map<String, dynamic> _$$_ImageActivityToJson(_$_ImageActivity instance) =>
 _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
       id: json['id'] as int,
       imageUrl: json['image_url'] as String,
-      questionVoice: json['question_voice'] as String,
+      voiceUrl: json['voice_url'] as String,
       question: json['question'] as String,
     );
 
@@ -75,6 +74,6 @@ Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
     <String, dynamic>{
       'id': instance.id,
       'image_url': instance.imageUrl,
-      'question_voice': instance.questionVoice,
+      'voice_url': instance.voiceUrl,
       'question': instance.question,
     };
