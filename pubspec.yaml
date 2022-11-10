@@ -47,6 +47,12 @@ dependencies:
   record: ^4.4.0
   path_provider: ^2.0.11
   carousel_slider: ^4.1.1
+  video_player: ^2.4.7
+  better_player: ^0.0.83
+  line_icons: ^2.0.1
+  flutter_staggered_grid_view: ^0.6.2
+  animate_do: ^2.1.0
+  card_swiper: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +81,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/dev/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

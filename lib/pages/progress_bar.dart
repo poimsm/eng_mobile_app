@@ -17,7 +17,7 @@ class _ProgressBarState extends State<ProgressBar> with SingleTickerProviderStat
   void initState() {
     super.initState();
     animationController = AnimationController(
-      duration: Duration(seconds: 25),
+      duration: Duration(seconds: 20),
       vsync: this);
 
     animation = Tween<double>(
@@ -48,7 +48,7 @@ class _ProgressBarState extends State<ProgressBar> with SingleTickerProviderStat
             decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12)),
-            height: 40,
+            height: 50,
             width: size.width * 0.98,
             child: Stack(
               children: [
@@ -56,9 +56,14 @@ class _ProgressBarState extends State<ProgressBar> with SingleTickerProviderStat
                   decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(12)),
-                  height: 40,
+                  height: 50,
                   width: size.width * 0.98 * animation.value,
                 ),
+                Positioned(
+                  top: 10,
+                  right: 15,
+                  child: Icon(Icons.mic, color: Colors.white.withOpacity(0.4), size: 30,),
+                )
               ],
             )),
       );

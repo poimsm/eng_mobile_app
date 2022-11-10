@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:eng_mobile_app/data/models/activity.dart';
+import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
 import 'package:eng_mobile_app/pages/home/enums.dart';
+import 'package:eng_mobile_app/pages/word_list/enums.dart';
 
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,8 +24,32 @@ class HomeState {
       this.challengeState = ChallengeStates.instructions,
       this.showChallenge = false,
       this.hasAudioSaved = false,
-      this.isPlaying = false,
-      this.isLoading = true});
+      this.isPlayingRecordedAudio = false,
+      this.isVoicePlaying = false,
+      this.showCollected = false,
+      this.showExample = false,
+      this.exampleText = '',
+      this.showQuestionExample = false,
+      this.showFail = false,
+      this.newWords = false,
+      this.exampleArry = const [],
+      this.challengeAnimated = false,
+      this.seconds = 0,
+      this.exampleAnimated = false,
+      this.bubbleChallengeWord,
+      this.showNextBtn = true,
+      this.activityCounter = 1,
+      this.showQuizScreen = true,
+      this.activityRoundCounter = 1,
+      this.readyForNextActivity = true,
+      this.showVideo = false,
+      this.shortVideo,
+      this.recordVoiceBusy = false,
+      this.recordAudioPath = '',
+      this.recordTemAudioPath = 'audio_0.mp3',
+      this.audioCounter = 0,
+      this.readyPlayRecordedAudioTicket = true,
+      this.isLoading = false});
 
   List<Activity> activities;
   Activity? activity;
@@ -33,7 +59,32 @@ class HomeState {
   bool loadingNextActivity;
   bool showChallenge;
   bool hasAudioSaved;
-  bool isPlaying;
+  bool isPlayingRecordedAudio;
+  bool isVoicePlaying;
+  bool showCollected;
+  bool showExample;
+  String exampleText;
+  bool showQuestionExample;
+  List<Map> exampleArry;
+  bool showFail;
+  bool newWords;
+  bool challengeAnimated;
+  bool exampleAnimated;
+  int seconds;
+  String? bubbleChallengeWord;
+  bool showNextBtn;
+  int activityCounter;
+  bool showQuizScreen;
+  int activityRoundCounter;
+  bool readyForNextActivity;
+  bool showVideo;
+  ShortVideo? shortVideo;
+  bool recordVoiceBusy;
+  String recordAudioPath;
+  String recordTemAudioPath;
+  int audioCounter;
+  bool readyPlayRecordedAudioTicket;
+
   ChallengeStates challengeState;
 
   HomeState copyWith(
@@ -45,12 +96,37 @@ class HomeState {
       loadingNextActivity,
       challengeState,
       showChallenge,
-      isPlaying,
+      isPlayingRecordedAudio,
+      isVoicePlaying,
+      showCollected,
+      showExample,
+      exampleText,
+      showQuestionExample,
+      showFail,
+      exampleArry,
+      newWords,
+      challengeAnimated,
+      seconds,
+      exampleAnimated,
+      bubbleChallengeWord,
+      showNextBtn,
+      activityCounter,
+      showQuizScreen,
+      activityRoundCounter,
+      readyForNextActivity,
+      showVideo,
+      shortVideo,
+      recordVoiceBusy,
+      recordAudioPath,
+      recordTemAudioPath,
+      audioCounter,
+      readyPlayRecordedAudioTicket,
       hasAudioSaved}) {
     return HomeState(
-      activities: activities == null
-          ? this.activities
-          : [...this.activities, ...activities],
+      // activities: activities == null
+      //     ? this.activities
+      //     : [...this.activities, ...activities],
+      activities: activities ?? this.activities,
       isRecording: isRecording ?? this.isRecording,
       isLoading: isLoading ?? this.isLoading,
       activity: activity ?? this.activity,
@@ -59,28 +135,71 @@ class HomeState {
       challengeState: challengeState ?? this.challengeState,
       showChallenge: showChallenge ?? this.showChallenge,
       hasAudioSaved: hasAudioSaved ?? this.hasAudioSaved,
-      isPlaying: isPlaying ?? this.isPlaying,
+      isPlayingRecordedAudio:
+          isPlayingRecordedAudio ?? this.isPlayingRecordedAudio,
+      isVoicePlaying: isVoicePlaying ?? this.isVoicePlaying,
+      showCollected: showCollected ?? this.showCollected,
+      showExample: showExample ?? this.showExample,
+      exampleText: exampleText ?? this.exampleText,
+      showQuestionExample: showQuestionExample ?? this.showQuestionExample,
+      showFail: showFail ?? this.showFail,
+      exampleArry: exampleArry ?? this.exampleArry,
+      newWords: newWords ?? this.newWords,
+      challengeAnimated: challengeAnimated ?? this.challengeAnimated,
+      seconds: seconds ?? this.seconds,
+      exampleAnimated: exampleAnimated ?? this.exampleAnimated,
+      bubbleChallengeWord: bubbleChallengeWord ?? this.bubbleChallengeWord,
+      showNextBtn: showNextBtn ?? this.showNextBtn,
+      activityCounter: activityCounter ?? this.activityCounter,
+      showQuizScreen: showQuizScreen ?? this.showQuizScreen,
+      activityRoundCounter: activityRoundCounter ?? this.activityRoundCounter,
+      readyForNextActivity: readyForNextActivity ?? this.readyForNextActivity,
+      showVideo: showVideo ?? this.showVideo,
+      shortVideo: shortVideo ?? this.shortVideo,
+      recordVoiceBusy: recordVoiceBusy ?? this.recordVoiceBusy,
+      recordAudioPath: recordAudioPath ?? this.recordAudioPath,
+      recordTemAudioPath: recordTemAudioPath ?? this.recordTemAudioPath,
+      audioCounter: audioCounter ?? this.audioCounter,
+      readyPlayRecordedAudioTicket:
+          readyPlayRecordedAudioTicket ?? this.readyPlayRecordedAudioTicket,
     );
   }
 }
 
-// FlutterTts flutterTts = FlutterTts();
 TextToSpeech tts = TextToSpeech();
 final player = AudioPlayer();
-// FlutterSoundRecorder myRecorder = FlutterSoundRecorder();
-// final aa = myRecorder.openRecorder();
-// aa.startRe
 final record = Record();
 bool recordCompleted = false;
+Timer? _timer;
+List<Timer?> voiceTrackerList = [];
+List<Timer?> audioTrackerList = [];
+Timer? _timerAudio;
+Timer? _timerVoice;
+int currentExamplePlay = 0;
 
 class HomeNotifier extends StateNotifier<HomeState> {
   HomeNotifier() : super(HomeState());
 
   bool micBlocked = false;
 
+  void toggleNewWord() {
+    state = state.copyWith(newWords: true);
+  }
+
+  void toggleChallengeAnimated() async {
+    state = state.copyWith(challengeAnimated: true);
+    await sleep(1000);
+    state = state.copyWith(challengeAnimated: false);
+  }
+
   Future<bool> retrieveActivities() async {
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(
+        isLoading: true,
+        showQuizScreen: false,
+        activityRoundCounter: state.activityRoundCounter + 1);
+
     final resp = await Network().get('/activities');
+
     if (!resp.ok) {
       state = state.copyWith(isLoading: false);
       return false;
@@ -91,91 +210,223 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
     state =
         state.copyWith(activities: activitiesData, activity: activitiesData[0]);
-    state = state.copyWith(isLoading: false);
 
-    if (state.activity!.type == 'question') {
-      speak(state.activity!.question!.voiceUrl);
-    } else {
-      speak('Describe the picture!');
-    }
+    playVoice(state.activity!.question.voiceUrl, shouldStop: false);
+
+    state = state.copyWith(isLoading: false);
 
     if (activitiesData[0].word != null) {
       await sleep(1000);
       state = state.copyWith(showChallenge: true);
     }
+
     return true;
   }
 
-  void onNextActivity() async {
+  delayedPlayRecordedAudioTicket() async {
+    state = state.copyWith(readyPlayRecordedAudioTicket: false);
+    await sleep(500);
+    state = state.copyWith(readyPlayRecordedAudioTicket: true);
+  }
+
+  delayedNextActivityTicket() async {
+    state = state.copyWith(readyForNextActivity: false);
+    await sleep(2050);
+    state = state.copyWith(readyForNextActivity: true);
+  }
+
+  Future<Activity?> onNextActivity() async {
+    delayedNextActivityTicket();
+    stopVoice();
+
     state = state.copyWith(loadingNextActivity: true);
+    delayedShowNextBtn();
+
+    if (state.activityCounter == state.activities.length) {
+      state = state.copyWith(
+          loadingNextActivity: false,
+          showQuizScreen: true,
+          hasAudioSaved: false,
+          currentIndex: 0,
+          challengeState: ChallengeStates.instructions,
+          activityCounter: 1);
+      return null;
+    }
+
     final index = state.currentIndex;
 
     state = state.copyWith(
+        showExample: false,
         showChallenge: false,
+        showQuestionExample: false,
+        bubbleChallengeWord: null,
+        activityCounter: state.activityCounter + 1,
         challengeState: ChallengeStates.instructions,
         hasAudioSaved: false);
 
-    if (index + 1 > state.activities.length - 1) {
-      bool nextOK = await retrieveActivities();
-      if (nextOK) {
-        state = state.copyWith(
-            activity: state.activities[index + 1], currentIndex: index + 1);
-      }
-
-      state = state.copyWith(loadingNextActivity: false);
-      await sleep(1000);
-      state = state.copyWith(showChallenge: true);
-      return;
-    }
-
     state = state.copyWith(
-        activity: state.activities[index + 1], currentIndex: index + 1);
+      activity: state.activities[index + 1],
+      currentIndex: index + 1,
+    );
+
+    if (state.activity!.question.type == QuestionType.teacher) {
+      state = state.copyWith(challengeState: ChallengeStates.accepted);
+    }
 
     await sleep(1000);
     state = state.copyWith(loadingNextActivity: false);
-    if (state.activity!.type == 'question') {
-      speak(state.activity!.question!.voiceUrl);
-    } else {
-      speak('Describe the picture!');
-    }
+    playVoice(state.activity!.question.voiceUrl, shouldStop: false);
 
-    // speak(state.activity.question.);
     await sleep(1000);
     state = state.copyWith(showChallenge: true);
+
+    return state.activity;
+  }
+
+  void delayedShowNextBtn() async {
+    state = state.copyWith(showNextBtn: false);
+    await sleep(300);
+
+    state = state.copyWith(showNextBtn: true);
   }
 
   void toggleRecording() async {
+    if (state.recordVoiceBusy) return;
+    recordVoiceBusyTracker();
+
     if (state.isRecording) {
+      toggleFail();
       stopMic();
     } else {
+      if (state.isVoicePlaying) {
+        await stopVoice();
+      }
+
+      if (state.isPlayingRecordedAudio) {
+        await stopPlayingRecordedAudio();
+      }
+
       recordMic();
     }
 
     state = state.copyWith(isRecording: !state.isRecording);
   }
 
-  void onWordClicked(val) async {
-    print('onWordClicked');
-    state = state.copyWith(challengeState: val);
+  void recordVoiceBusyTracker() async {
+    state = state.copyWith(recordVoiceBusy: true);
+    await sleep(1000);
+    state = state.copyWith(recordVoiceBusy: false);
   }
 
-  void speak(String text) async {
-    await sleep(1000);
+  void toggleFail() async {
+    // if(!state.hasAudioSaved) {
+    state = state.copyWith(showFail: true);
+    await sleep(2500);
+    state = state.copyWith(showFail: false);
+    // }
+  }
+
+  void onWordClicked(val, [sleepTime = 0]) async {
+    state = state.copyWith(challengeState: val);
+    if (sleepTime > 0) {
+      await sleep(sleepTime);
+      state = state.copyWith(showQuestionExample: true);
+
+      if (val == ChallengeStates.accepted) {
+        await sleep(300);
+        state = state.copyWith(exampleAnimated: true);
+        await sleep(600);
+        state = state.copyWith(exampleAnimated: false);
+      }
+    }
+  }
+
+  void speak(String text, {double speed = 1.2}) async {
+    if (text.isEmpty) return;
     tts.setVolume(1.0);
-    tts.setRate(1.2);
+    tts.setRate(speed);
     tts.setPitch(1.0);
     tts.speak(text);
   }
 
-  void playAudio() async {
+  Future stopVoice() async {
     try {
-      if (state.isPlaying) {
+      if (!state.isVoicePlaying) return;
+      await player.stop();
+      state = state.copyWith(isVoicePlaying: false);
+    } catch (_) {}
+  }
+
+  playVoice(String url, {bool shouldStop = true}) async {
+    try {
+      if (state.isVoicePlaying) {
         await player.stop();
-        state = state.copyWith(isPlaying: false);
+        state = state.copyWith(isVoicePlaying: false);
+        if (_timerVoice != null) {
+          _timerVoice!.cancel();
+        }
+
+        if (shouldStop) {
+          return;
+        }
+      }
+
+      final duration = await player.setAsset(url);
+      _timerVoice = Timer(duration!, () {
+        state = state.copyWith(isVoicePlaying: false);
+      });
+
+      state = state.copyWith(isVoicePlaying: true);
+      await player.play();
+    } catch (_) {}
+  }
+
+  void playRecordedAudio() async {
+    try {
+      if (!state.readyPlayRecordedAudioTicket) return;
+      delayedPlayRecordedAudioTicket();
+
+      if (state.isPlayingRecordedAudio) {
+        await stopPlayingRecordedAudio();
+      } else {
+        state = state.copyWith(isPlayingRecordedAudio: true);
+
+        _timerAudio = Timer(Duration(seconds: 20), () {
+          state = state.copyWith(isPlayingRecordedAudio: false);
+        });
+
+        Directory appDocDir = await getApplicationDocumentsDirectory();
+        String appDocPath = appDocDir.path;
+        String audioPath = '$appDocPath/${state.recordAudioPath}}';
+        // player.setFilePath(audioPath);
+        // final duration=await player.setAsset('assets/a01.mp3');
+        final duration = await player.setFilePath(audioPath);
+
+        await player.play();
+      }
+    } catch (_) {
+      state = state.copyWith(isPlayingRecordedAudio: false);
+    }
+  }
+
+  Future stopPlayingRecordedAudio() async {
+    await player.stop();
+    state = state.copyWith(isPlayingRecordedAudio: false);
+    if (_timerAudio != null) {
+      _timerAudio!.cancel();
+    }
+    return;
+  }
+
+  void playAudio2() async {
+    try {
+      if (state.isPlayingRecordedAudio) {
+        await player.stop();
+        state = state.copyWith(isPlayingRecordedAudio: false);
         return;
       }
 
-      state = state.copyWith(isPlaying: true);
+      state = state.copyWith(isPlayingRecordedAudio: true);
 
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String appDocPath = appDocDir.path;
@@ -184,27 +435,37 @@ class HomeNotifier extends StateNotifier<HomeState> {
       // final duration=await player.setAsset('assets/a01.mp3');
       final duration = await player.setFilePath(audioPath);
 
-      print(duration);
-
       await player.play();
-      state = state.copyWith(isPlaying: false);
+
+      int currentIndex = audioTrackerList.length;
+
+      audioTrackerList.add(Timer(duration!, () {
+        int innerIdx = currentIndex;
+        if (innerIdx + 1 == audioTrackerList.length) {
+          state = state.copyWith(isPlayingRecordedAudio: false);
+        }
+      }));
     } catch (_) {
-      state = state.copyWith(isPlaying: false);
+      state = state.copyWith(isPlayingRecordedAudio: false);
     }
   }
 
   void stopMic() async {
     if (await record.isRecording()) {
+      if (_timer != null) {
+        _timer!.cancel();
+        state = state.copyWith(seconds: 0);
+      }
       await record.stop();
     }
   }
 
   void recordMic() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    String audioPath = '$appDocPath/my_voice.pm3';
-
     if (await record.hasPermission()) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path;
+      String audioPath = '$appDocPath/${state.recordTemAudioPath}}';
+
       if (await record.isRecording()) {
         await record.stop();
       }
@@ -221,31 +482,128 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   triggerRecordTracker() async {
-    Timer(Duration(seconds: 5), () async {
-      recordCompleted = true;
-      await record.stop();
-      state = state.copyWith(hasAudioSaved: true, isRecording: false);
-      stopMic();
-      print('LISTOOOOOOOOO');
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      state = state.copyWith(seconds: state.seconds + 1);
+
+      if (state.seconds == 4) {
+        // toggleChallengeAnimated();
+      }
+
+      // if(state.seconds == 10) {
+      //   toggleChallengeAnimated();
+      // }
+
+      if (state.seconds == 20) {
+        recordCompleted = true;
+        await record.stop();
+        bool shouldHaveSavedAudio = state.isRecording ? true : false;
+        state = state.copyWith(
+            hasAudioSaved: false, isRecording: false, seconds: 0);
+        stopMic();
+        await sleep(500);
+        state = state.copyWith(hasAudioSaved: shouldHaveSavedAudio);
+
+        if (shouldHaveSavedAudio) {
+          state = state.copyWith(
+            recordAudioPath: state.recordTemAudioPath,
+            audioCounter: state.audioCounter + 1,
+            recordTemAudioPath: 'audio_${state.audioCounter + 1}.pm3',
+          );
+        }
+
+        timer.cancel();
+      }
     });
   }
 
-  void readExample() {
-    List<Map> ss = [
-      {
-        'text': 'Hello this is me oscar jaime Garcia',
-        'duration': 2000,
-      },
-      {
-        'text': "I live in the city of Valdivia but I'm from",
-        'duration': 2000,
-      },
-      {
-        'text': 'a small island called Mancera. This has a fortres!',
-        'duration': 2000,
-      }
-    ];
+  void toggleVideo(ShortVideo? video) async {
+    if (state.showVideo) {
+      state = state.copyWith(showVideo: false, shortVideo: null);
+      return;
+    }
+
+    state = state.copyWith(showVideo: true, shortVideo: video);
   }
+
+  void toggleExample() async {
+    state = state.copyWith(showExample: !state.showExample);
+
+    if (state.showExample) {
+      currentExamplePlay++;
+      final ex = state.activity!.example!;
+      String word =
+          state.activity!.word != null ? state.activity!.word!.word : '';
+      _playExample(ex, currentExamplePlay, word);
+      await player.setAsset(ex.voiceUrl);
+      player.play();
+    } else {
+      player.stop();
+      state = state.copyWith(showExample: false);
+      currentExamplePlay++;
+    }
+  }
+
+  void _playExample(Example ex, int index, String word) async {
+    for (var i = 0; i < ex.example.length; i++) {
+      if (index != currentExamplePlay) break;
+
+      state = state.copyWith(
+          exampleArry: _buildExample(ex.example[i]['text'], word));
+      await sleep(ex.example[i]['duration']);
+    }
+
+    if (index != currentExamplePlay) return;
+    state = state.copyWith(showExample: false);
+  }
+
+  void bubbleChallengeWordTrigger() {
+    Word word = state.activity!.word!;
+    bool isGroup = word.type == WordType.group;
+    String wordText = isGroup ? getGroupRandomTail(word.group) : word.word;
+    state = state.copyWith(bubbleChallengeWord: wordText);
+  }
+}
+
+List<Map> _buildExample(exampleText, String targetWord) {
+  final rr = exampleText.split(" ");
+
+  List<Map> words = [];
+
+  for (var elem in rr) {
+    words.add({
+      "text": elem,
+      "highlight": (elem as String).toLowerCase().trim() ==
+          targetWord.toLowerCase().trim()
+    });
+  }
+
+  List<Map> result = [
+    {'text': '', 'highlight': false}
+  ];
+  bool prev = false;
+  bool highlight = false;
+  int index = 0;
+  for (var elem in words) {
+    if (elem['highlight']) {
+      highlight = true;
+    } else {
+      highlight = false;
+    }
+
+    if (prev == highlight) {
+      result[index]['text'] += ' ' + elem['text'];
+      result[index]['highlight'] = highlight;
+    } else {
+      prev = highlight;
+      index++;
+      result.add({'text': '', 'highlight': false});
+
+      result[index]['text'] += ' ' + elem['text'];
+      result[index]['highlight'] = highlight;
+    }
+  }
+
+  return result;
 }
 
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {

@@ -35,6 +35,14 @@ class MockServer {
       return MockReply(200, MockMyWords().json());
     }
 
+    if (endpoint.contains('/library/video')) {
+      return MockReply(200, MockVideos().json());
+    }
+
+    if (endpoint.contains('/library/card')) {
+      return MockReply(200, MockCards().json());
+    }
+
     return MockReply(404, 'Not Found');
   }
 

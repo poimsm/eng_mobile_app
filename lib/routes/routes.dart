@@ -6,4 +6,6 @@ abstract class Routes {
   static const WORD_DETAIL = '/word-detail';
   static const LOGIN = '/login';
   static const CHALLENGE = '/challenge';
+  static const STORE = '/store';
+  static const LIBRARY = '/library';
 }

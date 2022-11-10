@@ -22,3 +22,10 @@ enum ActivityTypes {
   question,
   describeImage
 }
+
+enum RecordStages {
+  recording,
+  haveNewAudioSaved,
+  userHaveCancelledRecording,
+  example,
+}

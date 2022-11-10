@@ -20,11 +20,9 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Activity {
-  String get type => throw _privateConstructorUsedError;
-  Question? get question => throw _privateConstructorUsedError;
+  Question get question => throw _privateConstructorUsedError;
   Word? get word => throw _privateConstructorUsedError;
-  @JsonKey(name: 'image')
-  ImageActivity? get imageActivity => throw _privateConstructorUsedError;
+  Example? get example => throw _privateConstructorUsedError;
   Style get style => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,97 +34,91 @@ mixin _$Activity {
 /// @nodoc
 abstract class $ActivityCopyWith<$Res> {
   factory $ActivityCopyWith(Activity value, $Res Function(Activity) then) =
-      _$ActivityCopyWithImpl<$Res>;
-  $Res call(
-      {String type,
-      Question? question,
-      Word? word,
-      @JsonKey(name: 'image') ImageActivity? imageActivity,
-      Style style});
+      _$ActivityCopyWithImpl<$Res, Activity>;
+  @useResult
+  $Res call({Question question, Word? word, Example? example, Style style});
 
-  $QuestionCopyWith<$Res>? get question;
+  $QuestionCopyWith<$Res> get question;
   $WordCopyWith<$Res>? get word;
-  $ImageActivityCopyWith<$Res>? get imageActivity;
+  $ExampleCopyWith<$Res>? get example;
   $StyleCopyWith<$Res> get style;
 }
 
 /// @nodoc
-class _$ActivityCopyWithImpl<$Res> implements $ActivityCopyWith<$Res> {
+class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
+    implements $ActivityCopyWith<$Res> {
   _$ActivityCopyWithImpl(this._value, this._then);
 
-  final Activity _value;
   // ignore: unused_field
-  final $Res Function(Activity) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? type = freezed,
-    Object? question = freezed,
+    Object? question = null,
     Object? word = freezed,
-    Object? imageActivity = freezed,
-    Object? style = freezed,
+    Object? example = freezed,
+    Object? style = null,
   }) {
     return _then(_value.copyWith(
-      type: type == freezed
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      question: question == freezed
+      question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
-              as Question?,
-      word: word == freezed
+              as Question,
+      word: freezed == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as Word?,
-      imageActivity: imageActivity == freezed
-          ? _value.imageActivity
-          : imageActivity // ignore: cast_nullable_to_non_nullable
-              as ImageActivity?,
-      style: style == freezed
+      example: freezed == example
+          ? _value.example
+          : example // ignore: cast_nullable_to_non_nullable
+              as Example?,
+      style: null == style
           ? _value.style
           : style // ignore: cast_nullable_to_non_nullable
               as Style,
-    ));
+    ) as $Val);
   }
 
   @override
-  $QuestionCopyWith<$Res>? get question {
-    if (_value.question == null) {
-      return null;
-    }
-
-    return $QuestionCopyWith<$Res>(_value.question!, (value) {
-      return _then(_value.copyWith(question: value));
+  @pragma('vm:prefer-inline')
+  $QuestionCopyWith<$Res> get question {
+    return $QuestionCopyWith<$Res>(_value.question, (value) {
+      return _then(_value.copyWith(question: value) as $Val);
     });
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $WordCopyWith<$Res>? get word {
     if (_value.word == null) {
       return null;
     }
 
     return $WordCopyWith<$Res>(_value.word!, (value) {
-      return _then(_value.copyWith(word: value));
+      return _then(_value.copyWith(word: value) as $Val);
     });
   }
 
   @override
-  $ImageActivityCopyWith<$Res>? get imageActivity {
-    if (_value.imageActivity == null) {
+  @pragma('vm:prefer-inline')
+  $ExampleCopyWith<$Res>? get example {
+    if (_value.example == null) {
       return null;
     }
 
-    return $ImageActivityCopyWith<$Res>(_value.imageActivity!, (value) {
-      return _then(_value.copyWith(imageActivity: value));
+    return $ExampleCopyWith<$Res>(_value.example!, (value) {
+      return _then(_value.copyWith(example: value) as $Val);
     });
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $StyleCopyWith<$Res> get style {
     return $StyleCopyWith<$Res>(_value.style, (value) {
-      return _then(_value.copyWith(style: value));
+      return _then(_value.copyWith(style: value) as $Val);
     });
   }
 }
@@ -137,59 +129,49 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
           _$_Activity value, $Res Function(_$_Activity) then) =
       __$$_ActivityCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String type,
-      Question? question,
-      Word? word,
-      @JsonKey(name: 'image') ImageActivity? imageActivity,
-      Style style});
+  @useResult
+  $Res call({Question question, Word? word, Example? example, Style style});
 
   @override
-  $QuestionCopyWith<$Res>? get question;
+  $QuestionCopyWith<$Res> get question;
   @override
   $WordCopyWith<$Res>? get word;
   @override
-  $ImageActivityCopyWith<$Res>? get imageActivity;
+  $ExampleCopyWith<$Res>? get example;
   @override
   $StyleCopyWith<$Res> get style;
 }
 
 /// @nodoc
-class __$$_ActivityCopyWithImpl<$Res> extends _$ActivityCopyWithImpl<$Res>
+class __$$_ActivityCopyWithImpl<$Res>
+    extends _$ActivityCopyWithImpl<$Res, _$_Activity>
     implements _$$_ActivityCopyWith<$Res> {
   __$$_ActivityCopyWithImpl(
       _$_Activity _value, $Res Function(_$_Activity) _then)
-      : super(_value, (v) => _then(v as _$_Activity));
+      : super(_value, _then);
 
-  @override
-  _$_Activity get _value => super._value as _$_Activity;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? type = freezed,
-    Object? question = freezed,
+    Object? question = null,
     Object? word = freezed,
-    Object? imageActivity = freezed,
-    Object? style = freezed,
+    Object? example = freezed,
+    Object? style = null,
   }) {
     return _then(_$_Activity(
-      type: type == freezed
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      question: question == freezed
+      question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
-              as Question?,
-      word: word == freezed
+              as Question,
+      word: freezed == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as Word?,
-      imageActivity: imageActivity == freezed
-          ? _value.imageActivity
-          : imageActivity // ignore: cast_nullable_to_non_nullable
-              as ImageActivity?,
-      style: style == freezed
+      example: freezed == example
+          ? _value.example
+          : example // ignore: cast_nullable_to_non_nullable
+              as Example?,
+      style: null == style
           ? _value.style
           : style // ignore: cast_nullable_to_non_nullable
               as Style,
@@ -201,30 +183,23 @@ class __$$_ActivityCopyWithImpl<$Res> extends _$ActivityCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Activity implements _Activity {
   const _$_Activity(
-      {required this.type,
-      this.question,
-      this.word,
-      @JsonKey(name: 'image') this.imageActivity,
-      required this.style});
+      {required this.question, this.word, this.example, required this.style});
 
   factory _$_Activity.fromJson(Map<String, dynamic> json) =>
       _$$_ActivityFromJson(json);
 
   @override
-  final String type;
-  @override
-  final Question? question;
+  final Question question;
   @override
   final Word? word;
   @override
-  @JsonKey(name: 'image')
-  final ImageActivity? imageActivity;
+  final Example? example;
   @override
   final Style style;
 
   @override
   String toString() {
-    return 'Activity(type: $type, question: $question, word: $word, imageActivity: $imageActivity, style: $style)';
+    return 'Activity(question: $question, word: $word, example: $example, style: $style)';
   }
 
   @override
@@ -232,26 +207,20 @@ class _$_Activity implements _Activity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Activity &&
-            const DeepCollectionEquality().equals(other.type, type) &&
-            const DeepCollectionEquality().equals(other.question, question) &&
-            const DeepCollectionEquality().equals(other.word, word) &&
-            const DeepCollectionEquality()
-                .equals(other.imageActivity, imageActivity) &&
-            const DeepCollectionEquality().equals(other.style, style));
+            (identical(other.question, question) ||
+                other.question == question) &&
+            (identical(other.word, word) || other.word == word) &&
+            (identical(other.example, example) || other.example == example) &&
+            (identical(other.style, style) || other.style == style));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(type),
-      const DeepCollectionEquality().hash(question),
-      const DeepCollectionEquality().hash(word),
-      const DeepCollectionEquality().hash(imageActivity),
-      const DeepCollectionEquality().hash(style));
+  int get hashCode => Object.hash(runtimeType, question, word, example, style);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ActivityCopyWith<_$_Activity> get copyWith =>
       __$$_ActivityCopyWithImpl<_$_Activity>(this, _$identity);
 
@@ -265,23 +234,19 @@ class _$_Activity implements _Activity {
 
 abstract class _Activity implements Activity {
   const factory _Activity(
-      {required final String type,
-      final Question? question,
+      {required final Question question,
       final Word? word,
-      @JsonKey(name: 'image') final ImageActivity? imageActivity,
+      final Example? example,
       required final Style style}) = _$_Activity;
 
   factory _Activity.fromJson(Map<String, dynamic> json) = _$_Activity.fromJson;
 
   @override
-  String get type;
-  @override
-  Question? get question;
+  Question get question;
   @override
   Word? get word;
   @override
-  @JsonKey(name: 'image')
-  ImageActivity? get imageActivity;
+  Example? get example;
   @override
   Style get style;
   @override
@@ -296,10 +261,21 @@ Word _$WordFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Word {
-  int get id => throw _privateConstructorUsedError;
+  int get id =>
+      throw _privateConstructorUsedError; // @JsonKey(fromJson: User._addressFromJson,toJson: User._addressToJson) Address? address,
   @JsonKey(name: 'sentence')
   String get word => throw _privateConstructorUsedError;
+  int get origin => throw _privateConstructorUsedError;
+  int get type => throw _privateConstructorUsedError;
   String? get meaning => throw _privateConstructorUsedError;
+  bool get saved => throw _privateConstructorUsedError;
+  List<String> get group => throw _privateConstructorUsedError;
+  @JsonKey(name: 'source_type')
+  int? get sourceType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'info_card')
+  InfoCard? get infoCard => throw _privateConstructorUsedError;
+  @JsonKey(name: 'short_video')
+  ShortVideo? get shortVideo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -309,38 +285,114 @@ mixin _$Word {
 /// @nodoc
 abstract class $WordCopyWith<$Res> {
   factory $WordCopyWith(Word value, $Res Function(Word) then) =
-      _$WordCopyWithImpl<$Res>;
-  $Res call({int id, @JsonKey(name: 'sentence') String word, String? meaning});
+      _$WordCopyWithImpl<$Res, Word>;
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'sentence') String word,
+      int origin,
+      int type,
+      String? meaning,
+      bool saved,
+      List<String> group,
+      @JsonKey(name: 'source_type') int? sourceType,
+      @JsonKey(name: 'info_card') InfoCard? infoCard,
+      @JsonKey(name: 'short_video') ShortVideo? shortVideo});
+
+  $InfoCardCopyWith<$Res>? get infoCard;
+  $ShortVideoCopyWith<$Res>? get shortVideo;
 }
 
 /// @nodoc
-class _$WordCopyWithImpl<$Res> implements $WordCopyWith<$Res> {
+class _$WordCopyWithImpl<$Res, $Val extends Word>
+    implements $WordCopyWith<$Res> {
   _$WordCopyWithImpl(this._value, this._then);
 
-  final Word _value;
   // ignore: unused_field
-  final $Res Function(Word) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? word = freezed,
+    Object? id = null,
+    Object? word = null,
+    Object? origin = null,
+    Object? type = null,
     Object? meaning = freezed,
+    Object? saved = null,
+    Object? group = null,
+    Object? sourceType = freezed,
+    Object? infoCard = freezed,
+    Object? shortVideo = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      word: word == freezed
+      word: null == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
-      meaning: meaning == freezed
+      origin: null == origin
+          ? _value.origin
+          : origin // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
+      meaning: freezed == meaning
           ? _value.meaning
           : meaning // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+      saved: null == saved
+          ? _value.saved
+          : saved // ignore: cast_nullable_to_non_nullable
+              as bool,
+      group: null == group
+          ? _value.group
+          : group // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      sourceType: freezed == sourceType
+          ? _value.sourceType
+          : sourceType // ignore: cast_nullable_to_non_nullable
+              as int?,
+      infoCard: freezed == infoCard
+          ? _value.infoCard
+          : infoCard // ignore: cast_nullable_to_non_nullable
+              as InfoCard?,
+      shortVideo: freezed == shortVideo
+          ? _value.shortVideo
+          : shortVideo // ignore: cast_nullable_to_non_nullable
+              as ShortVideo?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $InfoCardCopyWith<$Res>? get infoCard {
+    if (_value.infoCard == null) {
+      return null;
+    }
+
+    return $InfoCardCopyWith<$Res>(_value.infoCard!, (value) {
+      return _then(_value.copyWith(infoCard: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ShortVideoCopyWith<$Res>? get shortVideo {
+    if (_value.shortVideo == null) {
+      return null;
+    }
+
+    return $ShortVideoCopyWith<$Res>(_value.shortVideo!, (value) {
+      return _then(_value.copyWith(shortVideo: value) as $Val);
+    });
   }
 }
 
@@ -349,37 +401,86 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
   factory _$$_WordCopyWith(_$_Word value, $Res Function(_$_Word) then) =
       __$$_WordCopyWithImpl<$Res>;
   @override
-  $Res call({int id, @JsonKey(name: 'sentence') String word, String? meaning});
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'sentence') String word,
+      int origin,
+      int type,
+      String? meaning,
+      bool saved,
+      List<String> group,
+      @JsonKey(name: 'source_type') int? sourceType,
+      @JsonKey(name: 'info_card') InfoCard? infoCard,
+      @JsonKey(name: 'short_video') ShortVideo? shortVideo});
+
+  @override
+  $InfoCardCopyWith<$Res>? get infoCard;
+  @override
+  $ShortVideoCopyWith<$Res>? get shortVideo;
 }
 
 /// @nodoc
-class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res>
+class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
     implements _$$_WordCopyWith<$Res> {
   __$$_WordCopyWithImpl(_$_Word _value, $Res Function(_$_Word) _then)
-      : super(_value, (v) => _then(v as _$_Word));
+      : super(_value, _then);
 
-  @override
-  _$_Word get _value => super._value as _$_Word;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? word = freezed,
+    Object? id = null,
+    Object? word = null,
+    Object? origin = null,
+    Object? type = null,
     Object? meaning = freezed,
+    Object? saved = null,
+    Object? group = null,
+    Object? sourceType = freezed,
+    Object? infoCard = freezed,
+    Object? shortVideo = freezed,
   }) {
     return _then(_$_Word(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      word: word == freezed
+      word: null == word
           ? _value.word
           : word // ignore: cast_nullable_to_non_nullable
               as String,
-      meaning: meaning == freezed
+      origin: null == origin
+          ? _value.origin
+          : origin // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
+      meaning: freezed == meaning
           ? _value.meaning
           : meaning // ignore: cast_nullable_to_non_nullable
               as String?,
+      saved: null == saved
+          ? _value.saved
+          : saved // ignore: cast_nullable_to_non_nullable
+              as bool,
+      group: null == group
+          ? _value._group
+          : group // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      sourceType: freezed == sourceType
+          ? _value.sourceType
+          : sourceType // ignore: cast_nullable_to_non_nullable
+              as int?,
+      infoCard: freezed == infoCard
+          ? _value.infoCard
+          : infoCard // ignore: cast_nullable_to_non_nullable
+              as InfoCard?,
+      shortVideo: freezed == shortVideo
+          ? _value.shortVideo
+          : shortVideo // ignore: cast_nullable_to_non_nullable
+              as ShortVideo?,
     ));
   }
 }
@@ -390,21 +491,54 @@ class _$_Word implements _Word {
   const _$_Word(
       {required this.id,
       @JsonKey(name: 'sentence') required this.word,
-      this.meaning});
+      required this.origin,
+      required this.type,
+      this.meaning,
+      this.saved = false,
+      final List<String> group = const [],
+      @JsonKey(name: 'source_type') this.sourceType,
+      @JsonKey(name: 'info_card') this.infoCard,
+      @JsonKey(name: 'short_video') this.shortVideo})
+      : _group = group;
 
   factory _$_Word.fromJson(Map<String, dynamic> json) => _$$_WordFromJson(json);
 
   @override
   final int id;
+// @JsonKey(fromJson: User._addressFromJson,toJson: User._addressToJson) Address? address,
   @override
   @JsonKey(name: 'sentence')
   final String word;
   @override
+  final int origin;
+  @override
+  final int type;
+  @override
   final String? meaning;
+  @override
+  @JsonKey()
+  final bool saved;
+  final List<String> _group;
+  @override
+  @JsonKey()
+  List<String> get group {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_group);
+  }
+
+  @override
+  @JsonKey(name: 'source_type')
+  final int? sourceType;
+  @override
+  @JsonKey(name: 'info_card')
+  final InfoCard? infoCard;
+  @override
+  @JsonKey(name: 'short_video')
+  final ShortVideo? shortVideo;
 
   @override
   String toString() {
-    return 'Word(id: $id, word: $word, meaning: $meaning)';
+    return 'Word(id: $id, word: $word, origin: $origin, type: $type, meaning: $meaning, saved: $saved, group: $group, sourceType: $sourceType, infoCard: $infoCard, shortVideo: $shortVideo)';
   }
 
   @override
@@ -412,21 +546,39 @@ class _$_Word implements _Word {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Word &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.word, word) &&
-            const DeepCollectionEquality().equals(other.meaning, meaning));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.word, word) || other.word == word) &&
+            (identical(other.origin, origin) || other.origin == origin) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.meaning, meaning) || other.meaning == meaning) &&
+            (identical(other.saved, saved) || other.saved == saved) &&
+            const DeepCollectionEquality().equals(other._group, _group) &&
+            (identical(other.sourceType, sourceType) ||
+                other.sourceType == sourceType) &&
+            (identical(other.infoCard, infoCard) ||
+                other.infoCard == infoCard) &&
+            (identical(other.shortVideo, shortVideo) ||
+                other.shortVideo == shortVideo));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(word),
-      const DeepCollectionEquality().hash(meaning));
+      id,
+      word,
+      origin,
+      type,
+      meaning,
+      saved,
+      const DeepCollectionEquality().hash(_group),
+      sourceType,
+      infoCard,
+      shortVideo);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_WordCopyWith<_$_Word> get copyWith =>
       __$$_WordCopyWithImpl<_$_Word>(this, _$identity);
 
@@ -442,20 +594,226 @@ abstract class _Word implements Word {
   const factory _Word(
       {required final int id,
       @JsonKey(name: 'sentence') required final String word,
-      final String? meaning}) = _$_Word;
+      required final int origin,
+      required final int type,
+      final String? meaning,
+      final bool saved,
+      final List<String> group,
+      @JsonKey(name: 'source_type') final int? sourceType,
+      @JsonKey(name: 'info_card') final InfoCard? infoCard,
+      @JsonKey(name: 'short_video') final ShortVideo? shortVideo}) = _$_Word;
 
   factory _Word.fromJson(Map<String, dynamic> json) = _$_Word.fromJson;
 
   @override
   int get id;
-  @override
+  @override // @JsonKey(fromJson: User._addressFromJson,toJson: User._addressToJson) Address? address,
   @JsonKey(name: 'sentence')
   String get word;
   @override
+  int get origin;
+  @override
+  int get type;
+  @override
   String? get meaning;
+  @override
+  bool get saved;
+  @override
+  List<String> get group;
+  @override
+  @JsonKey(name: 'source_type')
+  int? get sourceType;
+  @override
+  @JsonKey(name: 'info_card')
+  InfoCard? get infoCard;
+  @override
+  @JsonKey(name: 'short_video')
+  ShortVideo? get shortVideo;
   @override
   @JsonKey(ignore: true)
   _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
+}
+
+Example _$ExampleFromJson(Map<String, dynamic> json) {
+  return _Example.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Example {
+  int get id => throw _privateConstructorUsedError;
+  List<Map> get example => throw _privateConstructorUsedError;
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ExampleCopyWith<Example> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ExampleCopyWith<$Res> {
+  factory $ExampleCopyWith(Example value, $Res Function(Example) then) =
+      _$ExampleCopyWithImpl<$Res, Example>;
+  @useResult
+  $Res call(
+      {int id, List<Map> example, @JsonKey(name: 'voice_url') String voiceUrl});
+}
+
+/// @nodoc
+class _$ExampleCopyWithImpl<$Res, $Val extends Example>
+    implements $ExampleCopyWith<$Res> {
+  _$ExampleCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? example = null,
+    Object? voiceUrl = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      example: null == example
+          ? _value.example
+          : example // ignore: cast_nullable_to_non_nullable
+              as List<Map>,
+      voiceUrl: null == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_ExampleCopyWith<$Res> implements $ExampleCopyWith<$Res> {
+  factory _$$_ExampleCopyWith(
+          _$_Example value, $Res Function(_$_Example) then) =
+      __$$_ExampleCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id, List<Map> example, @JsonKey(name: 'voice_url') String voiceUrl});
+}
+
+/// @nodoc
+class __$$_ExampleCopyWithImpl<$Res>
+    extends _$ExampleCopyWithImpl<$Res, _$_Example>
+    implements _$$_ExampleCopyWith<$Res> {
+  __$$_ExampleCopyWithImpl(_$_Example _value, $Res Function(_$_Example) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? example = null,
+    Object? voiceUrl = null,
+  }) {
+    return _then(_$_Example(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      example: null == example
+          ? _value._example
+          : example // ignore: cast_nullable_to_non_nullable
+              as List<Map>,
+      voiceUrl: null == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Example implements _Example {
+  const _$_Example(
+      {required this.id,
+      required final List<Map> example,
+      @JsonKey(name: 'voice_url') required this.voiceUrl})
+      : _example = example;
+
+  factory _$_Example.fromJson(Map<String, dynamic> json) =>
+      _$$_ExampleFromJson(json);
+
+  @override
+  final int id;
+  final List<Map> _example;
+  @override
+  List<Map> get example {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_example);
+  }
+
+  @override
+  @JsonKey(name: 'voice_url')
+  final String voiceUrl;
+
+  @override
+  String toString() {
+    return 'Example(id: $id, example: $example, voiceUrl: $voiceUrl)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Example &&
+            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other._example, _example) &&
+            (identical(other.voiceUrl, voiceUrl) ||
+                other.voiceUrl == voiceUrl));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, id, const DeepCollectionEquality().hash(_example), voiceUrl);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ExampleCopyWith<_$_Example> get copyWith =>
+      __$$_ExampleCopyWithImpl<_$_Example>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ExampleToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Example implements Example {
+  const factory _Example(
+      {required final int id,
+      required final List<Map> example,
+      @JsonKey(name: 'voice_url') required final String voiceUrl}) = _$_Example;
+
+  factory _Example.fromJson(Map<String, dynamic> json) = _$_Example.fromJson;
+
+  @override
+  int get id;
+  @override
+  List<Map> get example;
+  @override
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ExampleCopyWith<_$_Example> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 Style _$StyleFromJson(Map<String, dynamic> json) {
@@ -466,8 +824,22 @@ Style _$StyleFromJson(Map<String, dynamic> json) {
 mixin _$Style {
   @JsonKey(name: 'background_screen')
   String get backgroundScreen => throw _privateConstructorUsedError;
-  @JsonKey(name: 'background_word')
-  String get backgroundWord => throw _privateConstructorUsedError;
+  @JsonKey(name: 'background_challenge')
+  String get backgroundChallenge => throw _privateConstructorUsedError;
+  @JsonKey(name: 'use_gradient')
+  bool get useGradient => throw _privateConstructorUsedError;
+  @JsonKey(name: 'bottom_gradient_color')
+  String? get bottomGradientColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'top_gradient_color')
+  String? get topGradientColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'question_position')
+  double get questionPosition => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_position')
+  double get imagePosition => throw _privateConstructorUsedError;
+  @JsonKey(name: 'question_font_size')
+  double get questionFontSize => throw _privateConstructorUsedError;
+  @JsonKey(name: 'question_opacity')
+  double get questionOpacity => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -477,35 +849,81 @@ mixin _$Style {
 /// @nodoc
 abstract class $StyleCopyWith<$Res> {
   factory $StyleCopyWith(Style value, $Res Function(Style) then) =
-      _$StyleCopyWithImpl<$Res>;
+      _$StyleCopyWithImpl<$Res, Style>;
+  @useResult
   $Res call(
       {@JsonKey(name: 'background_screen') String backgroundScreen,
-      @JsonKey(name: 'background_word') String backgroundWord});
+      @JsonKey(name: 'background_challenge') String backgroundChallenge,
+      @JsonKey(name: 'use_gradient') bool useGradient,
+      @JsonKey(name: 'bottom_gradient_color') String? bottomGradientColor,
+      @JsonKey(name: 'top_gradient_color') String? topGradientColor,
+      @JsonKey(name: 'question_position') double questionPosition,
+      @JsonKey(name: 'image_position') double imagePosition,
+      @JsonKey(name: 'question_font_size') double questionFontSize,
+      @JsonKey(name: 'question_opacity') double questionOpacity});
 }
 
 /// @nodoc
-class _$StyleCopyWithImpl<$Res> implements $StyleCopyWith<$Res> {
+class _$StyleCopyWithImpl<$Res, $Val extends Style>
+    implements $StyleCopyWith<$Res> {
   _$StyleCopyWithImpl(this._value, this._then);
 
-  final Style _value;
   // ignore: unused_field
-  final $Res Function(Style) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? backgroundScreen = freezed,
-    Object? backgroundWord = freezed,
+    Object? backgroundScreen = null,
+    Object? backgroundChallenge = null,
+    Object? useGradient = null,
+    Object? bottomGradientColor = freezed,
+    Object? topGradientColor = freezed,
+    Object? questionPosition = null,
+    Object? imagePosition = null,
+    Object? questionFontSize = null,
+    Object? questionOpacity = null,
   }) {
     return _then(_value.copyWith(
-      backgroundScreen: backgroundScreen == freezed
+      backgroundScreen: null == backgroundScreen
           ? _value.backgroundScreen
           : backgroundScreen // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundWord: backgroundWord == freezed
-          ? _value.backgroundWord
-          : backgroundWord // ignore: cast_nullable_to_non_nullable
+      backgroundChallenge: null == backgroundChallenge
+          ? _value.backgroundChallenge
+          : backgroundChallenge // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+      useGradient: null == useGradient
+          ? _value.useGradient
+          : useGradient // ignore: cast_nullable_to_non_nullable
+              as bool,
+      bottomGradientColor: freezed == bottomGradientColor
+          ? _value.bottomGradientColor
+          : bottomGradientColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      topGradientColor: freezed == topGradientColor
+          ? _value.topGradientColor
+          : topGradientColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      questionPosition: null == questionPosition
+          ? _value.questionPosition
+          : questionPosition // ignore: cast_nullable_to_non_nullable
+              as double,
+      imagePosition: null == imagePosition
+          ? _value.imagePosition
+          : imagePosition // ignore: cast_nullable_to_non_nullable
+              as double,
+      questionFontSize: null == questionFontSize
+          ? _value.questionFontSize
+          : questionFontSize // ignore: cast_nullable_to_non_nullable
+              as double,
+      questionOpacity: null == questionOpacity
+          ? _value.questionOpacity
+          : questionOpacity // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
   }
 }
 
@@ -514,34 +932,75 @@ abstract class _$$_StyleCopyWith<$Res> implements $StyleCopyWith<$Res> {
   factory _$$_StyleCopyWith(_$_Style value, $Res Function(_$_Style) then) =
       __$$_StyleCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@JsonKey(name: 'background_screen') String backgroundScreen,
-      @JsonKey(name: 'background_word') String backgroundWord});
+      @JsonKey(name: 'background_challenge') String backgroundChallenge,
+      @JsonKey(name: 'use_gradient') bool useGradient,
+      @JsonKey(name: 'bottom_gradient_color') String? bottomGradientColor,
+      @JsonKey(name: 'top_gradient_color') String? topGradientColor,
+      @JsonKey(name: 'question_position') double questionPosition,
+      @JsonKey(name: 'image_position') double imagePosition,
+      @JsonKey(name: 'question_font_size') double questionFontSize,
+      @JsonKey(name: 'question_opacity') double questionOpacity});
 }
 
 /// @nodoc
-class __$$_StyleCopyWithImpl<$Res> extends _$StyleCopyWithImpl<$Res>
+class __$$_StyleCopyWithImpl<$Res> extends _$StyleCopyWithImpl<$Res, _$_Style>
     implements _$$_StyleCopyWith<$Res> {
   __$$_StyleCopyWithImpl(_$_Style _value, $Res Function(_$_Style) _then)
-      : super(_value, (v) => _then(v as _$_Style));
+      : super(_value, _then);
 
-  @override
-  _$_Style get _value => super._value as _$_Style;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? backgroundScreen = freezed,
-    Object? backgroundWord = freezed,
+    Object? backgroundScreen = null,
+    Object? backgroundChallenge = null,
+    Object? useGradient = null,
+    Object? bottomGradientColor = freezed,
+    Object? topGradientColor = freezed,
+    Object? questionPosition = null,
+    Object? imagePosition = null,
+    Object? questionFontSize = null,
+    Object? questionOpacity = null,
   }) {
     return _then(_$_Style(
-      backgroundScreen: backgroundScreen == freezed
+      backgroundScreen: null == backgroundScreen
           ? _value.backgroundScreen
           : backgroundScreen // ignore: cast_nullable_to_non_nullable
               as String,
-      backgroundWord: backgroundWord == freezed
-          ? _value.backgroundWord
-          : backgroundWord // ignore: cast_nullable_to_non_nullable
+      backgroundChallenge: null == backgroundChallenge
+          ? _value.backgroundChallenge
+          : backgroundChallenge // ignore: cast_nullable_to_non_nullable
               as String,
+      useGradient: null == useGradient
+          ? _value.useGradient
+          : useGradient // ignore: cast_nullable_to_non_nullable
+              as bool,
+      bottomGradientColor: freezed == bottomGradientColor
+          ? _value.bottomGradientColor
+          : bottomGradientColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      topGradientColor: freezed == topGradientColor
+          ? _value.topGradientColor
+          : topGradientColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      questionPosition: null == questionPosition
+          ? _value.questionPosition
+          : questionPosition // ignore: cast_nullable_to_non_nullable
+              as double,
+      imagePosition: null == imagePosition
+          ? _value.imagePosition
+          : imagePosition // ignore: cast_nullable_to_non_nullable
+              as double,
+      questionFontSize: null == questionFontSize
+          ? _value.questionFontSize
+          : questionFontSize // ignore: cast_nullable_to_non_nullable
+              as double,
+      questionOpacity: null == questionOpacity
+          ? _value.questionOpacity
+          : questionOpacity // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -551,7 +1010,14 @@ class __$$_StyleCopyWithImpl<$Res> extends _$StyleCopyWithImpl<$Res>
 class _$_Style implements _Style {
   const _$_Style(
       {@JsonKey(name: 'background_screen') required this.backgroundScreen,
-      @JsonKey(name: 'background_word') required this.backgroundWord});
+      @JsonKey(name: 'background_challenge') required this.backgroundChallenge,
+      @JsonKey(name: 'use_gradient') required this.useGradient,
+      @JsonKey(name: 'bottom_gradient_color') this.bottomGradientColor,
+      @JsonKey(name: 'top_gradient_color') this.topGradientColor,
+      @JsonKey(name: 'question_position') required this.questionPosition,
+      @JsonKey(name: 'image_position') required this.imagePosition,
+      @JsonKey(name: 'question_font_size') required this.questionFontSize,
+      @JsonKey(name: 'question_opacity') required this.questionOpacity});
 
   factory _$_Style.fromJson(Map<String, dynamic> json) =>
       _$$_StyleFromJson(json);
@@ -560,12 +1026,33 @@ class _$_Style implements _Style {
   @JsonKey(name: 'background_screen')
   final String backgroundScreen;
   @override
-  @JsonKey(name: 'background_word')
-  final String backgroundWord;
+  @JsonKey(name: 'background_challenge')
+  final String backgroundChallenge;
+  @override
+  @JsonKey(name: 'use_gradient')
+  final bool useGradient;
+  @override
+  @JsonKey(name: 'bottom_gradient_color')
+  final String? bottomGradientColor;
+  @override
+  @JsonKey(name: 'top_gradient_color')
+  final String? topGradientColor;
+  @override
+  @JsonKey(name: 'question_position')
+  final double questionPosition;
+  @override
+  @JsonKey(name: 'image_position')
+  final double imagePosition;
+  @override
+  @JsonKey(name: 'question_font_size')
+  final double questionFontSize;
+  @override
+  @JsonKey(name: 'question_opacity')
+  final double questionOpacity;
 
   @override
   String toString() {
-    return 'Style(backgroundScreen: $backgroundScreen, backgroundWord: $backgroundWord)';
+    return 'Style(backgroundScreen: $backgroundScreen, backgroundChallenge: $backgroundChallenge, useGradient: $useGradient, bottomGradientColor: $bottomGradientColor, topGradientColor: $topGradientColor, questionPosition: $questionPosition, imagePosition: $imagePosition, questionFontSize: $questionFontSize, questionOpacity: $questionOpacity)';
   }
 
   @override
@@ -573,21 +1060,43 @@ class _$_Style implements _Style {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Style &&
-            const DeepCollectionEquality()
-                .equals(other.backgroundScreen, backgroundScreen) &&
-            const DeepCollectionEquality()
-                .equals(other.backgroundWord, backgroundWord));
+            (identical(other.backgroundScreen, backgroundScreen) ||
+                other.backgroundScreen == backgroundScreen) &&
+            (identical(other.backgroundChallenge, backgroundChallenge) ||
+                other.backgroundChallenge == backgroundChallenge) &&
+            (identical(other.useGradient, useGradient) ||
+                other.useGradient == useGradient) &&
+            (identical(other.bottomGradientColor, bottomGradientColor) ||
+                other.bottomGradientColor == bottomGradientColor) &&
+            (identical(other.topGradientColor, topGradientColor) ||
+                other.topGradientColor == topGradientColor) &&
+            (identical(other.questionPosition, questionPosition) ||
+                other.questionPosition == questionPosition) &&
+            (identical(other.imagePosition, imagePosition) ||
+                other.imagePosition == imagePosition) &&
+            (identical(other.questionFontSize, questionFontSize) ||
+                other.questionFontSize == questionFontSize) &&
+            (identical(other.questionOpacity, questionOpacity) ||
+                other.questionOpacity == questionOpacity));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(backgroundScreen),
-      const DeepCollectionEquality().hash(backgroundWord));
+      backgroundScreen,
+      backgroundChallenge,
+      useGradient,
+      bottomGradientColor,
+      topGradientColor,
+      questionPosition,
+      imagePosition,
+      questionFontSize,
+      questionOpacity);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_StyleCopyWith<_$_Style> get copyWith =>
       __$$_StyleCopyWithImpl<_$_Style>(this, _$identity);
 
@@ -603,8 +1112,22 @@ abstract class _Style implements Style {
   const factory _Style(
       {@JsonKey(name: 'background_screen')
           required final String backgroundScreen,
-      @JsonKey(name: 'background_word')
-          required final String backgroundWord}) = _$_Style;
+      @JsonKey(name: 'background_challenge')
+          required final String backgroundChallenge,
+      @JsonKey(name: 'use_gradient')
+          required final bool useGradient,
+      @JsonKey(name: 'bottom_gradient_color')
+          final String? bottomGradientColor,
+      @JsonKey(name: 'top_gradient_color')
+          final String? topGradientColor,
+      @JsonKey(name: 'question_position')
+          required final double questionPosition,
+      @JsonKey(name: 'image_position')
+          required final double imagePosition,
+      @JsonKey(name: 'question_font_size')
+          required final double questionFontSize,
+      @JsonKey(name: 'question_opacity')
+          required final double questionOpacity}) = _$_Style;
 
   factory _Style.fromJson(Map<String, dynamic> json) = _$_Style.fromJson;
 
@@ -612,170 +1135,32 @@ abstract class _Style implements Style {
   @JsonKey(name: 'background_screen')
   String get backgroundScreen;
   @override
-  @JsonKey(name: 'background_word')
-  String get backgroundWord;
+  @JsonKey(name: 'background_challenge')
+  String get backgroundChallenge;
+  @override
+  @JsonKey(name: 'use_gradient')
+  bool get useGradient;
+  @override
+  @JsonKey(name: 'bottom_gradient_color')
+  String? get bottomGradientColor;
+  @override
+  @JsonKey(name: 'top_gradient_color')
+  String? get topGradientColor;
+  @override
+  @JsonKey(name: 'question_position')
+  double get questionPosition;
+  @override
+  @JsonKey(name: 'image_position')
+  double get imagePosition;
+  @override
+  @JsonKey(name: 'question_font_size')
+  double get questionFontSize;
+  @override
+  @JsonKey(name: 'question_opacity')
+  double get questionOpacity;
   @override
   @JsonKey(ignore: true)
   _$$_StyleCopyWith<_$_Style> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-ImageActivity _$ImageActivityFromJson(Map<String, dynamic> json) {
-  return _ImageActivity.fromJson(json);
-}
-
-/// @nodoc
-mixin _$ImageActivity {
-  int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'image_url')
-  String get imageUrl => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $ImageActivityCopyWith<ImageActivity> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ImageActivityCopyWith<$Res> {
-  factory $ImageActivityCopyWith(
-          ImageActivity value, $Res Function(ImageActivity) then) =
-      _$ImageActivityCopyWithImpl<$Res>;
-  $Res call({int id, @JsonKey(name: 'image_url') String imageUrl});
-}
-
-/// @nodoc
-class _$ImageActivityCopyWithImpl<$Res>
-    implements $ImageActivityCopyWith<$Res> {
-  _$ImageActivityCopyWithImpl(this._value, this._then);
-
-  final ImageActivity _value;
-  // ignore: unused_field
-  final $Res Function(ImageActivity) _then;
-
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? imageUrl = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      imageUrl: imageUrl == freezed
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-abstract class _$$_ImageActivityCopyWith<$Res>
-    implements $ImageActivityCopyWith<$Res> {
-  factory _$$_ImageActivityCopyWith(
-          _$_ImageActivity value, $Res Function(_$_ImageActivity) then) =
-      __$$_ImageActivityCopyWithImpl<$Res>;
-  @override
-  $Res call({int id, @JsonKey(name: 'image_url') String imageUrl});
-}
-
-/// @nodoc
-class __$$_ImageActivityCopyWithImpl<$Res>
-    extends _$ImageActivityCopyWithImpl<$Res>
-    implements _$$_ImageActivityCopyWith<$Res> {
-  __$$_ImageActivityCopyWithImpl(
-      _$_ImageActivity _value, $Res Function(_$_ImageActivity) _then)
-      : super(_value, (v) => _then(v as _$_ImageActivity));
-
-  @override
-  _$_ImageActivity get _value => super._value as _$_ImageActivity;
-
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? imageUrl = freezed,
-  }) {
-    return _then(_$_ImageActivity(
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      imageUrl: imageUrl == freezed
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$_ImageActivity implements _ImageActivity {
-  const _$_ImageActivity(
-      {required this.id, @JsonKey(name: 'image_url') required this.imageUrl});
-
-  factory _$_ImageActivity.fromJson(Map<String, dynamic> json) =>
-      _$$_ImageActivityFromJson(json);
-
-  @override
-  final int id;
-  @override
-  @JsonKey(name: 'image_url')
-  final String imageUrl;
-
-  @override
-  String toString() {
-    return 'ImageActivity(id: $id, imageUrl: $imageUrl)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_ImageActivity &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.imageUrl, imageUrl));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(imageUrl));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$_ImageActivityCopyWith<_$_ImageActivity> get copyWith =>
-      __$$_ImageActivityCopyWithImpl<_$_ImageActivity>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_ImageActivityToJson(
-      this,
-    );
-  }
-}
-
-abstract class _ImageActivity implements ImageActivity {
-  const factory _ImageActivity(
-          {required final int id,
-          @JsonKey(name: 'image_url') required final String imageUrl}) =
-      _$_ImageActivity;
-
-  factory _ImageActivity.fromJson(Map<String, dynamic> json) =
-      _$_ImageActivity.fromJson;
-
-  @override
-  int get id;
-  @override
-  @JsonKey(name: 'image_url')
-  String get imageUrl;
-  @override
-  @JsonKey(ignore: true)
-  _$$_ImageActivityCopyWith<_$_ImageActivity> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -786,6 +1171,7 @@ Question _$QuestionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Question {
   int get id => throw _privateConstructorUsedError;
+  int get type => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'voice_url')
@@ -801,47 +1187,57 @@ mixin _$Question {
 /// @nodoc
 abstract class $QuestionCopyWith<$Res> {
   factory $QuestionCopyWith(Question value, $Res Function(Question) then) =
-      _$QuestionCopyWithImpl<$Res>;
+      _$QuestionCopyWithImpl<$Res, Question>;
+  @useResult
   $Res call(
       {int id,
+      int type,
       @JsonKey(name: 'image_url') String imageUrl,
       @JsonKey(name: 'voice_url') String voiceUrl,
       String question});
 }
 
 /// @nodoc
-class _$QuestionCopyWithImpl<$Res> implements $QuestionCopyWith<$Res> {
+class _$QuestionCopyWithImpl<$Res, $Val extends Question>
+    implements $QuestionCopyWith<$Res> {
   _$QuestionCopyWithImpl(this._value, this._then);
 
-  final Question _value;
   // ignore: unused_field
-  final $Res Function(Question) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? imageUrl = freezed,
-    Object? voiceUrl = freezed,
-    Object? question = freezed,
+    Object? id = null,
+    Object? type = null,
+    Object? imageUrl = null,
+    Object? voiceUrl = null,
+    Object? question = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      imageUrl: imageUrl == freezed
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      voiceUrl: voiceUrl == freezed
+      voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      question: question == freezed
+      question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
@@ -851,44 +1247,50 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
           _$_Question value, $Res Function(_$_Question) then) =
       __$$_QuestionCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {int id,
+      int type,
       @JsonKey(name: 'image_url') String imageUrl,
       @JsonKey(name: 'voice_url') String voiceUrl,
       String question});
 }
 
 /// @nodoc
-class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
+class __$$_QuestionCopyWithImpl<$Res>
+    extends _$QuestionCopyWithImpl<$Res, _$_Question>
     implements _$$_QuestionCopyWith<$Res> {
   __$$_QuestionCopyWithImpl(
       _$_Question _value, $Res Function(_$_Question) _then)
-      : super(_value, (v) => _then(v as _$_Question));
+      : super(_value, _then);
 
-  @override
-  _$_Question get _value => super._value as _$_Question;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? imageUrl = freezed,
-    Object? voiceUrl = freezed,
-    Object? question = freezed,
+    Object? id = null,
+    Object? type = null,
+    Object? imageUrl = null,
+    Object? voiceUrl = null,
+    Object? question = null,
   }) {
     return _then(_$_Question(
-      id: id == freezed
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      imageUrl: imageUrl == freezed
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      voiceUrl: voiceUrl == freezed
+      voiceUrl: null == voiceUrl
           ? _value.voiceUrl
           : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      question: question == freezed
+      question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
@@ -901,6 +1303,7 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
 class _$_Question implements _Question {
   const _$_Question(
       {required this.id,
+      required this.type,
       @JsonKey(name: 'image_url') required this.imageUrl,
       @JsonKey(name: 'voice_url') required this.voiceUrl,
       required this.question});
@@ -910,6 +1313,8 @@ class _$_Question implements _Question {
 
   @override
   final int id;
+  @override
+  final int type;
   @override
   @JsonKey(name: 'image_url')
   final String imageUrl;
@@ -921,7 +1326,7 @@ class _$_Question implements _Question {
 
   @override
   String toString() {
-    return 'Question(id: $id, imageUrl: $imageUrl, voiceUrl: $voiceUrl, question: $question)';
+    return 'Question(id: $id, type: $type, imageUrl: $imageUrl, voiceUrl: $voiceUrl, question: $question)';
   }
 
   @override
@@ -929,23 +1334,24 @@ class _$_Question implements _Question {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Question &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
-            const DeepCollectionEquality().equals(other.voiceUrl, voiceUrl) &&
-            const DeepCollectionEquality().equals(other.question, question));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.voiceUrl, voiceUrl) ||
+                other.voiceUrl == voiceUrl) &&
+            (identical(other.question, question) ||
+                other.question == question));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(imageUrl),
-      const DeepCollectionEquality().hash(voiceUrl),
-      const DeepCollectionEquality().hash(question));
+  int get hashCode =>
+      Object.hash(runtimeType, id, type, imageUrl, voiceUrl, question);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_QuestionCopyWith<_$_Question> get copyWith =>
       __$$_QuestionCopyWithImpl<_$_Question>(this, _$identity);
 
@@ -960,6 +1366,7 @@ class _$_Question implements _Question {
 abstract class _Question implements Question {
   const factory _Question(
       {required final int id,
+      required final int type,
       @JsonKey(name: 'image_url') required final String imageUrl,
       @JsonKey(name: 'voice_url') required final String voiceUrl,
       required final String question}) = _$_Question;
@@ -968,6 +1375,8 @@ abstract class _Question implements Question {
 
   @override
   int get id;
+  @override
+  int get type;
   @override
   @JsonKey(name: 'image_url')
   String get imageUrl;

@@ -76,3 +76,47 @@ printWarning(String text) {
 printError(String text) {
   print('\x1B[31m ⛔ $text\x1B[0m');
 }
+
+String getGroupHead(List<String> list) {
+  return list[0];
+}
+
+List<String> getGroupTailList(List<String> list) {
+  List<String> result = [];
+  for (var i = 1; i < list.length; i++) {
+    result.add(list[i]);
+    if(i == 4) break;   
+  }
+  return result;
+}
+
+String getGroupShortTail(List<String> list) {
+  String result = '';
+  for (var i = 1; i < list.length; i++) {
+    result += list[i];
+    if(i < list.length && i < 4) {
+      result += ', ';
+    }
+    if(i == 4) break;   
+  }
+  return result;
+}
+
+String getGroupFullTail(List<String> list) {
+  String result = '';
+  for (var i = 1; i < list.length; i++) {
+    result += list[i];
+    if(i < list.length - 1) {
+      result += ', ';
+    }
+  }
+  return result;
+}
+
+String getGroupRandomTail(List<String> list) {
+  final random = Random();
+  int next(int min, int max) => min + random.nextInt(max - min);
+
+  int index = next(1, list.length);
+  return list[index];
+}

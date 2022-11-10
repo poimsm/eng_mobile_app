@@ -1,10 +1,15 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
+
 import 'package:eng_mobile_app/data/models/activity.dart';
+import 'package:eng_mobile_app/pages/layout/controller.dart';
+import 'package:eng_mobile_app/pages/library/library_page.dart';
 import 'package:eng_mobile_app/pages/word_detail/word_detail_page.dart';
+import 'package:eng_mobile_app/pages/word_list/enums.dart';
 import 'package:eng_mobile_app/pages/word_list/word_list_controller.dart';
-import 'package:eng_mobile_app/routes/routes.dart';
+import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
 class WordListPage extends ConsumerStatefulWidget {
   const WordListPage({super.key});
@@ -17,6 +22,11 @@ class WordListPageState extends ConsumerState<WordListPage> {
   @override
   void initState() {
     ref.read(wordListProvider.notifier).retrieveWords();
+    // ref.read(wordListProvider.notifier).checkHistoryTypes(shouldRefresh: false);
+
+    Future.delayed(Duration(milliseconds: 500),
+        () => ref.read(wordListProvider.notifier).toggleAnimatedWordBtn());
+
     super.initState();
   }
 
@@ -25,332 +35,474 @@ class WordListPageState extends ConsumerState<WordListPage> {
   @override
   Widget build(BuildContext context) {
     wordListState = ref.watch(wordListProvider);
+    // ref.read(wordListProvider.notifier).checkHistoryTypes(shouldRefresh: true);
     size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
         height: size.height,
         width: size.width,
         child: SafeArea(
-            child: Stack(
+            child: Column(
           children: [
-            Column(
-              children: [
-                _appbar(),
-                SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: size.height*0.8,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _fox(),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        ..._wordList(),
-                        SizedBox(height: 100)
-
-                      ],
-                    ),
-                  ),
-                )
-                // _fox(),
-                // SizedBox(
-                //   height: 30,
-                // ),
-                // _wordList(),
-              ],
+            _appbar(),
+            // _title('YOURS'),
+            // SizedBox(height: 200,),
+            _myWords(),
+            Divider(
+              height: 50,
             ),
-            Positioned(
-                left: 0,
-                bottom: 30,
-                child: Container(
-                  color: Color(0xffF9F9F9),
-                  padding: EdgeInsets.only(top: 20),
-                  width: size.width,
-                  child: Center(
-                    child: _newWordBox(),
-                  ),
-                ))
+            _title('LAST WORDS'),
+            _history()
           ],
         )));
   }
 
-  _appbar() {
+  _title(String text) {
     return Container(
-      height: 60,
+        width: size.width,
+        padding: EdgeInsets.only(left: 20),
+        child: Text(text,
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.black87,
+                fontWeight: FontWeight.bold)));
+  }
+
+  _myWords() {
+    return Column(
+      children: [
+        _scrolleableWordList(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [_getWordsBtn(), _addWordBtn()],
+        )
+      ],
+    );
+  }
+
+  _scrolleableWordList() {
+    Widget words = Container(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      width: size.width,
+      height: size.height * 0.55,
+      child: wordListState.words.isNotEmpty
+          ? _wordList()
+          : SizedBox(
+              height: size.height * 0.55,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Oops… There are no words',
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.7), fontSize: 21)),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Tap',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black38,
+                          // fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      SizedBox(
+                        child: Image.asset(
+                          'assets/add_grey_01.png',
+                          width: 29,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'to add one',
+                        style: TextStyle(fontSize: 18, color: Colors.black38),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+    );
+
+    return Stack(
+      children: [
+        words,
+        if (wordListState.showListBlinker)
+          Container(
+              height: size.height * 0.5,
+              width: size.width,
+              color: Colors.blue.withOpacity(0.1))
+      ],
+    );
+  }
+
+  _history() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      width: size.width,
+      height: size.height * 0.15,
+      child: _historyList(),
+    );
+  }
+
+  _historyList() {
+    return ListView.builder(
+        itemCount: wordListState.history.length,
+        itemBuilder: (context, i) => _historyItem(wordListState.history[i]));
+  }
+
+  _historyItem(HistoryItem item) {
+    Widget questionChild;
+
+    if (item.questionType == QuestionType.teacher) {
+      List<String> questionSplit = item.questionText.split("[word]");
+
+      questionChild = RichText(
+        textAlign: TextAlign.left,
+        text: TextSpan(
+          children: [
+            TextSpan(
+                text: questionSplit[0],
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
+                )),
+            TextSpan(
+                text: questionSplit[1],
+                style: TextStyle(
+                  color: Color(0xff7562A5),
+                  fontWeight: FontWeight.normal,
+                  fontSize: 19,
+                )),
+            TextSpan(
+                text: questionSplit[2],
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
+                )),
+          ],
+        ),
+      );
+    } else {
+      questionChild = RichText(
+        textAlign: TextAlign.left,
+        text: TextSpan(
+          children: [
+            TextSpan(
+                text: item.questionText,
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
+                )),
+            TextSpan(
+                text: ' ${item.wordText}  ',
+                style: TextStyle(
+                  color: Color(0xff7562A5),
+                  fontWeight: FontWeight.normal,
+                  fontSize: 19,
+                )),
+          ],
+        ),
+      );
+    }
+
+    return Container(
+        margin: EdgeInsets.only(top: 20),
+        width: double.infinity,
+        child: questionChild);
+  }
+
+  _appbar() {
+    return SizedBox(
+      height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(children: [
-            IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(
-                Icons.arrow_back,
-                size: 30,
-              ),
-            ),
-            Text(
-              'My words',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff222222)),
+            Column(
+              children: [
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                      ),
+                    ),
+                    Text(
+                      'Words',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff222222)),
+                    )
+                  ],
+                ),
+              ],
             )
           ]),
-          // Container(),
-          Container(
-            padding: EdgeInsets.all(5),
-            child: Image.asset('assets/store11.png', width: 55,)),
-          if(false)Container(
-            padding: EdgeInsets.only(right: 10, top: 7),
-            // child: Icon(Icons.store_outlined, size: 50),
+          InkWell(
+            onTap: () {
+              // Navigator.pushNamed(context, Routes.STORE);
+            },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-              decoration: BoxDecoration(
-                color: Color(0xffF1F1F1),
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Row(
-                children: [
-                  Text('Get more', style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black87
-                  ),),
-                  SizedBox(width: 5,),
-                  Image.asset('assets/store.png', width: 40,),
-                ],
-              )),
-          )
-        ],        
-      ),
-    );
-  }
-
-    _fox4() {
-    return CarouselSlider(
-          options: CarouselOptions(
-            height: 200.0,
-            viewportFraction: 1,
-            ),
-          items: [1,2,3,4,5].map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                        return Container(
-                            width: size.width,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.yellow),
-                            color: Colors.red,
-                            ),                         
-                        );
-              });
-          }).toList(),
-        );
-  }
-
-   _fox() {
-    return Column(
-      children: [
-        CarouselSlider(
-              options: CarouselOptions(
-                height: 180.0,
-                viewportFraction: 1,
-                ),
-              items: [1,2,3].map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                            return Column(children: [
-                                      Container(
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 35),
+                padding: EdgeInsets.all(5),
+                height: 80,
+                width: 80,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black12),
-                  borderRadius: BorderRadius.circular(35)
+                  shape: BoxShape.circle,
                 ),
-                child: Column(children: [
-                  SizedBox(
-                    width: size.width*0.6,
-                    child: Text('Hello world nice done?', style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black54
-                    ),),
-                  ),
-                  SizedBox(height: 20,),
-                  Image.asset('assets/audio_bar_02.png', width: 200,)]),
-              ),
-                            ]);
-                  });
-              }).toList(),
-            ),
-             SizedBox(height: 0,),
-          _bullets()
-      ],
-    );
-  }
-
-  // _fox() {
-  //   return CarouselSlider(
-  //     options: CarouselOptions(height: 400.0),
-  //     items: [1,2,3,4,5].map((i) {
-  //       return Builder(
-  //         builder: (BuildContext context) {
-  //           return Column(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Container(
-  //           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 35),
-  //           decoration: BoxDecoration(
-  //             border: Border.all(color: Colors.black12),
-  //             borderRadius: BorderRadius.circular(40)
-  //           ),
-  //           child: Column(children: [
-  //             SizedBox(
-  //               width: size.width*0.6,
-  //               child: Text('Hello world nice done?', style: TextStyle(
-  //                 fontSize: 20,
-  //                 color: Colors.black54
-  //               ),),
-  //             ),
-  //             SizedBox(height: 20,),
-  //             Image.asset('assets/audio_bar_02.png', width: 200,)]),
-  //         ),
-  //         SizedBox(height: 10,),
-  //         _bullets()
-  //       ],
-  //     );
-  //   );
-  //         },
-  //       );
-  //     }
-  // }
-
-  _bullets() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _bullet(true),
-        SizedBox(width: 10,),
-        _bullet(false),
-        SizedBox(width: 10,),
-        _bullet(false)
-        
-      ],
-    );
-  }
-
-  _bullet(asd) {
-    return Container(
-      height: 20,
-      width: 20,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: asd? Color(0xff6E5AA0): Colors.transparent,
-        border: Border.all(color: asd? Colors.transparent :Colors.black26)
+                child: Image.asset(
+                  'assets/user_16.png',
+                  width: 60,
+                )),
+          ),
+        ],
       ),
     );
   }
 
-  _fox2() {
-    return Container(
-      child: Column(children: [Image.asset('assets/fox.png'), _tipsBtn()]),
-    );
+  _getWordsBtn() {
+    return InkWell(
+        onTap: () async {
+          // ref.read(wordListProvider.notifier).toggleListBlinker();
+          // return;
+          // dynamic resp = await Navigator.pushNamed(context, Routes.LIBRARY);
+
+          final resp = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    LibraryPage(totalWords: wordListState.words.length)),
+          );
+
+          if (resp != null) {
+            ref.read(wordListProvider.notifier).setWordsFromList(resp['words']);
+            ref.read(wordListProvider.notifier).addUserWordList(resp['words']);
+            if (resp['shouldBlink']) {
+              ref.read(wordListProvider.notifier).toggleListBlinker();
+            }
+          }
+        },
+        child: Image.asset(
+          'assets/explore02.png',
+          width: 165,
+        ));
+    // return Container(
+    //   padding: EdgeInsets.symmetric(vertical: 14, horizontal: 30),
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(20),
+    //     border: Border.all(color: Colors.black)
+    //   ),
+    //   child: Text('Get words', style: TextStyle(
+    //     fontSize: 18,
+    //     fontWeight: FontWeight.bold
+    //   ),),
+    // );
   }
 
-  _tipsBtn() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black.withOpacity(0.7)),
-          borderRadius: BorderRadius.circular(8)),
-      child: Text(
-        'Tap here for tips!',
-        style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.7)),
+  _addWordBtn() {
+    bool animate = wordListState.animateAddWordBtn;
+    return InkWell(
+      onTap: () async {
+        final resp = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  WordDetailPage(isNewWord: true, word: null)),
+        );
+
+        if (resp != null) {
+          Timer(Duration(milliseconds: 300), () {
+            context.read<Screen>().showToast(resp['toast'], seconds: 2);
+          });
+        }
+
+        // ref
+        //     .read(wordListProvider.notifier)
+        //     .checkHistoryTypes(shouldRefresh: true);
+      },
+      child: AnimatedContainer(
+        width: animate ? 65 : 60,
+        height: animate ? 65 : 60,
+        decoration: BoxDecoration(
+            color: animate ? Colors.white : Color(0xff6E5AA0),
+            // color: Color(0xff6E5AA0),
+            shape: BoxShape.circle,
+            border: Border.all(
+                width: 3,
+                color: Color(0xff6E5AA0).withOpacity(animate ? 0.8 : 0))),
+        duration: const Duration(milliseconds: 400),
+        // curve: Curves.elasticIn,
+        child: AnimatedRotation(
+          turns: animate ? 0.03 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          child: Icon(
+            Icons.add,
+            // size: wordListState.animateAddWordBtn ? 45:37,
+            size: 40,
+            // color: Colors.white,
+            color: animate ? Color(0xff6E5AA0) : Colors.white,
+            // color: Colors.white.withOpacity(wordListState.animateAddWordBtn? 1: 0.8)
+          ),
+        ),
+        // Icon(Icons.add, size: wordListState.animateAddWordBtn ? 42:37, color: Colors.white),
       ),
     );
   }
 
   _wordList() {
-    return List.generate(wordListState.words.length,
-              (index) => _wordItem(wordListState.words[index]));
+    return ListView.builder(
+        itemCount: wordListState.words.length + 1,
+        itemBuilder: (context, i) {
+          if (i == wordListState.words.length) {
+            return SizedBox(
+              height: 100,
+              width: 10,
+            );
+          }
+
+          return _wordNormalItem(wordListState.words[i]);
+        });
+    // return List.generate(wordListState.words.length + 1,
+    //     (i) {
+
+    //       if(i == wordListState.words.length) {
+    //         return SizedBox(height: 100, width: 10,);
+    //       }
+
+    //       return _wordNormalItem(wordListState.words[i]);
+    //     });
   }
 
-  _wordItem(Word word) {
+  // _wordList() {
+  //   return List.generate(wordListState.words.length + 1,
+  //       (i) {
+
+  //         if(i == wordListState.words.length) {
+  //           return SizedBox(height: 100, width: 10,);
+  //         }
+
+  //         return _wordNormalItem(wordListState.words[i]);
+  //       });
+  // }
+
+  _wordNormalItem(Word word) {
     return InkWell(
-      onTap: () {
-        print('Entrooooo');
-        Navigator.push(
+      onTap: () async {
+        final resp = await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WordDetailPage(
-            isNewWord: false,
-            word: word
-          )),
+          MaterialPageRoute(
+              builder: (context) =>
+                  WordDetailPage(isNewWord: false, word: word)),
         );
-        // Navigator.pushNamed(context, Routes.WORD_DETAIL,
-        //     arguments: {"word": word, "new_word": false});
+
+        if (resp != null) {
+          Timer(Duration(milliseconds: 300), () {
+            context.read<Screen>().showToast(resp['toast']);
+          });
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20),
-        width: size.width*0.8,
-        child: Text(
-          word.word,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 22, color: Colors.black),
+        width: size.width * 0.8,
+        child: Row(
+          mainAxisAlignment: word.origin == WordOrigin.saved
+              ? MainAxisAlignment.spaceBetween
+              : MainAxisAlignment.center,
+          children: [
+            if (word.origin == WordOrigin.saved) Container(width: 25),
+            Text(
+              word.type == WordType.group
+                  ? getGroupHead(word.group)
+                  : word.word,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
+            ),
+            if (word.origin == WordOrigin.saved)
+              SizedBox(
+                width: 30,
+                // child: Image.asset('assets/bookmark.png', width: 30),
+              )
+          ],
         ),
       ),
     );
   }
 
-  _wordItem2(word) {
-    return ListTile(
-      title: Text(
-        word,
-        style: TextStyle(fontSize: 20, color: Colors.black),
-      ),
-    );
-  }
+  // _wordGroupItem(Word word) {
+  //   return InkWell(
+  //     onTap: () async {
+  //       final resp = await Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) =>
+  //                 WordDetailPage(isNewWord: false, word: word)),
+  //       );
 
-  _newWordBox() {
-    return InkWell(
-      onTap: () {
-        // Navigator.pushNamed(context, Routes.WORD_DETAIL);
-        // Navigator.pushNamed(context, Routes.WORD_DETAIL,
-        //     arguments: {"word": null, "new_word": false});
+  //       if (resp != null) {
+  //         Timer(Duration(milliseconds: 300), () {
+  //           context.read<Screen>().showToast(resp['toast']);
+  //         });
+  //       }
+  //     },
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(vertical: 20),
+  //       width: size.width * 0.8,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         children: [
+  //           Container(
+  //             padding: EdgeInsets.all(3),
+  //             decoration: BoxDecoration(
+  //               color: Colors.black.withOpacity(0.05),
+  //               shape: BoxShape.circle
+  //             ),
+  //             child: Icon(Icons.group, color: Colors.grey, size: 25),
+  //           ),
+  //           Text(
+  //             word.groupWord!,
+  //             textAlign: TextAlign.center,
+  //             style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
+  //           ),
+  //           SizedBox(
+  //             child: Image.asset('assets/bookmark.png', width: 30),
+  //           )
+  //         ],
+  //       ),
+  //     )
+  //   );
+  // }
 
-        print('_newWordBox');
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WordDetailPage(
-            isNewWord: true,
-            word: null
-          )),
-        );
-
-        // MaterialPageRoute(builder: (context) => WordDetailPage(
-        //     isNewWord: false,
-        //     word: null
-        //   ));
-      },
-      child: Container(
-          width: size.width * 0.8,
-          height: 65,
-          // padding: EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(
-              color: Color(0xff6E5AA0),
-              borderRadius: BorderRadius.circular(15)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.add, size: 30, color: Colors.white),
-              Text(
-                'Add word',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              )
-            ],
-          )),
-    );
-  }
+  // _groupItem(String text) {
+  //   return Row(
+  //     children: [
+  //       Container(width: 25),
+  //           Text(
+  //             text,
+  //             textAlign: TextAlign.center,
+  //             style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
+  //           ),
+  //           SizedBox(
+  //             child: Image.asset('assets/bookmark.png', width: 30),
+  //           )
+  //     ],
+  //   );
+  // }
 }

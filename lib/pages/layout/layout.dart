@@ -336,10 +336,10 @@ class Layout extends StatelessWidget {
             width: size.width,
             child: Center(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 14),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.black.withOpacity(0.65)),
+                    borderRadius: BorderRadius.circular(25),
+                    color: Color(0xff555555).withOpacity(0.95)),
                 child: Text(
                   message,
                   style: TextStyle(color: Colors.white, fontSize: 18),

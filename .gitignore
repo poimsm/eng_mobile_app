@@ -48,3 +48,6 @@ app.*.map.json
 
 # VSCode
 /.vscode
+
+# Assets
+/assets/dev
