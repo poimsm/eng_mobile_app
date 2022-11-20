@@ -471,7 +471,7 @@ class HomePageState extends ConsumerState<HomePage> {
     bool isGroup = homeState.activity!.word!.type == WordType.group;
     String wordText = '';
     if (isGroup) {
-      wordText = getGroupShortTail(homeState.activity!.word!.group);
+      wordText = getGroupShortTail(homeState.activity!.word!.extras!);
     } else {
       wordText = homeState.activity!.word!.word;
     }
@@ -953,7 +953,7 @@ class HomePageState extends ConsumerState<HomePage> {
                 }
 
                 if (isGroup) {
-                  msg = getGroupHead(act.word!.group);
+                  msg = getGroupHead(act.word!.extras!);
                 } else {
                   msg = act.word!.meaning!;
                 }
@@ -1044,7 +1044,7 @@ class HomePageState extends ConsumerState<HomePage> {
                                         ),
                                         ...List.generate(
                                             getGroupTailList(homeState
-                                                    .activity!.word!.group)
+                                                    .activity!.word!.extras!)
                                                 .length, (i) {
                                           if (i > 3) {
                                             return Container();
@@ -1052,7 +1052,7 @@ class HomePageState extends ConsumerState<HomePage> {
 
                                           return Text(
                                             getGroupTailList(homeState
-                                                .activity!.word!.group)[i],
+                                                .activity!.word!.extras!)[i],
                                             style: TextStyle(fontSize: 22),
                                           );
                                         }),

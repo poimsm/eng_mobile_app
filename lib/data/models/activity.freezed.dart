@@ -269,7 +269,7 @@ mixin _$Word {
   int get type => throw _privateConstructorUsedError;
   String? get meaning => throw _privateConstructorUsedError;
   bool get saved => throw _privateConstructorUsedError;
-  List<String> get group => throw _privateConstructorUsedError;
+  String? get extras => throw _privateConstructorUsedError;
   @JsonKey(name: 'source_type')
   int? get sourceType => throw _privateConstructorUsedError;
   @JsonKey(name: 'info_card')
@@ -294,7 +294,7 @@ abstract class $WordCopyWith<$Res> {
       int type,
       String? meaning,
       bool saved,
-      List<String> group,
+      String? extras,
       @JsonKey(name: 'source_type') int? sourceType,
       @JsonKey(name: 'info_card') InfoCard? infoCard,
       @JsonKey(name: 'short_video') ShortVideo? shortVideo});
@@ -322,7 +322,7 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
     Object? type = null,
     Object? meaning = freezed,
     Object? saved = null,
-    Object? group = null,
+    Object? extras = freezed,
     Object? sourceType = freezed,
     Object? infoCard = freezed,
     Object? shortVideo = freezed,
@@ -352,10 +352,10 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
           ? _value.saved
           : saved // ignore: cast_nullable_to_non_nullable
               as bool,
-      group: null == group
-          ? _value.group
-          : group // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      extras: freezed == extras
+          ? _value.extras
+          : extras // ignore: cast_nullable_to_non_nullable
+              as String?,
       sourceType: freezed == sourceType
           ? _value.sourceType
           : sourceType // ignore: cast_nullable_to_non_nullable
@@ -409,7 +409,7 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
       int type,
       String? meaning,
       bool saved,
-      List<String> group,
+      String? extras,
       @JsonKey(name: 'source_type') int? sourceType,
       @JsonKey(name: 'info_card') InfoCard? infoCard,
       @JsonKey(name: 'short_video') ShortVideo? shortVideo});
@@ -435,7 +435,7 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
     Object? type = null,
     Object? meaning = freezed,
     Object? saved = null,
-    Object? group = null,
+    Object? extras = freezed,
     Object? sourceType = freezed,
     Object? infoCard = freezed,
     Object? shortVideo = freezed,
@@ -465,10 +465,10 @@ class __$$_WordCopyWithImpl<$Res> extends _$WordCopyWithImpl<$Res, _$_Word>
           ? _value.saved
           : saved // ignore: cast_nullable_to_non_nullable
               as bool,
-      group: null == group
-          ? _value._group
-          : group // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      extras: freezed == extras
+          ? _value.extras
+          : extras // ignore: cast_nullable_to_non_nullable
+              as String?,
       sourceType: freezed == sourceType
           ? _value.sourceType
           : sourceType // ignore: cast_nullable_to_non_nullable
@@ -495,11 +495,10 @@ class _$_Word implements _Word {
       required this.type,
       this.meaning,
       this.saved = false,
-      final List<String> group = const [],
+      this.extras,
       @JsonKey(name: 'source_type') this.sourceType,
       @JsonKey(name: 'info_card') this.infoCard,
-      @JsonKey(name: 'short_video') this.shortVideo})
-      : _group = group;
+      @JsonKey(name: 'short_video') this.shortVideo});
 
   factory _$_Word.fromJson(Map<String, dynamic> json) => _$$_WordFromJson(json);
 
@@ -518,14 +517,8 @@ class _$_Word implements _Word {
   @override
   @JsonKey()
   final bool saved;
-  final List<String> _group;
   @override
-  @JsonKey()
-  List<String> get group {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_group);
-  }
-
+  final String? extras;
   @override
   @JsonKey(name: 'source_type')
   final int? sourceType;
@@ -538,7 +531,7 @@ class _$_Word implements _Word {
 
   @override
   String toString() {
-    return 'Word(id: $id, word: $word, origin: $origin, type: $type, meaning: $meaning, saved: $saved, group: $group, sourceType: $sourceType, infoCard: $infoCard, shortVideo: $shortVideo)';
+    return 'Word(id: $id, word: $word, origin: $origin, type: $type, meaning: $meaning, saved: $saved, extras: $extras, sourceType: $sourceType, infoCard: $infoCard, shortVideo: $shortVideo)';
   }
 
   @override
@@ -552,7 +545,7 @@ class _$_Word implements _Word {
             (identical(other.type, type) || other.type == type) &&
             (identical(other.meaning, meaning) || other.meaning == meaning) &&
             (identical(other.saved, saved) || other.saved == saved) &&
-            const DeepCollectionEquality().equals(other._group, _group) &&
+            (identical(other.extras, extras) || other.extras == extras) &&
             (identical(other.sourceType, sourceType) ||
                 other.sourceType == sourceType) &&
             (identical(other.infoCard, infoCard) ||
@@ -563,18 +556,8 @@ class _$_Word implements _Word {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      word,
-      origin,
-      type,
-      meaning,
-      saved,
-      const DeepCollectionEquality().hash(_group),
-      sourceType,
-      infoCard,
-      shortVideo);
+  int get hashCode => Object.hash(runtimeType, id, word, origin, type, meaning,
+      saved, extras, sourceType, infoCard, shortVideo);
 
   @JsonKey(ignore: true)
   @override
@@ -598,7 +581,7 @@ abstract class _Word implements Word {
       required final int type,
       final String? meaning,
       final bool saved,
-      final List<String> group,
+      final String? extras,
       @JsonKey(name: 'source_type') final int? sourceType,
       @JsonKey(name: 'info_card') final InfoCard? infoCard,
       @JsonKey(name: 'short_video') final ShortVideo? shortVideo}) = _$_Word;
@@ -619,7 +602,7 @@ abstract class _Word implements Word {
   @override
   bool get saved;
   @override
-  List<String> get group;
+  String? get extras;
   @override
   @JsonKey(name: 'source_type')
   int? get sourceType;

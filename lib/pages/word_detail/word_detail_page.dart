@@ -33,8 +33,8 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
 
     if (!widget.isNewWord) {
       if (widget.word!.type == WordType.group) {
-        _wordCtrl.text = getGroupHead(widget.word!.group);
-        _meaningCtrl.text = getGroupFullTail(widget.word!.group);
+        _wordCtrl.text = getGroupHead(widget.word!.extras!);
+        _meaningCtrl.text = getGroupFullTail(widget.word!.extras!);
       } else {
         _wordCtrl.text = widget.word!.word;
         _meaningCtrl.text = widget.word!.meaning ?? '';

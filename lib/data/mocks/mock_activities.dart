@@ -99,9 +99,10 @@ class MockActivities {
           "word": {
             "id": 101,
             "origin": 0,
-            "type": 0,
-            "sentence": "Chaos",
-            "meaning": "Disorder, confusion, “Chaos is unleashed!!”"
+            "sentence": "",
+            "meaning": null,
+            "type": 1,
+            "extras": "Excelent;Amazing;Wonderful;Fantastic;Splendid;Misterious"
           },
           "example": {
             "id": 101,

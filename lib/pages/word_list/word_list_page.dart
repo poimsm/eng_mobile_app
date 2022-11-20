@@ -430,7 +430,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
             if (word.origin == WordOrigin.saved) Container(width: 25),
             Text(
               word.type == WordType.group
-                  ? getGroupHead(word.group)
+                  ? getGroupHead(word.extras!)
                   : word.word,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),

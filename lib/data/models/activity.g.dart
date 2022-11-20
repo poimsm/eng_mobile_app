@@ -32,9 +32,7 @@ _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
       type: json['type'] as int,
       meaning: json['meaning'] as String?,
       saved: json['saved'] as bool? ?? false,
-      group:
-          (json['group'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
+      extras: json['extras'] as String?,
       sourceType: json['source_type'] as int?,
       infoCard: json['info_card'] == null
           ? null
@@ -51,7 +49,7 @@ Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'type': instance.type,
       'meaning': instance.meaning,
       'saved': instance.saved,
-      'group': instance.group,
+      'extras': instance.extras,
       'source_type': instance.sourceType,
       'info_card': instance.infoCard,
       'short_video': instance.shortVideo,

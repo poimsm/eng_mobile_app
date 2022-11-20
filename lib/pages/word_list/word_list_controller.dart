@@ -125,7 +125,7 @@ class WordListNotifier extends StateNotifier<WordListState> {
               word: x['sentence'],
               meaning: x['meaning'],
               origin: x['origin'],
-              group: x['group'],
+              extras: x['extras'],
               type: x['type'],
             ))
         .toList();

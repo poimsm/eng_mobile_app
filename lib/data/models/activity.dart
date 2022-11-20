@@ -30,7 +30,7 @@ class Word with _$Word {
     required int type,
     String? meaning,
     @Default(false) bool saved,
-    @Default([]) List<String> group,
+    String? extras,
     @JsonKey(name: 'source_type') int? sourceType,
     @JsonKey(name: 'info_card') InfoCard? infoCard,
     @JsonKey(name: 'short_video') ShortVideo? shortVideo,

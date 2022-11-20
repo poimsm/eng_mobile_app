@@ -559,7 +559,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   void bubbleChallengeWordTrigger() {
     Word word = state.activity!.word!;
     bool isGroup = word.type == WordType.group;
-    String wordText = isGroup ? getGroupRandomTail(word.group) : word.word;
+    String wordText = isGroup ? getGroupRandomTail(word.extras!) : word.word;
     state = state.copyWith(bubbleChallengeWord: wordText);
   }
 }

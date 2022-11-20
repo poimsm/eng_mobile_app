@@ -107,7 +107,7 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
           word: card.words[i].word,
           origin: card.words[i].origin,
           type: card.words[i].type,
-          group: card.words[i].group,
+          extras: card.words[i].extras,
           saved: true,
           sourceType: SourceType.infoCard,
           infoCard: card
