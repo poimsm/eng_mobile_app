@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
 import 'package:eng_mobile_app/data/network/mockserver.dart';
@@ -38,7 +39,7 @@ class Network {
         HttpClientRequest request =
             await httpClient.getUrl(Uri.parse(apiURL + path));
         request.headers.set('content-type', 'application/json');
-        request.headers.set('Authorization', 'Bearer ${_authService.token}');
+        // request.headers.set('Authorization', 'Bearer ${_authService.token}');
         HttpClientResponse response =
             await request.close().timeout(Duration(milliseconds: timeout));
         reply = await response.transform(utf8.decoder).join();
@@ -53,6 +54,7 @@ class Network {
       }
 
       final data = reply != '' ? jsonDecode(reply) : '';
+      log(reply);
 
       printDebug('RESPONSE <<<-- | $statusCode | $path | $data');
       return Response(ok: true, data: data);

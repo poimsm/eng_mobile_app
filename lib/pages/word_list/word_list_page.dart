@@ -423,11 +423,11 @@ class WordListPageState extends ConsumerState<WordListPage> {
         padding: EdgeInsets.symmetric(vertical: 20),
         width: size.width * 0.8,
         child: Row(
-          mainAxisAlignment: word.origin == WordOrigin.saved
+          mainAxisAlignment: word.origin == WordOrigin.resource
               ? MainAxisAlignment.spaceBetween
               : MainAxisAlignment.center,
           children: [
-            if (word.origin == WordOrigin.saved) Container(width: 25),
+            if (word.origin == WordOrigin.resource) Container(width: 25),
             Text(
               word.type == WordType.group
                   ? getGroupHead(word.extras!)
@@ -435,7 +435,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
             ),
-            if (word.origin == WordOrigin.saved)
+            if (word.origin == WordOrigin.resource)
               SizedBox(
                 width: 30,
                 // child: Image.asset('assets/bookmark.png', width: 30),

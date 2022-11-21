@@ -198,7 +198,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         showQuizScreen: false,
         activityRoundCounter: state.activityRoundCounter + 1);
 
-    final resp = await Network().get('/activities');
+    final resp = await Network().get('/daily-activities');
 
     if (!resp.ok) {
       state = state.copyWith(isLoading: false);

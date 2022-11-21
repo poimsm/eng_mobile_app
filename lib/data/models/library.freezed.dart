@@ -23,6 +23,7 @@ mixin _$ShortVideo {
   int get id => throw _privateConstructorUsedError;
   String get cover => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
+  bool? get saved => throw _privateConstructorUsedError;
   List<Word> get words => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,7 +38,7 @@ abstract class $ShortVideoCopyWith<$Res> {
           ShortVideo value, $Res Function(ShortVideo) then) =
       _$ShortVideoCopyWithImpl<$Res, ShortVideo>;
   @useResult
-  $Res call({int id, String cover, String url, List<Word> words});
+  $Res call({int id, String cover, String url, bool? saved, List<Word> words});
 }
 
 /// @nodoc
@@ -56,6 +57,7 @@ class _$ShortVideoCopyWithImpl<$Res, $Val extends ShortVideo>
     Object? id = null,
     Object? cover = null,
     Object? url = null,
+    Object? saved = freezed,
     Object? words = null,
   }) {
     return _then(_value.copyWith(
@@ -71,6 +73,10 @@ class _$ShortVideoCopyWithImpl<$Res, $Val extends ShortVideo>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      saved: freezed == saved
+          ? _value.saved
+          : saved // ignore: cast_nullable_to_non_nullable
+              as bool?,
       words: null == words
           ? _value.words
           : words // ignore: cast_nullable_to_non_nullable
@@ -87,7 +93,7 @@ abstract class _$$_ShortVideoCopyWith<$Res>
       __$$_ShortVideoCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String cover, String url, List<Word> words});
+  $Res call({int id, String cover, String url, bool? saved, List<Word> words});
 }
 
 /// @nodoc
@@ -104,6 +110,7 @@ class __$$_ShortVideoCopyWithImpl<$Res>
     Object? id = null,
     Object? cover = null,
     Object? url = null,
+    Object? saved = freezed,
     Object? words = null,
   }) {
     return _then(_$_ShortVideo(
@@ -119,6 +126,10 @@ class __$$_ShortVideoCopyWithImpl<$Res>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      saved: freezed == saved
+          ? _value.saved
+          : saved // ignore: cast_nullable_to_non_nullable
+              as bool?,
       words: null == words
           ? _value._words
           : words // ignore: cast_nullable_to_non_nullable
@@ -134,6 +145,7 @@ class _$_ShortVideo implements _ShortVideo {
       {required this.id,
       required this.cover,
       required this.url,
+      this.saved,
       required final List<Word> words})
       : _words = words;
 
@@ -146,6 +158,8 @@ class _$_ShortVideo implements _ShortVideo {
   final String cover;
   @override
   final String url;
+  @override
+  final bool? saved;
   final List<Word> _words;
   @override
   List<Word> get words {
@@ -155,7 +169,7 @@ class _$_ShortVideo implements _ShortVideo {
 
   @override
   String toString() {
-    return 'ShortVideo(id: $id, cover: $cover, url: $url, words: $words)';
+    return 'ShortVideo(id: $id, cover: $cover, url: $url, saved: $saved, words: $words)';
   }
 
   @override
@@ -166,13 +180,14 @@ class _$_ShortVideo implements _ShortVideo {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.cover, cover) || other.cover == cover) &&
             (identical(other.url, url) || other.url == url) &&
+            (identical(other.saved, saved) || other.saved == saved) &&
             const DeepCollectionEquality().equals(other._words, _words));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, cover, url, const DeepCollectionEquality().hash(_words));
+  int get hashCode => Object.hash(runtimeType, id, cover, url, saved,
+      const DeepCollectionEquality().hash(_words));
 
   @JsonKey(ignore: true)
   @override
@@ -193,6 +208,7 @@ abstract class _ShortVideo implements ShortVideo {
       {required final int id,
       required final String cover,
       required final String url,
+      final bool? saved,
       required final List<Word> words}) = _$_ShortVideo;
 
   factory _ShortVideo.fromJson(Map<String, dynamic> json) =
@@ -204,6 +220,8 @@ abstract class _ShortVideo implements ShortVideo {
   String get cover;
   @override
   String get url;
+  @override
+  bool? get saved;
   @override
   List<Word> get words;
   @override
@@ -221,11 +239,11 @@ mixin _$InfoCard {
   int get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String get imageUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'audio_url')
-  String get audioUrl => throw _privateConstructorUsedError;
-  bool get saved => throw _privateConstructorUsedError;
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl => throw _privateConstructorUsedError;
+  bool? get saved => throw _privateConstructorUsedError;
   List<Word> get words => throw _privateConstructorUsedError;
-  List<String> get examples => throw _privateConstructorUsedError;
+  List<String> get collocations => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -241,10 +259,10 @@ abstract class $InfoCardCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'image_url') String imageUrl,
-      @JsonKey(name: 'audio_url') String audioUrl,
-      bool saved,
+      @JsonKey(name: 'voice_url') String voiceUrl,
+      bool? saved,
       List<Word> words,
-      List<String> examples});
+      List<String> collocations});
 }
 
 /// @nodoc
@@ -262,10 +280,10 @@ class _$InfoCardCopyWithImpl<$Res, $Val extends InfoCard>
   $Res call({
     Object? id = null,
     Object? imageUrl = null,
-    Object? audioUrl = null,
-    Object? saved = null,
+    Object? voiceUrl = null,
+    Object? saved = freezed,
     Object? words = null,
-    Object? examples = null,
+    Object? collocations = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -276,21 +294,21 @@ class _$InfoCardCopyWithImpl<$Res, $Val extends InfoCard>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      audioUrl: null == audioUrl
-          ? _value.audioUrl
-          : audioUrl // ignore: cast_nullable_to_non_nullable
+      voiceUrl: null == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      saved: null == saved
+      saved: freezed == saved
           ? _value.saved
           : saved // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
       words: null == words
           ? _value.words
           : words // ignore: cast_nullable_to_non_nullable
               as List<Word>,
-      examples: null == examples
-          ? _value.examples
-          : examples // ignore: cast_nullable_to_non_nullable
+      collocations: null == collocations
+          ? _value.collocations
+          : collocations // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
   }
@@ -306,10 +324,10 @@ abstract class _$$_InfoCardCopyWith<$Res> implements $InfoCardCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'image_url') String imageUrl,
-      @JsonKey(name: 'audio_url') String audioUrl,
-      bool saved,
+      @JsonKey(name: 'voice_url') String voiceUrl,
+      bool? saved,
       List<Word> words,
-      List<String> examples});
+      List<String> collocations});
 }
 
 /// @nodoc
@@ -325,10 +343,10 @@ class __$$_InfoCardCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? imageUrl = null,
-    Object? audioUrl = null,
-    Object? saved = null,
+    Object? voiceUrl = null,
+    Object? saved = freezed,
     Object? words = null,
-    Object? examples = null,
+    Object? collocations = null,
   }) {
     return _then(_$_InfoCard(
       id: null == id
@@ -339,21 +357,21 @@ class __$$_InfoCardCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      audioUrl: null == audioUrl
-          ? _value.audioUrl
-          : audioUrl // ignore: cast_nullable_to_non_nullable
+      voiceUrl: null == voiceUrl
+          ? _value.voiceUrl
+          : voiceUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      saved: null == saved
+      saved: freezed == saved
           ? _value.saved
           : saved // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as bool?,
       words: null == words
           ? _value._words
           : words // ignore: cast_nullable_to_non_nullable
               as List<Word>,
-      examples: null == examples
-          ? _value._examples
-          : examples // ignore: cast_nullable_to_non_nullable
+      collocations: null == collocations
+          ? _value._collocations
+          : collocations // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
@@ -365,12 +383,12 @@ class _$_InfoCard implements _InfoCard {
   const _$_InfoCard(
       {required this.id,
       @JsonKey(name: 'image_url') required this.imageUrl,
-      @JsonKey(name: 'audio_url') required this.audioUrl,
-      required this.saved,
+      @JsonKey(name: 'voice_url') required this.voiceUrl,
+      this.saved,
       required final List<Word> words,
-      required final List<String> examples})
+      required final List<String> collocations})
       : _words = words,
-        _examples = examples;
+        _collocations = collocations;
 
   factory _$_InfoCard.fromJson(Map<String, dynamic> json) =>
       _$$_InfoCardFromJson(json);
@@ -381,10 +399,10 @@ class _$_InfoCard implements _InfoCard {
   @JsonKey(name: 'image_url')
   final String imageUrl;
   @override
-  @JsonKey(name: 'audio_url')
-  final String audioUrl;
+  @JsonKey(name: 'voice_url')
+  final String voiceUrl;
   @override
-  final bool saved;
+  final bool? saved;
   final List<Word> _words;
   @override
   List<Word> get words {
@@ -392,16 +410,16 @@ class _$_InfoCard implements _InfoCard {
     return EqualUnmodifiableListView(_words);
   }
 
-  final List<String> _examples;
+  final List<String> _collocations;
   @override
-  List<String> get examples {
+  List<String> get collocations {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_examples);
+    return EqualUnmodifiableListView(_collocations);
   }
 
   @override
   String toString() {
-    return 'InfoCard(id: $id, imageUrl: $imageUrl, audioUrl: $audioUrl, saved: $saved, words: $words, examples: $examples)';
+    return 'InfoCard(id: $id, imageUrl: $imageUrl, voiceUrl: $voiceUrl, saved: $saved, words: $words, collocations: $collocations)';
   }
 
   @override
@@ -412,11 +430,12 @@ class _$_InfoCard implements _InfoCard {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.audioUrl, audioUrl) ||
-                other.audioUrl == audioUrl) &&
+            (identical(other.voiceUrl, voiceUrl) ||
+                other.voiceUrl == voiceUrl) &&
             (identical(other.saved, saved) || other.saved == saved) &&
             const DeepCollectionEquality().equals(other._words, _words) &&
-            const DeepCollectionEquality().equals(other._examples, _examples));
+            const DeepCollectionEquality()
+                .equals(other._collocations, _collocations));
   }
 
   @JsonKey(ignore: true)
@@ -425,10 +444,10 @@ class _$_InfoCard implements _InfoCard {
       runtimeType,
       id,
       imageUrl,
-      audioUrl,
+      voiceUrl,
       saved,
       const DeepCollectionEquality().hash(_words),
-      const DeepCollectionEquality().hash(_examples));
+      const DeepCollectionEquality().hash(_collocations));
 
   @JsonKey(ignore: true)
   @override
@@ -448,10 +467,10 @@ abstract class _InfoCard implements InfoCard {
   const factory _InfoCard(
       {required final int id,
       @JsonKey(name: 'image_url') required final String imageUrl,
-      @JsonKey(name: 'audio_url') required final String audioUrl,
-      required final bool saved,
+      @JsonKey(name: 'voice_url') required final String voiceUrl,
+      final bool? saved,
       required final List<Word> words,
-      required final List<String> examples}) = _$_InfoCard;
+      required final List<String> collocations}) = _$_InfoCard;
 
   factory _InfoCard.fromJson(Map<String, dynamic> json) = _$_InfoCard.fromJson;
 
@@ -461,14 +480,14 @@ abstract class _InfoCard implements InfoCard {
   @JsonKey(name: 'image_url')
   String get imageUrl;
   @override
-  @JsonKey(name: 'audio_url')
-  String get audioUrl;
+  @JsonKey(name: 'voice_url')
+  String get voiceUrl;
   @override
-  bool get saved;
+  bool? get saved;
   @override
   List<Word> get words;
   @override
-  List<String> get examples;
+  List<String> get collocations;
   @override
   @JsonKey(ignore: true)
   _$$_InfoCardCopyWith<_$_InfoCard> get copyWith =>

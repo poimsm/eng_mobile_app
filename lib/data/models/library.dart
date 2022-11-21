@@ -12,6 +12,7 @@ class ShortVideo with _$ShortVideo {
     required int id,
     required String cover,
     required String url,
+    bool? saved,
     required List<Word> words,
   }) = _ShortVideo;
 
@@ -24,11 +25,12 @@ class InfoCard with _$InfoCard {
   const factory InfoCard({
     required int id,
     @JsonKey(name: 'image_url') required String imageUrl,
-    @JsonKey(name: 'audio_url') required String audioUrl,
-    required bool saved,
+    @JsonKey(name: 'voice_url') required String voiceUrl,
+    bool? saved,
     required List<Word> words,
-    required List<String> examples,
+    required List<String> collocations,
   }) = _InfoCard;
 
-  factory InfoCard.fromJson(Map<String, Object?> json) => _$InfoCardFromJson(json);
+  factory InfoCard.fromJson(Map<String, Object?> json) =>
+      _$InfoCardFromJson(json);
 }

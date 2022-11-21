@@ -1,4 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/library/library_controller.dart';
@@ -45,7 +46,10 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
             Navigator.of(context).pop();
           }
 
-          Navigator.of(context).pop({'words': libraryState.words, 'shouldBlink': libraryState.haveSavedWords});
+          Navigator.of(context).pop({
+            'words': libraryState.words,
+            'shouldBlink': libraryState.haveSavedWords
+          });
           return true;
         },
         child: libraryState.isPlayingVideo
@@ -71,8 +75,10 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                             if (!libraryState.haveSavedWords) {
                               return Navigator.of(context).pop();
                             }
-                            Navigator.of(context)
-                                .pop({'words': libraryState.words, 'shouldBlink': libraryState.haveSavedWords});
+                            Navigator.of(context).pop({
+                              'words': libraryState.words,
+                              'shouldBlink': libraryState.haveSavedWords
+                            });
                           },
                         ),
                         title: Text(
@@ -228,8 +234,11 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                       child: Container(
                           height: 380,
                           width: 360,
-                          child: Image.asset(libraryState.cards[i].imageUrl,
-                              fit: BoxFit.cover)),
+                          child: Config.MOCK
+                              ? Image.asset(libraryState.cards[i].imageUrl,
+                                  fit: BoxFit.cover)
+                              : Image.network(libraryState.cards[i].imageUrl,
+                                  fit: BoxFit.cover)),
                     ),
                     Positioned(
                       bottom: 12,
@@ -240,7 +249,8 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _collocationsBtn(libraryState.cards[i].examples),
+                            _collocationsBtn(
+                                libraryState.cards[i].collocations),
                             // SizedBox(width: 30,),
                             _speakBtn(i),
                             // SizedBox(width: 30,),
@@ -295,7 +305,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
   _speakBtn(int i) {
     return InkWell(
       onTap: () {
-        if( i != 0) return;
+        if (i != 0) return;
         ref.read(homeProvider.notifier).playVoice('assets/ee04.mp3');
       },
       child: Card(
@@ -329,7 +339,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(7),
           ),
-          child: Icon(card.saved ? Icons.bookmark : LineIcons.bookmark,
+          child: Icon(card.saved! ? Icons.bookmark : LineIcons.bookmark,
               color: Colors.black87, size: 33),
         ),
       ),
@@ -415,13 +425,18 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         // ref.read(libraryProvider.notifier).toggleAnimateWord();
       },
       child: Container(
-        padding: EdgeInsets.all(10),
-        child: Image.asset(
-          video.cover,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
-      ),
+          padding: EdgeInsets.all(10),
+          child: Config.MOCK
+              ? Image.asset(
+                  video.cover,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )
+              : Image.network(
+                  video.cover,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )),
     );
   }
 

@@ -118,7 +118,7 @@ class _QuizScreenState extends State<QuizScreen> {
     String msg = '';
 
     if (widget.isWelcome) {
-      msg = "We will ask you 8 questions… Ready?";
+      msg = "We will ask you 6 questions… Ready?";
     } else {
       msg = "Amazing, you’ve practiced first Question Round!";
     }

@@ -44,7 +44,7 @@ void main() async {
 }
 
 authenticate() async {
-  print('INICIO AUTH');
+  print('AUTH INIT');
   await sleep(500);
   // bool isAuth = await GetIt.I.get<AuthService>().checkTokenValidity();
   // startPage = isAuth ? Routes.HOME : Routes.LOGIN;

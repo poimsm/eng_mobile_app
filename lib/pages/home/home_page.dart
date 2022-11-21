@@ -1,3 +1,4 @@
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/pages/QuizScreen.dart';
 import 'package:eng_mobile_app/pages/audio_bar_white.dart';
@@ -560,11 +561,17 @@ class HomePageState extends ConsumerState<HomePage> {
       child: Center(
         child: Stack(
           children: [
-            Image.asset(
-              act.question.imageUrl,
-              width: size.width,
-              fit: BoxFit.cover,
-            ),
+            Config.MOCK
+                ? Image.asset(
+                    act.question.imageUrl,
+                    width: size.width,
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    act.question.imageUrl,
+                    width: size.width,
+                    fit: BoxFit.cover,
+                  )
           ],
         ),
       ),
@@ -861,8 +868,10 @@ class HomePageState extends ConsumerState<HomePage> {
                           height: 350,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(30),
-                              child:
-                                  Image.asset(act.word!.infoCard!.imageUrl))),
+                              child: Config.MOCK
+                                  ? Image.asset(act.word!.infoCard!.imageUrl)
+                                  : Image.network(
+                                      act.word!.infoCard!.imageUrl))),
                     ),
                   );
                 }
@@ -902,12 +911,19 @@ class HomePageState extends ConsumerState<HomePage> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                act.word!.shortVideo!.cover,
-                                width: size.width * 0.65,
-                                height: size.width * 1,
-                                fit: BoxFit.cover,
-                              ),
+                              child: Config.MOCK
+                                  ? Image.asset(
+                                      act.word!.shortVideo!.cover,
+                                      width: size.width * 0.65,
+                                      height: size.width * 1,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      act.word!.shortVideo!.cover,
+                                      width: size.width * 0.65,
+                                      height: size.width * 1,
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                             Positioned(
                               child: Container(

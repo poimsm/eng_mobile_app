@@ -1,6 +1,6 @@
 class WordOrigin {
   static int get random => 0;
-  static int get saved => 1;
+  static int get resource => 1;
   static int get user => 2;
 }
 

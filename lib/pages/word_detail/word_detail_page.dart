@@ -1,3 +1,4 @@
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
@@ -50,11 +51,12 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    showBanner = widget.word == null || widget.word!.origin != WordOrigin.saved;
+    showBanner =
+        widget.word == null || widget.word!.origin != WordOrigin.resource;
 
     Widget solution = _meaningInput();
 
-    if (widget.word != null && widget.word!.origin == WordOrigin.saved) {
+    if (widget.word != null && widget.word!.origin == WordOrigin.resource) {
       if (widget.word!.sourceType == SourceType.infoCard) {
         solution = _solutionCard(widget.word!.infoCard!);
       }
@@ -191,7 +193,8 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                   padding: EdgeInsets.only(right: 15),
                   child: _saveBtn(),
                 ),
-              if (!widget.isNewWord && widget.word!.origin != WordOrigin.saved)
+              if (!widget.isNewWord &&
+                  widget.word!.origin != WordOrigin.resource)
                 Padding(
                   padding: EdgeInsets.only(right: 15),
                   child: _editBtn(),
@@ -235,7 +238,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           child: TextField(
             enabled: widget.word == null ||
                 (widget.word != null &&
-                    widget.word!.origin != WordOrigin.saved),
+                    widget.word!.origin != WordOrigin.resource),
             maxLines: 1,
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: widget.isNewWord ? 20 : 24),
@@ -280,14 +283,20 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           child: Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  video.cover,
-                  width: size.width * 0.65,
-                  height: size.width * 1,
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Config.MOCK
+                      ? Image.asset(
+                          video.cover,
+                          width: size.width * 0.65,
+                          height: size.width * 1,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          video.cover,
+                          width: size.width * 0.65,
+                          height: size.width * 1,
+                          fit: BoxFit.cover,
+                        )),
               Positioned(
                 child: Container(
                   width: size.width * 0.65,
@@ -339,17 +348,21 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(color: Colors.black12)),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.asset(
-                card.imageUrl,
-                width: size.width * 0.8,
-              ),
-            )),
+                borderRadius: BorderRadius.circular(4),
+                child: Config.MOCK
+                    ? Image.asset(
+                        card.imageUrl,
+                        width: size.width * 0.8,
+                      )
+                    : Image.network(
+                        card.imageUrl,
+                        width: size.width * 0.8,
+                      ))),
         SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _examplesCardBtn(card.examples),
+            _examplesCardBtn(card.collocations),
             _speakCardBtn(),
           ],
         )
