@@ -90,7 +90,7 @@ class Network {
         HttpClientRequest request =
             await httpClient.postUrl(Uri.parse(apiURL + path));
         request.headers.set('content-type', 'application/json');
-        request.headers.set('Authorization', 'Bearer ${_authService.token}');
+        request.headers.set('AuthorizationX', 'Bearer ${_authService.token}');
         request.headers.contentLength =
             utf8.encode(json.encode(payload)).length;
         request.add(utf8.encode(json.encode(payload)));
@@ -144,7 +144,7 @@ class Network {
         HttpClientRequest request =
             await httpClient.putUrl(Uri.parse(apiURL + path));
         request.headers.set('content-type', 'application/json');
-        request.headers.set('Authorization', 'Bearer ${_authService.token}');
+        request.headers.set('AuthorizationX', 'Bearer ${_authService.token}');
         request.headers.contentLength =
             utf8.encode(json.encode(payload)).length;
         request.add(utf8.encode(json.encode(payload)));
@@ -199,7 +199,7 @@ class Network {
         HttpClientRequest request =
             await httpClient.deleteUrl(Uri.parse(apiURL + path));
         request.headers.set('content-type', 'application/json');
-        request.headers.set('Authorization', 'Bearer ${_authService.token}');
+        request.headers.set('AuthorizationX', 'Bearer ${_authService.token}');
         request.headers.contentLength =
             utf8.encode(json.encode(payload)).length;
         request.add(utf8.encode(json.encode(payload)));

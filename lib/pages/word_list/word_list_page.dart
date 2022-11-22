@@ -9,6 +9,7 @@ import 'package:eng_mobile_app/pages/word_list/word_list_controller.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class WordListPage extends ConsumerStatefulWidget {
@@ -21,11 +22,10 @@ class WordListPage extends ConsumerStatefulWidget {
 class WordListPageState extends ConsumerState<WordListPage> {
   @override
   void initState() {
-    ref.read(wordListProvider.notifier).retrieveWords();
-    // ref.read(wordListProvider.notifier).checkHistoryTypes(shouldRefresh: false);
-
-    Future.delayed(Duration(milliseconds: 500),
-        () => ref.read(wordListProvider.notifier).toggleAnimatedWordBtn());
+    Future.delayed(Duration(milliseconds: 500), () {
+      ref.read(wordListProvider.notifier).fetchWords();
+      ref.read(wordListProvider.notifier).toggleAnimatedWordBtn();
+    });
 
     super.initState();
   }
@@ -70,12 +70,25 @@ class WordListPageState extends ConsumerState<WordListPage> {
   _myWords() {
     return Column(
       children: [
-        _scrolleableWordList(),
+        wordListState.isLoading ? _loadingWords() : _scrolleableWordList(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [_getWordsBtn(), _addWordBtn()],
         )
       ],
+    );
+  }
+
+  _loadingWords() {
+    return SizedBox(
+      width: size.width,
+      height: size.height * 0.55,
+      // color: Colors.red,
+      child: Center(
+          child: SpinKitThreeBounce(
+        color: Colors.grey,
+        size: 40,
+      )),
     );
   }
 

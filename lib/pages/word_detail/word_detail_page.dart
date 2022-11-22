@@ -3,11 +3,13 @@ import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/single_video.dart';
+import 'package:eng_mobile_app/pages/word_detail/word_detail_controller.dart';
 import 'package:eng_mobile_app/pages/word_list/enums.dart';
 import 'package:eng_mobile_app/pages/word_list/word_list_controller.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_icons/line_icons.dart';
 
 class WordDetailPage extends ConsumerStatefulWidget {
@@ -21,35 +23,46 @@ class WordDetailPage extends ConsumerStatefulWidget {
 }
 
 class WordDetailPageState extends ConsumerState<WordDetailPage> {
-  late TextEditingController _wordCtrl;
-  late TextEditingController _meaningCtrl;
   bool meaningSwitch = true;
+
+  late TextEditingController wordCtrl;
+  late TextEditingController meaningCtrl;
 
   @override
   void initState() {
     super.initState();
-    _wordCtrl = TextEditingController();
 
-    _meaningCtrl = TextEditingController();
+    wordCtrl = TextEditingController();
+    meaningCtrl = TextEditingController();
 
     if (!widget.isNewWord) {
       if (widget.word!.type == WordType.group) {
-        _wordCtrl.text = getGroupHead(widget.word!.extras!);
-        _meaningCtrl.text = getGroupFullTail(widget.word!.extras!);
+        wordCtrl.text = getGroupHead(widget.word!.extras!);
+        meaningCtrl.text = getGroupFullTail(widget.word!.extras!);
       } else {
-        _wordCtrl.text = widget.word!.word;
-        _meaningCtrl.text = widget.word!.meaning ?? '';
+        wordCtrl.text = widget.word!.word;
+        meaningCtrl.text = widget.word!.meaning ?? '';
       }
     }
   }
 
+  @override
+  void dispose() {
+    wordCtrl.dispose();
+    meaningCtrl.dispose();
+    super.dispose();
+  }
+
   Size size = Size.zero;
-  bool changed = false;
-  bool showVideo = false;
   bool showBanner = true;
   Map args = {};
+
+  late WordDetailState wordDetailState;
+
   @override
   Widget build(BuildContext context) {
+    wordDetailState = ref.watch(wordDetailProvider);
+
     size = MediaQuery.of(context).size;
     showBanner =
         widget.word == null || widget.word!.origin != WordOrigin.resource;
@@ -68,9 +81,8 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (showVideo) {
-          showVideo = false;
-          setState(() {});
+        if (wordDetailState.showVideo) {
+          ref.read(wordDetailProvider.notifier).setShowVideo(false);
           return false;
         }
         return true;
@@ -94,15 +106,34 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                   ],
                 ),
               )),
-              if (showVideo)
+              if (wordDetailState.showVideo)
                 SingleVideo(
                     video: widget.word!.shortVideo!,
                     onSaveWords: () {
                       // showVideo = false;
                       //         setState(() {});
-                    })
+                    }),
+              if (wordDetailState.isLoading)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: _loading(),
+                )
             ],
           )),
+    );
+  }
+
+  _loading() {
+    return Container(
+      height: size.height,
+      width: size.width,
+      color: Colors.white.withOpacity(0.7),
+      child: SpinKitRing(
+        size: 40,
+        lineWidth: 4,
+        color: Colors.black87,
+      ),
     );
   }
 
@@ -112,14 +143,16 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
         height: 70,
         // color: Color(0xffFFC000),
         color: Colors.greenAccent,
+        // color: Colors.green,
         child: Row(
           children: [
             SizedBox(
-              width: 10,
+              width: 20,
             ),
             Image.asset(
               'assets/questions01.png',
-              width: 45,
+              width: 35,
+              color: Colors.white,
             ),
             SizedBox(
               width: 15,
@@ -173,20 +206,25 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           ]),
           Row(
             children: [
+              // if (!widget.isNewWord)
+              //   Padding(
+              //     padding: EdgeInsets.only(right: 15),
+              //     child: IconButton(
+              //       onPressed: () {
+              //         ref
+              //             .read(wordListProvider.notifier)
+              //             .deleteWord(widget.word!.id);
+              //         Navigator.pop(context, {'toast': 'Word deleted'});
+              //       },
+              //       icon:
+              //           Icon(LineIcons.trash, size: 35, color: Colors.black54),
+              //       // icon: Icon(Icons.delete_outline, size: 35, color: Colors.black54),
+              //     ),
+              //   ),
               if (!widget.isNewWord)
                 Padding(
                   padding: EdgeInsets.only(right: 15),
-                  child: IconButton(
-                    onPressed: () {
-                      ref
-                          .read(wordListProvider.notifier)
-                          .deleteWord(widget.word!.id);
-                      Navigator.pop(context, {'toast': 'Word deleted'});
-                    },
-                    icon:
-                        Icon(LineIcons.trash, size: 35, color: Colors.black54),
-                    // icon: Icon(Icons.delete_outline, size: 35, color: Colors.black54),
-                  ),
+                  child: _deleteBtn(),
                 ),
               if (widget.isNewWord)
                 Padding(
@@ -210,17 +248,17 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
     return Column(
       children: [
         SizedBox(
-          width: size.width * 0.8,
+          width: size.width * 0.81,
           child: Row(
             children: [
               Text(
                 'Word or phrase',
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 20, color: Colors.black54),
+                style: TextStyle(fontSize: 21, color: Colors.black54),
               ),
               IconButton(
                 onPressed: () {
-                  ref.read(homeProvider.notifier).speak(_wordCtrl.text);
+                  ref.read(homeProvider.notifier).speak(wordCtrl.text);
                 },
                 icon: Icon(Icons.volume_down_outlined,
                     size: 30, color: Colors.black54),
@@ -229,7 +267,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           ),
         ),
         Container(
-          width: size.width * 0.8,
+          width: size.width * 0.85,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: BoxDecoration(
             color: Color(0xffEEEEEE),
@@ -240,9 +278,11 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                 (widget.word != null &&
                     widget.word!.origin != WordOrigin.resource),
             maxLines: 1,
+            maxLength: 20,
             textCapitalization: TextCapitalization.sentences,
-            style: TextStyle(fontSize: widget.isNewWord ? 20 : 24),
+            style: TextStyle(fontSize: widget.isNewWord ? 20 : 20),
             decoration: InputDecoration(
+              counter: Offstage(),
               hintText: 'Example: Give it a shot',
               counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
               hintStyle: TextStyle(color: Colors.black26),
@@ -251,14 +291,14 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
               //         borderSide: BorderSide(color: Colors.black),
               //      ),
             ),
+            controller: wordCtrl,
             onChanged: (_) {
-              if (!widget.isNewWord) {
-                changed = _wordCtrl.text != widget.word!.word ||
-                    _meaningCtrl.text != (widget.word!.meaning ?? '');
-              }
-              setState(() {});
+              ref.read(wordDetailProvider.notifier).checkEnableToSaveOrEdit(
+                  wordCtrl.text,
+                  meaningCtrl.text,
+                  widget.isNewWord,
+                  widget.word);
             },
-            controller: _wordCtrl,
           ),
         ),
       ],
@@ -273,7 +313,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           child: Text(
             'Solution:',
             textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 20, color: Colors.black54),
+            style: TextStyle(fontSize: 21, color: Colors.black54),
           ),
         ),
         SizedBox(
@@ -308,8 +348,9 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                   child: Center(
                     child: InkWell(
                       onTap: () {
-                        showVideo = true;
-                        setState(() {});
+                        ref
+                            .read(wordDetailProvider.notifier)
+                            .setShowVideo(true);
                       },
                       child: Container(
                           padding: EdgeInsets.all(10),
@@ -337,7 +378,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           child: Text(
             'Solution:',
             textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 20, color: Colors.black54),
+            style: TextStyle(fontSize: 21, color: Colors.black54),
           ),
         ),
         SizedBox(
@@ -365,7 +406,8 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
             _examplesCardBtn(card.collocations),
             _speakCardBtn(),
           ],
-        )
+        ),
+        SizedBox(height: 50),
       ],
     );
   }
@@ -426,14 +468,14 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
     return Column(
       children: [
         SizedBox(
-          width: size.width * 0.8,
+          width: size.width * 0.81,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Solution',
                 textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 20, color: Colors.black54),
+                style: TextStyle(fontSize: 21, color: Colors.black54),
               ),
               // SizedBox(width: size.width*0.3,),
               // CupertinoSwitch(
@@ -450,7 +492,7 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
         ),
         if (meaningSwitch)
           Container(
-            width: size.width * 0.8,
+            width: size.width * 0.85,
             margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
@@ -458,24 +500,24 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
               borderRadius: BorderRadius.circular(15),
             ),
             child: TextField(
-              maxLines: 8,
+              maxLines: 12,
               // maxLength: 200,
               textCapitalization: TextCapitalization.sentences,
-              style: TextStyle(fontSize: 19),
+              style: TextStyle(fontSize: 20),
               decoration: InputDecoration(
                 counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
                 hintText: exampleMeaning.trim(),
                 hintStyle: TextStyle(color: Colors.black26),
                 border: InputBorder.none,
               ),
+              controller: meaningCtrl,
               onChanged: (_) {
-                if (!widget.isNewWord) {
-                  changed = _wordCtrl.text != widget.word!.word ||
-                      _meaningCtrl.text != (widget.word!.meaning ?? '');
-                  setState(() {});
-                }
+                ref.read(wordDetailProvider.notifier).checkEnableToSaveOrEdit(
+                    wordCtrl.text,
+                    meaningCtrl.text,
+                    widget.isNewWord,
+                    widget.word);
               },
-              controller: _meaningCtrl,
             ),
           ),
       ],
@@ -484,24 +526,25 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
 
   _saveBtn() {
     return InkWell(
-      onTap: () {
-        if (_wordCtrl.text == '') return;
-        ref.read(wordListProvider.notifier).addNewWord(Word(
-            id: ref.read(wordListProvider).words.length + 1,
-            word: _wordCtrl.text,
-            origin: WordOrigin.user,
-            type: WordType.normal,
-            meaning: _meaningCtrl.text == '' ? null : _meaningCtrl.text));
-        ref.read(wordListProvider.notifier).addUserWord(_wordCtrl.text);
+      onTap: () async {
+        if (!wordDetailState.enableToSaveOrEdit) return;
+        final word = await ref.read(wordDetailProvider.notifier).createWord(
+            {'sentence': wordCtrl.text, 'meaning': meaningCtrl.text});
 
+        if (word == null) return;
+
+        ref.read(wordListProvider.notifier).addNewWord(word);
+        ref.read(wordListProvider.notifier).addUserWord(word.word);
+
+        if (!mounted) return;
         Navigator.pop(context, {'toast': 'Word added'});
       },
       child: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
-              color:
-                  Color(0xff6E5AA0).withOpacity(_wordCtrl.text != '' ? 1 : 0.3),
+              color: Color(0xff6E5AA0)
+                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.3),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
@@ -517,27 +560,61 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
 
   _editBtn() {
     return InkWell(
-      onTap: () {
-        if (!changed) return;
+      onTap: () async {
+        if (!wordDetailState.enableToSaveOrEdit) return;
 
-        ref.read(wordListProvider.notifier).editWord(Word(
-            id: widget.word!.id,
-            word: _wordCtrl.text,
-            origin: WordOrigin.user,
-            type: WordType.normal,
-            meaning: _meaningCtrl.text == '' ? null : _meaningCtrl.text));
+        final word = await ref.read(wordDetailProvider.notifier).updateWord({
+          'id': widget.word!.id,
+          'sentence': wordCtrl.text,
+          'meaning': meaningCtrl.text
+        });
 
+        if (word == null) return;
+
+        ref.read(wordListProvider.notifier).editWord(word);
+
+        if (!mounted) return;
         Navigator.pop(context, {'toast': 'Word edited'});
+      },
+      child: Container(
+          height: 40,
+          padding: EdgeInsets.symmetric(horizontal: 22),
+          decoration: BoxDecoration(
+              color: Color(0xff6E5AA0)
+                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.3),
+              borderRadius: BorderRadius.circular(8)),
+          child: Center(
+            child: Text(
+              'Edit',
+              style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          )),
+    );
+  }
+
+  _deleteBtn() {
+    return InkWell(
+      onTap: () async {
+        final resOk = await ref
+            .read(wordDetailProvider.notifier)
+            .deleteWord(widget.word!.id);
+        if (!resOk) return;
+        ref.read(wordListProvider.notifier).deleteWord(widget.word!.id);
+
+        if (!mounted) return;
+        Navigator.pop(context, {'toast': 'Word deleted'});
       },
       child: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
-              color: Color(0xff6E5AA0).withOpacity(changed ? 1 : 0.3),
-              borderRadius: BorderRadius.circular(8)),
+              color: Colors.redAccent, borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
-              'Edit',
+              'Delete',
               style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,

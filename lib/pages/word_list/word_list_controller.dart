@@ -18,7 +18,7 @@ class HistoryItem {
 class WordListState {
   WordListState({
     this.words = const [],
-    this.isLoading = true,
+    this.isLoading = false,
     this.animateAddWordBtn = false,
     this.showListBlinker = false,
     this.history = const [],
@@ -54,18 +54,18 @@ class WordListState {
 class WordListNotifier extends StateNotifier<WordListState> {
   WordListNotifier() : super(WordListState());
 
-  Future<bool> retrieveWords() async {
+  Future<bool> fetchWords() async {
     // state = state.copyWith(isLoading: true);
-    // final resp = await Network().get('/word/?id=user_id');
-    // if (!resp.ok) {
-    //   state = state.copyWith(isLoading: false);
-    //   return false;
-    // }
+    final resp = await Network().get('/sentence/?page=1');
+    if (!resp.ok) {
+      state = state.copyWith(isLoading: false);
+      return false;
+    }
 
-    // final wordsData =
-    //     (resp.data as List).map((x) => Word.fromJson(x)).toList();
+    final wordsData =
+        (resp.data['data'] as List).map((x) => Word.fromJson(x)).toList();
 
-    // state = state.copyWith(words: wordsData);
+    state = state.copyWith(words: wordsData);
     // state = state.copyWith(isLoading: false);
     return true;
   }
@@ -133,7 +133,13 @@ class WordListNotifier extends StateNotifier<WordListState> {
     state = state.copyWith(words: [...wordsData, ...state.words]);
   }
 
-  void addNewWord(Word word) {
+  void addNewWord(Word word) async {
+    final resp = await Network().get('/sentence/?page=1');
+    if (!resp.ok) {
+      state = state.copyWith(isLoading: false);
+      return;
+    }
+
     state = state.copyWith(words: [word, ...state.words]);
   }
 
