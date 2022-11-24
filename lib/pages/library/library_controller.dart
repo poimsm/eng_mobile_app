@@ -5,7 +5,6 @@ import 'package:eng_mobile_app/pages/word_list/enums.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class LibraryState {
   LibraryState({
     this.isLoading = true,
@@ -13,40 +12,39 @@ class LibraryState {
     this.cards = const [],
     this.isPlayingVideo = false,
     this.videoIndex = 0,
-    this.haveSavedWords = false,
     this.words = const [],
     this.animateWords = false,
+    this.wordCounter = 0,
   });
 
   List<ShortVideo> videos;
   List<InfoCard> cards;
   bool isLoading;
   bool isPlayingVideo;
-  bool haveSavedWords;
   int videoIndex;
-  List<Word> words;
+  List<Map> words;
   bool animateWords;
+  int wordCounter;
 
   LibraryState copyWith({
     videos,
     cards,
     isLoading,
     isPlayingVideo,
-    haveSavedWords,
     videoIndex,
     words,
     animateWords,
-    }) {
-
+    wordCounter,
+  }) {
     return LibraryState(
       videos: videos ?? this.videos,
       cards: cards ?? this.cards,
       isLoading: isLoading ?? this.isLoading,
       isPlayingVideo: isPlayingVideo ?? this.isPlayingVideo,
-      haveSavedWords: haveSavedWords ?? this.haveSavedWords,
       videoIndex: videoIndex ?? this.videoIndex,
       words: words ?? this.words,
-      animateWords: animateWords?? this.animateWords,
+      animateWords: animateWords ?? this.animateWords,
+      wordCounter: wordCounter ?? this.wordCounter,
     );
   }
 }
@@ -54,86 +52,194 @@ class LibraryState {
 class LibraryNotifier extends StateNotifier<LibraryState> {
   LibraryNotifier() : super(LibraryState());
 
+  void setTotalWords(int val) async {
+    state = state.copyWith(wordCounter: val);
+  }
+
   Future<bool> fetchVideos() async {
     state = state.copyWith(isLoading: true);
-    final resp = await Network().get('/library/videos/?id=12');
-    if (!resp.ok) {
-      state = state.copyWith(isLoading: false);
-      return false;
-    }
+    final resp = await Network().get('/short-video');
+    state = state.copyWith(isLoading: false);
+    if (!resp.ok) return false;
 
     final data =
         (resp.data as List).map((x) => ShortVideo.fromJson(x)).toList();
 
     state = state.copyWith(videos: data);
-    state = state.copyWith(isLoading: false);
     return true;
   }
 
   Future<bool> fetchCards() async {
     state = state.copyWith(isLoading: true);
-    final resp = await Network().get('/library/cards/?id=12');
+    final resp = await Network().get('/info-card');
     if (!resp.ok) {
       state = state.copyWith(isLoading: false);
       return false;
     }
 
-    final data =
-        (resp.data as List).map((x) => InfoCard.fromJson(x)).toList();
+    final data = (resp.data as List).map((x) => InfoCard.fromJson(x)).toList();
 
     state = state.copyWith(cards: data);
     state = state.copyWith(isLoading: false);
     return true;
   }
 
-  void saveCard(InfoCard card) {    
-    card = card.copyWith(saved: true);
+  void toggleFavoriteCard(InfoCard card) async {
+    bool isFavoriteFlag = !card.isFavorite!;
+
+    Network().put('/info-card',
+        data: {'id': card.id, 'is_favorite': isFavoriteFlag});
+
+    card = card.copyWith(isFavorite: isFavoriteFlag);
 
     List<InfoCard> cards = state.cards;
 
     cards = cards.map((x) {
-        if(x.id == card.id) {
-          return x.copyWith(saved: true);
-        }
-        return x;
-      }).toList();
+      if (x.id == card.id) {
+        return x.copyWith(isFavorite: isFavoriteFlag);
+      }
+      return x;
+    }).toList();
 
     List<Word> cardWords = [];
 
     for (var i = 0; i < card.words.length; i++) {
-      cardWords.add(
-        Word(
+      cardWords.add(Word(
           id: card.words[i].id,
           word: card.words[i].word,
           origin: card.words[i].origin,
           type: card.words[i].type,
           extras: card.words[i].extras,
-          saved: true,
+          saved: isFavoriteFlag,
           sourceType: SourceType.infoCard,
-          infoCard: card
-        )
-      );
+          infoCard: card));
     }
 
-    List<Word> words = [...state.words, ...cardWords];
+    List<Map> words = state.words;
+    List<Map> newWords = words.map((e) => e).toList();
+    List<String> aa = [];
 
-    state = state.copyWith(cards: cards, haveSavedWords: true, words: words);
+    bool foundCard = false;
 
+    for (var i = 0; i < words.length; i++) {
+      if (state.words[i]['type'] == 'card' &&
+          state.words[i]['info_card_id'] == card.id) {
+        foundCard = true;
+        break;
+      }
+    }
+
+    if (foundCard) {
+      newWords.removeWhere((Map w) => w['info_card_id'] == card.id);
+    } else {
+      for (var i = 0; i < cardWords.length; i++) {
+        aa.add(cardWords[i].word);
+        newWords.add({
+          'type': 'card',
+          'info_card_id': card.id,
+          'action': isFavoriteFlag ? 'add' : 'delete',
+          'word': cardWords[i]
+        });
+      }
+    }
+
+    int wordCounter = state.wordCounter;
+    for (var i = 0; i < newWords.length; i++) {
+      if (newWords[i]['action'] == 'add') {
+        wordCounter++;
+      } else {
+        wordCounter--;
+      }
+    }
+
+    state =
+        state.copyWith(cards: cards, words: newWords, wordCounter: wordCounter);
     toggleAnimateWord();
   }
 
-  void saveVideoWords(ShortVideo video) {
+  void toggleFavoriteVideo(ShortVideo video) {
+    bool isFavoriteFlag = !video.isFavorite!;
+
+    Network().put('/short-video',
+        data: {'id': video.id, 'is_favorite': isFavoriteFlag});
+
+    video = video.copyWith(isFavorite: isFavoriteFlag);
+
+    List<ShortVideo> videos = state.videos;
+
+    videos = videos.map((x) {
+      if (x.id == video.id) {
+        return x.copyWith(isFavorite: isFavoriteFlag);
+      }
+      return x;
+    }).toList();
+
     List<Word> videoWords = [];
+
     for (var i = 0; i < video.words.length; i++) {
-      videoWords.add(
-      video.words[i].copyWith(shortVideo: video)
-      );
-      // videoWords.add(
-      //   Word.fromJson(videoWords.toJson())
-      // );
+      videoWords.add(Word(
+          id: video.words[i].id,
+          word: video.words[i].word,
+          origin: video.words[i].origin,
+          type: video.words[i].type,
+          extras: video.words[i].extras,
+          saved: isFavoriteFlag,
+          sourceType: SourceType.infoCard,
+          shortVideo: video));
     }
-    List<Word> words = [...state.words, ...videoWords];
-    state = state.copyWith(haveSavedWords: true, words: words);
+
+    List<Map> words = state.words;
+    List<Map> newWords = words.map((e) => e).toList();
+
+    bool foundVideo = false;
+
+    for (var i = 0; i < words.length; i++) {
+      if (state.words[i]['type'] == 'video' &&
+          state.words[i]['short_video_id'] == video.id) {
+        foundVideo = true;
+        break;
+      }
+    }
+
+    if (foundVideo) {
+      newWords.removeWhere((Map w) => w['short_video_id'] == video.id);
+    } else {
+      for (var i = 0; i < videoWords.length; i++) {
+        newWords.add({
+          'type': 'video',
+          'short_video_id': video.id,
+          'action': isFavoriteFlag ? 'add' : 'delete',
+          'word': videoWords[i]
+        });
+      }
+    }
+
+    int wordCounter = state.wordCounter;
+    for (var i = 0; i < newWords.length; i++) {
+      if (newWords[i]['action'] == 'add') {
+        wordCounter++;
+      } else {
+        wordCounter--;
+      }
+    }
+
+    state = state.copyWith(
+        videos: videos, words: newWords, wordCounter: wordCounter);
+    // toggleAnimateWord();
+  }
+
+  void saveVideoWords2(ShortVideo video) {
+    // List<Word> videoWords = [];
+    // for (var i = 0; i < video.words.length; i++) {
+    //   videoWords.add(
+    //   video.words[i].copyWith(shortVideo: video)
+    //   );
+    //   // videoWords.add(
+    //   //   Word.fromJson(videoWords.toJson())
+    //   // );
+    // }
+    // List<Word> words = [...state.words, ...videoWords];
+    // state = state.copyWith(haveSavedWords: true, words: words);
   }
 
   void playVideo(ShortVideo video, int index) {
@@ -153,7 +259,7 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
 
 // .autoDispose<
 //     SettingsAppearanceController, SnapFormState>
-    
+
 final libraryProvider =
     StateNotifierProvider.autoDispose<LibraryNotifier, LibraryState>((ref) {
   return LibraryNotifier();

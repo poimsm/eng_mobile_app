@@ -57,6 +57,8 @@ class WordListNotifier extends StateNotifier<WordListState> {
   Future<bool> fetchWords() async {
     // state = state.copyWith(isLoading: true);
     final resp = await Network().get('/sentence/?page=1');
+    // state = state.copyWith(isLoading: false);
+
     if (!resp.ok) {
       state = state.copyWith(isLoading: false);
       return false;
@@ -66,7 +68,6 @@ class WordListNotifier extends StateNotifier<WordListState> {
         (resp.data['data'] as List).map((x) => Word.fromJson(x)).toList();
 
     state = state.copyWith(words: wordsData);
-    // state = state.copyWith(isLoading: false);
     return true;
   }
 
@@ -87,15 +88,6 @@ class WordListNotifier extends StateNotifier<WordListState> {
     state = state.copyWith(userWords: [...state.userWords, wordText]);
   }
 
-  void addUserWordList(List<Word> words) {
-    List<String> wordsText = [];
-    for (var i = 0; i < words.length; i++) {
-      wordsText.add(words[i].word);
-    }
-
-    state = state.copyWith(userWords: [...state.userWords, ...wordsText]);
-  }
-
   void addHistory({required Question question, Word? word}) {
     List<HistoryItem> history = [
       HistoryItem(
@@ -113,24 +105,32 @@ class WordListNotifier extends StateNotifier<WordListState> {
     state = state.copyWith(history: history);
   }
 
-  void setWordsFromList(List<Word> newWords) async {
-    List<Word> words = [...newWords, ...state.words];
-    state = state.copyWith(words: words);
-  }
+  void favoriteWordHandler(List<Map> favWords) {
+    final words = state.words.map((e) => e).toList();
+    List<Word> addedWords = [];
+    for (var i = 0; i < favWords.length; i++) {
+      if (favWords[i]['action'] == 'add') {
+        addedWords.add(favWords[i]['word']);
+      }
 
-  void setWordsFromMap(data) async {
-    final wordsData = (data as List)
-        .map((x) => Word(
-              id: x['id'],
-              word: x['sentence'],
-              meaning: x['meaning'],
-              origin: x['origin'],
-              extras: x['extras'],
-              type: x['type'],
-            ))
-        .toList();
+      if (favWords[i]['action'] == 'delete') {
+        if (favWords[i]['type'] == 'card') {
+          words.removeWhere((w) {
+            return w.infoCard != null &&
+                w.infoCard!.id == favWords[i]['short_video_id'];
+          });
+        }
 
-    state = state.copyWith(words: [...wordsData, ...state.words]);
+        if (favWords[i]['type'] == 'video') {
+          words.removeWhere((w) {
+            return w.shortVideo != null &&
+                w.shortVideo!.id == favWords[i]['short_video_id'];
+          });
+        }
+      }
+    }
+
+    state = state.copyWith(words: [...addedWords, ...words]);
   }
 
   void addNewWord(Word word) async {
@@ -154,7 +154,6 @@ class WordListNotifier extends StateNotifier<WordListState> {
       }
     }
 
-    // final words = state.words.firstWhere((w) => w.id == word.id);
     state = state.copyWith(words: newWords);
   }
 

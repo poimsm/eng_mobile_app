@@ -108,10 +108,10 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
               )),
               if (wordDetailState.showVideo)
                 SingleVideo(
+                    enableFavoriteBtn: false,
                     video: widget.word!.shortVideo!,
-                    onSaveWords: () {
-                      // showVideo = false;
-                      //         setState(() {});
+                    onBack: (_) {
+                      ref.read(wordDetailProvider.notifier).setShowVideo(false);
                     }),
               if (wordDetailState.isLoading)
                 Positioned(
@@ -634,13 +634,13 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
               builder: (BuildContext context, StateSetter setState) {
             return Container(
                 width: size.width,
-                height: size.height * 0.4,
+                height: size.height * 0.5,
                 padding: EdgeInsets.only(top: 50, bottom: 20),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30))),
                 child: Container(
                   height: size.height * 0.3,
                   padding: EdgeInsets.symmetric(horizontal: 40),

@@ -12,8 +12,9 @@ class ShortVideo with _$ShortVideo {
     required int id,
     required String cover,
     required String url,
-    bool? saved,
+    @JsonKey(name: 'is_favorite') bool? isFavorite,
     required List<Word> words,
+    required List<String> collocations,
   }) = _ShortVideo;
 
   factory ShortVideo.fromJson(Map<String, Object?> json) =>
@@ -26,7 +27,7 @@ class InfoCard with _$InfoCard {
     required int id,
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'voice_url') required String voiceUrl,
-    bool? saved,
+    @JsonKey(name: 'is_favorite') bool? isFavorite,
     required List<Word> words,
     required List<String> collocations,
   }) = _InfoCard;

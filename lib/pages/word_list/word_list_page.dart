@@ -35,7 +35,6 @@ class WordListPageState extends ConsumerState<WordListPage> {
   @override
   Widget build(BuildContext context) {
     wordListState = ref.watch(wordListProvider);
-    // ref.read(wordListProvider.notifier).checkHistoryTypes(shouldRefresh: true);
     size = MediaQuery.of(context).size;
     return SizedBox(
         height: size.height,
@@ -296,7 +295,6 @@ class WordListPageState extends ConsumerState<WordListPage> {
         onTap: () async {
           // ref.read(wordListProvider.notifier).toggleListBlinker();
           // return;
-          // dynamic resp = await Navigator.pushNamed(context, Routes.LIBRARY);
 
           final resp = await Navigator.push(
             context,
@@ -306,11 +304,12 @@ class WordListPageState extends ConsumerState<WordListPage> {
           );
 
           if (resp != null) {
-            ref.read(wordListProvider.notifier).setWordsFromList(resp['words']);
-            ref.read(wordListProvider.notifier).addUserWordList(resp['words']);
-            if (resp['shouldBlink']) {
-              ref.read(wordListProvider.notifier).toggleListBlinker();
-            }
+            ref
+                .read(wordListProvider.notifier)
+                .favoriteWordHandler(resp['words']);
+            // if (resp['shouldBlink']) {
+            //   ref.read(wordListProvider.notifier).toggleListBlinker();
+            // }
           }
         },
         child: Image.asset(
@@ -346,10 +345,6 @@ class WordListPageState extends ConsumerState<WordListPage> {
             context.read<Screen>().showToast(resp['toast'], seconds: 2);
           });
         }
-
-        // ref
-        //     .read(wordListProvider.notifier)
-        //     .checkHistoryTypes(shouldRefresh: true);
       },
       child: AnimatedContainer(
         width: animate ? 65 : 60,
@@ -393,28 +388,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
 
           return _wordNormalItem(wordListState.words[i]);
         });
-    // return List.generate(wordListState.words.length + 1,
-    //     (i) {
-
-    //       if(i == wordListState.words.length) {
-    //         return SizedBox(height: 100, width: 10,);
-    //       }
-
-    //       return _wordNormalItem(wordListState.words[i]);
-    //     });
   }
-
-  // _wordList() {
-  //   return List.generate(wordListState.words.length + 1,
-  //       (i) {
-
-  //         if(i == wordListState.words.length) {
-  //           return SizedBox(height: 100, width: 10,);
-  //         }
-
-  //         return _wordNormalItem(wordListState.words[i]);
-  //       });
-  // }
 
   _wordNormalItem(Word word) {
     return InkWell(
@@ -458,64 +432,4 @@ class WordListPageState extends ConsumerState<WordListPage> {
       ),
     );
   }
-
-  // _wordGroupItem(Word word) {
-  //   return InkWell(
-  //     onTap: () async {
-  //       final resp = await Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) =>
-  //                 WordDetailPage(isNewWord: false, word: word)),
-  //       );
-
-  //       if (resp != null) {
-  //         Timer(Duration(milliseconds: 300), () {
-  //           context.read<Screen>().showToast(resp['toast']);
-  //         });
-  //       }
-  //     },
-  //     child: Container(
-  //       padding: EdgeInsets.symmetric(vertical: 20),
-  //       width: size.width * 0.8,
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Container(
-  //             padding: EdgeInsets.all(3),
-  //             decoration: BoxDecoration(
-  //               color: Colors.black.withOpacity(0.05),
-  //               shape: BoxShape.circle
-  //             ),
-  //             child: Icon(Icons.group, color: Colors.grey, size: 25),
-  //           ),
-  //           Text(
-  //             word.groupWord!,
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
-  //           ),
-  //           SizedBox(
-  //             child: Image.asset('assets/bookmark.png', width: 30),
-  //           )
-  //         ],
-  //       ),
-  //     )
-  //   );
-  // }
-
-  // _groupItem(String text) {
-  //   return Row(
-  //     children: [
-  //       Container(width: 25),
-  //           Text(
-  //             text,
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
-  //           ),
-  //           SizedBox(
-  //             child: Image.asset('assets/bookmark.png', width: 30),
-  //           )
-  //     ],
-  //   );
-  // }
 }

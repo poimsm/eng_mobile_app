@@ -1,3 +1,4 @@
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/layout/controller.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,14 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class MutipleVideos extends ConsumerStatefulWidget {
-  const MutipleVideos({super.key, 
-  required this.videos,
-  required this.activeIndex,
-  this.totalWords = 3,
-  required this.onNext, required this.onSaveWords});
+class MultipleVideos extends ConsumerStatefulWidget {
+  const MultipleVideos(
+      {super.key,
+      required this.videos,
+      required this.activeIndex,
+      this.totalWords = 3,
+      required this.onNext,
+      required this.onSaveWords});
 
   // final VoidCallback onExit;
   final List<ShortVideo> videos;
@@ -19,15 +22,14 @@ class MutipleVideos extends ConsumerStatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onSaveWords;
   final int totalWords;
-  
 
   @override
-  MutipleVideosState createState() => MutipleVideosState();
+  MultipleVideosState createState() => MultipleVideosState();
 }
 
-class MutipleVideosState extends ConsumerState<MutipleVideos> {
+class MultipleVideosState extends ConsumerState<MultipleVideos> {
   Size size = Size.zero;
-  bool savedWord = false;  
+  bool savedWord = false;
 
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -35,7 +37,9 @@ class MutipleVideosState extends ConsumerState<MutipleVideos> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videos[widget.activeIndex].url);
+    _controller = Config.MOCK
+        ? VideoPlayerController.asset(widget.videos[widget.activeIndex].url)
+        : VideoPlayerController.network(widget.videos[widget.activeIndex].url);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
@@ -50,14 +54,6 @@ class MutipleVideosState extends ConsumerState<MutipleVideos> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-
-    print('AKIIIIIIIIIII<-------------');
-
-    print('videos:::: ${widget.videos}');
-    print('activeIndex:::: ${widget.activeIndex}');
-    print('totalWords:::: ${widget.totalWords}');
-    print(widget.videos[widget.activeIndex].url);
-
     return Container(
         height: size.height,
         width: size.width,
@@ -120,7 +116,7 @@ class MutipleVideosState extends ConsumerState<MutipleVideos> {
         context.read<Screen>().showToast('${widget.totalWords} word saved');
         savedWord = true;
         setState(() {});
-        },
+      },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 11, horizontal: 25),
         decoration: BoxDecoration(
@@ -140,7 +136,9 @@ class MutipleVideosState extends ConsumerState<MutipleVideos> {
             Text(
               savedWord ? 'Saved' : 'Save Words',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 18),
             )
           ],
         ),

@@ -1,20 +1,23 @@
+import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/layout/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class SingleVideo extends ConsumerStatefulWidget {
-  const SingleVideo({super.key, 
-  required this.video,
-  required this.onSaveWords});
+  const SingleVideo(
+      {super.key,
+      required this.enableFavoriteBtn,
+      required this.video,
+      this.onToggleFavorite,
+      required this.onBack});
 
-  // final VoidCallback onExit;
+  final bool enableFavoriteBtn;
   final ShortVideo video;
-  final VoidCallback onSaveWords;
-  
+  final VoidCallback? onToggleFavorite;
+  final Function(bool) onBack;
 
   @override
   SingleVideoState createState() => SingleVideoState();
@@ -22,7 +25,8 @@ class SingleVideo extends ConsumerStatefulWidget {
 
 class SingleVideoState extends ConsumerState<SingleVideo> {
   Size size = Size.zero;
-  bool savedWord = false;
+  bool savedWords = false;
+  bool pressedToggleFav = false;
 
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -30,10 +34,13 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.video.url);
+    _controller = Config.MOCK
+        ? VideoPlayerController.asset(widget.video.url)
+        : VideoPlayerController.network(widget.video.url);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
+    savedWords = widget.video.isFavorite!;
   }
 
   @override
@@ -56,16 +63,50 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
             height: size.height,
             width: size.width,
           ),
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: Icon(Icons.arrow_back, color: Colors.white, size: 30)),
           _video(),
+          Positioned(
+            left: 10,
+            top: 0,
+            child: _title(),
+          ),
           Positioned(
             left: 0,
             bottom: 50,
             child: _ctrlBtns(),
           ),
         ])));
+  }
+
+  _back() {
+    return IconButton(
+        onPressed: () {
+          widget.onBack(pressedToggleFav);
+        },
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+          size: 25,
+        ));
+  }
+
+  _title() {
+    return SizedBox(
+      child: Row(
+        children: [
+          _back(),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            'Stop saying very...',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   _video() {
@@ -90,46 +131,35 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
   }
 
   _ctrlBtns() {
-    return Container();
-    // return Container(
-    //   width: size.width,
-    //   height: size.height * 0.15,
-    //   child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-    //     _collect(),
-    //     // _next()
-    //     // _collectWordsBtn(),
-    //   ]),
-    // );
+    return SizedBox(
+      width: size.width,
+      height: size.height * 0.15,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        _collocations(),
+        if (widget.enableFavoriteBtn) _saveFavoriteBtn(),
+      ]),
+    );
   }
 
-  _collect() {
+  _collocations() {
     return InkWell(
       onTap: () {
-        widget.onSaveWords();
-        context.read<Screen>().showToast('${widget.video.words.length} words saved');
-        savedWord = true;
-        setState(() {});
-        },
+        _presentActionSheet(widget.video.collocations);
+      },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 11, horizontal: 25),
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
         decoration: BoxDecoration(
             border: Border.all(color: Colors.white.withOpacity(0.8)),
             borderRadius: BorderRadius.circular(10),
             color: Colors.black.withOpacity(0.05)),
         child: Row(
           children: [
-            Icon(
-              savedWord ? Icons.bookmark : LineIcons.bookmark,
-              color: Colors.white,
-              size: 30,
-            ),
-            SizedBox(
-              width: 5,
-            ),
             Text(
-              savedWord ? 'Saved' : 'Save Words',
+              'EXAMPLES',
               style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 17),
             )
           ],
         ),
@@ -137,18 +167,84 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
     );
   }
 
-  _next() {
+  _saveFavoriteBtn() {
+    String msg = '';
+    int len = widget.video.words.length;
+    bool willSave = !savedWords;
+
+    if (willSave && len <= 1) {
+      msg = '$len word saved';
+    }
+
+    if (willSave && len > 1) {
+      msg = '$len words saved';
+    }
+
+    if (!willSave && len <= 1) {
+      msg = '$len word removed';
+    }
+
+    if (!willSave && len > 1) {
+      msg = '$len words removed';
+    }
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        pressedToggleFav = !pressedToggleFav;
+        widget.onToggleFavorite!();
+        context.read<Screen>().showToast(msg);
+        savedWords = !savedWords;
+        setState(() {});
+      },
       child: Container(
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.white.withOpacity(0.8)),
-              // shape: BoxShape.circle,
+              border: Border.all(color: Colors.white.withOpacity(0)),
               borderRadius: BorderRadius.circular(20),
-              color: Colors.black.withOpacity(0.1)),
-          child: Icon(Icons.chevron_right,
-              color: Colors.white.withOpacity(0.9), size: 35)),
+              color: Colors.white.withOpacity(0.7)),
+          child: Icon(savedWords ? Icons.bookmark : Icons.bookmark_outline,
+              color:
+                  savedWords ? Colors.black87 : Colors.black.withOpacity(0.9),
+              size: 35)),
     );
+  }
+
+  void _presentActionSheet(List<String> examples) async {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+                width: size.width,
+                height: size.height * 0.5,
+                padding: EdgeInsets.only(top: 50, bottom: 20),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30))),
+                child: Container(
+                  height: size.height * 0.3,
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(
+                          examples.length,
+                          (i) => Container(
+                                margin: EdgeInsets.only(bottom: 25),
+                                child: Text(
+                                  '${i + 1}. ${examples[i]}',
+                                  style: TextStyle(
+                                      fontSize: 19, color: Colors.black87),
+                                ),
+                              )),
+                    ),
+                  ),
+                ));
+          });
+        });
   }
 }

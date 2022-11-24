@@ -186,8 +186,11 @@ class HomePageState extends ConsumerState<HomePage> {
               top: 0,
               left: 0,
               child: SingleVideo(
+                enableFavoriteBtn: false,
                 video: homeState.shortVideo!,
-                onSaveWords: () {},
+                onBack: (_) {
+                  ref.read(homeProvider.notifier).toggleVideo(null);
+                },
               ),
             ),
         ],
