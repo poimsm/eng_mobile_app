@@ -1,6 +1,7 @@
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/layout/controller.dart';
+import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,10 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
-    savedWords = widget.video.isFavorite!;
+
+    if (widget.enableFavoriteBtn) {
+      savedWords = widget.video.isFavorite!;
+    }
   }
 
   @override
@@ -168,30 +172,12 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
   }
 
   _saveFavoriteBtn() {
-    String msg = '';
-    int len = widget.video.words.length;
-    bool willSave = !savedWords;
-
-    if (willSave && len <= 1) {
-      msg = '$len word saved';
-    }
-
-    if (willSave && len > 1) {
-      msg = '$len words saved';
-    }
-
-    if (!willSave && len <= 1) {
-      msg = '$len word removed';
-    }
-
-    if (!willSave && len > 1) {
-      msg = '$len words removed';
-    }
     return InkWell(
       onTap: () {
         pressedToggleFav = !pressedToggleFav;
         widget.onToggleFavorite!();
-        context.read<Screen>().showToast(msg);
+        context.read<Screen>().showToast(toastMsgBasedOnLength(
+            length: widget.video.words.length, willSave: !savedWords));
         savedWords = !savedWords;
         setState(() {});
       },

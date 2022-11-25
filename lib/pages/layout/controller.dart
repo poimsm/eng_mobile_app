@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:eng_mobile_app/main.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
@@ -20,13 +22,21 @@ class Screen with ChangeNotifier {
   bool get renderToast => _renderToast;
   String toastMessage = '';
 
+  Timer? _timer;
+
   showToast(String msg, {int seconds = 4}) async {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+
     _renderToast = true;
     toastMessage = msg;
     notifyListeners();
-    await sleep(seconds * 1000);
-    _renderToast = false;
-    notifyListeners();
+
+    _timer = Timer(Duration(seconds: seconds), () {
+      _renderToast = false;
+      notifyListeners();
+    });
   }
 
   Size screenSize = Size.zero;

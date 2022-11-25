@@ -461,9 +461,9 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
 
   _meaningInput() {
     String exampleMeaning = '''
- Add definition, example phrase, or a text that help you ✌️
+ Add a definition, an example sentence or any text that help you to remember! ✌️
 
-Example: Yeah, sure, I'll give it a shot, it means to try to do
+Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
                 ''';
     return Column(
       children: [
@@ -544,7 +544,7 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
           padding: EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
               color: Color(0xff6E5AA0)
-                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.3),
+                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
@@ -581,7 +581,7 @@ Example: Yeah, sure, I'll give it a shot, it means to try to do
           padding: EdgeInsets.symmetric(horizontal: 22),
           decoration: BoxDecoration(
               color: Color(0xff6E5AA0)
-                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.3),
+                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(

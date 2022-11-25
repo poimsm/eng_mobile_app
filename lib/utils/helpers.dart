@@ -85,7 +85,7 @@ printError(String text) {
 //   List<String> result = [];
 //   for (var i = 1; i < list.length; i++) {
 //     result.add(list[i]);
-//     if(i == 4) break;   
+//     if(i == 4) break;
 //   }
 //   return result;
 // }
@@ -97,7 +97,7 @@ printError(String text) {
 //     if(i < list.length && i < 4) {
 //       result += ', ';
 //     }
-//     if(i == 4) break;   
+//     if(i == 4) break;
 //   }
 //   return result;
 // }
@@ -131,7 +131,7 @@ List<String> getGroupTailList(String extras) {
   List<String> result = [];
   for (var i = 1; i < split.length; i++) {
     result.add(split[i]);
-    if(i == 4) break;
+    if (i == 4) break;
   }
   return result;
 }
@@ -141,10 +141,10 @@ String getGroupShortTail(String extras) {
   String result = '';
   for (var i = 1; i < split.length; i++) {
     result += split[i];
-    if(i < split.length && i < 4) {
+    if (i < split.length && i < 4) {
       result += ', ';
     }
-    if(i == 4) break;   
+    if (i == 4) break;
   }
   return result;
 }
@@ -154,7 +154,7 @@ String getGroupFullTail(String extras) {
   String result = '';
   for (var i = 1; i < split.length; i++) {
     result += split[i];
-    if(i < split.length - 1) {
+    if (i < split.length - 1) {
       result += ', ';
     }
   }
@@ -168,4 +168,24 @@ String getGroupRandomTail(String extras) {
 
   int index = next(1, split.length);
   return split[index];
+}
+
+String toastMsgBasedOnLength({required bool willSave, required int length}) {
+  String msg = '';
+  if (willSave && length <= 1) {
+    msg = '$length word saved';
+  }
+
+  if (willSave && length > 1) {
+    msg = '$length words saved';
+  }
+
+  if (!willSave && length <= 1) {
+    msg = '$length word removed';
+  }
+
+  if (!willSave && length > 1) {
+    msg = '$length words removed';
+  }
+  return msg;
 }

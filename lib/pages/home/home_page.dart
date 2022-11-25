@@ -426,6 +426,8 @@ class HomePageState extends ConsumerState<HomePage> {
   _audioBtn() {
     return InkWell(
       onTap: () {
+        if (homeState.blocker) return;
+        ref.read(homeProvider.notifier).toggleBlocker();
         ref.read(homeProvider.notifier).playRecordedAudio();
       },
       child: Container(

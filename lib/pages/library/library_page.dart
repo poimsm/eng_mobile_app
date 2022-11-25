@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
+import 'package:eng_mobile_app/pages/layout/controller.dart';
 import 'package:eng_mobile_app/pages/library/library_controller.dart';
 import 'package:eng_mobile_app/pages/single_video.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
@@ -9,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 class LibraryPage extends ConsumerStatefulWidget {
   const LibraryPage({Key? key, required this.totalWords}) : super(key: key);
@@ -29,12 +33,9 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
       ref.read(libraryProvider.notifier).fetchVideos();
       ref.read(libraryProvider.notifier).setTotalWords(widget.totalWords);
     });
-
-    // ref.read(libraryProvider.notifier).fetchVideos();
   }
 
   late LibraryState libraryState;
-
   Size size = Size.zero;
 
   @override
@@ -53,23 +54,9 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
           });
           return true;
         },
-        child: libraryState.isPlayingVideo
-            ? SingleVideo(
-                enableFavoriteBtn: true,
-                video: libraryState.videos[libraryState.videoIndex],
-                onToggleFavorite: () {
-                  final video = libraryState.videos[libraryState.videoIndex];
-                  ref.read(libraryProvider.notifier).toggleFavoriteVideo(video);
-                },
-                onBack: (hasSavedWords) async {
-                  ref.read(libraryProvider.notifier).toggleVideo();
-                  if (hasSavedWords) {
-                    await sleep(300);
-                    ref.read(libraryProvider.notifier).toggleAnimateWord();
-                  }
-                },
-              )
-            : DefaultTabController(
+        child: Stack(
+          children: [
+            DefaultTabController(
                 length: 2,
                 child: Stack(
                   children: [
@@ -144,24 +131,73 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                           physics: NeverScrollableScrollPhysics(),
                           children: [
                             libraryState.isLoading
-                                ? Container(
+                                ? SizedBox(
                                     height: size.height,
                                     width: size.width,
-                                    // color: Colors.black,
                                     child: SpinKitThreeBounce(
                                       color: Colors.grey,
                                       size: 40,
                                     ))
-                                : SizedBox(
-                                    height: 420,
-                                    // color: Colors.green,
-                                    child: _slides(),
-                                  ),
+                                : Container(
+                                    color: Color(0xff6E5AA0),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 560,
+                                          child: _slides(),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        _refreshCardBtn(),
+                                      ],
+                                    )),
                             _list(),
                           ]),
                     ),
                   ],
-                )));
+                )),
+            if (libraryState.isPlayingVideo)
+              Positioned(
+                  top: 0,
+                  left: 0,
+                  child: SingleVideo(
+                    enableFavoriteBtn: true,
+                    video: libraryState.videos[libraryState.videoIndex],
+                    onToggleFavorite: () {
+                      final video =
+                          libraryState.videos[libraryState.videoIndex];
+                      ref
+                          .read(libraryProvider.notifier)
+                          .toggleFavoriteVideo(video);
+                    },
+                    onBack: (hasSavedWords) async {
+                      ref.read(libraryProvider.notifier).toggleVideo();
+                      if (hasSavedWords) {
+                        await sleep(300);
+                        ref
+                            .read(libraryProvider.notifier)
+                            .toggleAnimateTotalWords();
+                      }
+                    },
+                  ))
+          ],
+        ));
+  }
+
+  _refreshCardBtn() {
+    return InkWell(
+      onTap: () {
+        ref.read(libraryProvider.notifier).fetchCards();
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.9), shape: BoxShape.circle),
+        child: Icon(LineIcons.syncIcon,
+            size: 50, color: Colors.black.withOpacity(0.7)),
+      ),
+    );
   }
 
   _slides() {
@@ -173,52 +209,64 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         height: 400,
         width: size.width,
         child: Swiper(
-          index: 2,
+          index: 0,
           itemBuilder: (BuildContext context, int i) {
-            return Container(
-                decoration: BoxDecoration(
-                    // border: Border.all(color: Colors.black12)
-                    ),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 500,
+            return Stack(
+              children: [
+                Container(
+                  height: 500,
+                  width: 360,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white.withOpacity(1),
+                  ),
+                ),
+                Positioned(
+                  top: 20,
+                  child: SizedBox(
+                      height: 380,
                       width: 360,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.white.withOpacity(1),
-                      ),
-                      // color: Color.fromARGB(255, 59, 34, 98).withOpacity(1),
+                      child: Config.MOCK
+                          ? Image.asset(libraryState.cards[i].imageUrl,
+                              fit: BoxFit.cover)
+                          : Image.network(
+                              libraryState.cards[i].imageUrl,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Container(
+                                  color: Color(0xfff6f6f6),
+                                  height: 380,
+                                  width: 360,
+                                  child: Icon(
+                                    Icons.image,
+                                    color: Color(0xffcccccc),
+                                    size: 90,
+                                  ),
+                                );
+                              },
+                            )),
+                ),
+                Positioned(
+                  bottom: 12,
+                  right: 0,
+                  child: SizedBox(
+                    width: 360,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _collocationsBtn(libraryState.cards[i].collocations, i),
+                        _speakBtn(libraryState.cards[i].voiceUrl),
+                        _toggleFavCardBtn(libraryState.cards[i])
+                      ],
                     ),
-                    Positioned(
-                      top: 20,
-                      child: Container(
-                          height: 380,
-                          width: 360,
-                          child: Config.MOCK
-                              ? Image.asset(libraryState.cards[i].imageUrl,
-                                  fit: BoxFit.cover)
-                              : Image.network(libraryState.cards[i].imageUrl,
-                                  fit: BoxFit.cover)),
-                    ),
-                    Positioned(
-                      bottom: 12,
-                      right: 0,
-                      child: SizedBox(
-                        width: 360,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            _collocationsBtn(
-                                libraryState.cards[i].collocations),
-                            _speakBtn(i),
-                            _saveWordsBtn(libraryState.cards[i]),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ));
+                  ),
+                )
+              ],
+            );
           },
           viewportFraction: 0.5,
           itemCount: libraryState.cards.length,
@@ -229,7 +277,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         ));
   }
 
-  _collocationsBtn(List<String> examples) {
+  _collocationsBtn(List<String> examples, int i) {
     return InkWell(
       onTap: () {
         _presentActionSheet(examples);
@@ -240,7 +288,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         ),
         elevation: 5,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(7),
           ),
@@ -255,11 +303,13 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
     );
   }
 
-  _speakBtn(int i) {
+  _speakBtn(String url) {
     return InkWell(
       onTap: () {
-        if (i != 0) return;
-        ref.read(homeProvider.notifier).playVoice('assets/ee04.mp3');
+        if (libraryState.blocker) return;
+        ref.read(libraryProvider.notifier).toggleAnimatedCardSpeakBtn();
+        ref.read(libraryProvider.notifier).toggleBlocker(milliseconds: 1000);
+        ref.read(homeProvider.notifier).playVoice(url);
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -267,20 +317,29 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         ),
         elevation: 10,
         child: Container(
-          padding: EdgeInsets.all(10),
+          width: 55,
+          height: 55,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(7),
           ),
-          child: Icon(LineIcons.volumeUp, color: Colors.black87, size: 33),
+          child: AnimatedContainer(
+              duration: const Duration(milliseconds: 30),
+              curve: Curves.bounceInOut,
+              child: Icon(LineIcons.volumeUp,
+                  color: Colors.black87,
+                  size: libraryState.animateCardSpeakBtn ? 26 : 33)),
         ),
       ),
     );
   }
 
-  _saveWordsBtn(InfoCard card) {
+  _toggleFavCardBtn(InfoCard card) {
     return InkWell(
       onTap: () {
+        if (libraryState.blocker) return;
         ref.read(libraryProvider.notifier).toggleFavoriteCard(card);
+        context.read<Screen>().showToast(toastMsgBasedOnLength(
+            length: card.words.length, willSave: !card.isFavorite!));
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -288,12 +347,18 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         ),
         elevation: 10,
         child: Container(
-          padding: EdgeInsets.all(10),
+          width: 55,
+          height: 55,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7),
+            shape: BoxShape.circle,
           ),
-          child: Icon(card.isFavorite! ? Icons.bookmark : LineIcons.bookmark,
-              color: Colors.black87, size: 33),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 30),
+            curve: Curves.bounceInOut,
+            child: Icon(card.isFavorite! ? Icons.bookmark : LineIcons.bookmark,
+                color: Colors.black87,
+                size: libraryState.animateCardFavBtn ? 26 : 33),
+          ),
         ),
       ),
     );
@@ -345,13 +410,13 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
               builder: (BuildContext context, StateSetter setState) {
             return Container(
                 width: size.width,
-                height: size.height * 0.4,
+                height: size.height * 0.5,
                 padding: EdgeInsets.only(top: 50, bottom: 20),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30))),
                 child: Container(
                   height: size.height * 0.3,
                   padding: EdgeInsets.symmetric(horizontal: 40),
