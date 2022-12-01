@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
-import 'package:eng_mobile_app/data/network/network.dart';
+import 'package:eng_mobile_app/data/repositories/activity/activity_repository.dart';
+import 'package:eng_mobile_app/data/repositories/activity/activity_repository_impl.dart';
 import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/word_list/enums.dart';
 
@@ -184,9 +185,10 @@ Timer? _timerVoice;
 int currentExamplePlay = 0;
 
 class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier() : super(HomeState());
+  HomeNotifier(this.activityRepository) : super(HomeState());
 
   bool micBlocked = false;
+  ActivityRepository activityRepository;
 
   void toggleNewWord() {
     state = state.copyWith(newWords: true);
@@ -198,30 +200,22 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(challengeAnimated: false);
   }
 
-  Future<bool> retrieveActivities() async {
+  Future<bool> fetchActivities() async {
     state = state.copyWith(
         isLoading: true,
         showQuizScreen: false,
         activityRoundCounter: state.activityRoundCounter + 1);
 
-    final resp = await Network().get('/daily-activities');
+    final activities = await activityRepository.getActivities();
 
-    if (!resp.ok) {
-      state = state.copyWith(isLoading: false);
-      return false;
-    }
-
-    final activitiesData =
-        (resp.data as List).map((x) => Activity.fromJson(x)).toList();
-
-    state =
-        state.copyWith(activities: activitiesData, activity: activitiesData[0]);
+    state = state.copyWith(
+        activities: activities, activity: activities[0], isLoading: false);
 
     playVoice(state.activity!.question.voiceUrl, shouldStop: false);
 
     state = state.copyWith(isLoading: false);
 
-    if (activitiesData[0].word != null) {
+    if (activities[0].word != null) {
       await sleep(1000);
       state = state.copyWith(showChallenge: true);
     }
@@ -620,5 +614,6 @@ List<Map> _buildExample(exampleText, String targetWord) {
 }
 
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
-  return HomeNotifier();
+  final activityRepository = ref.watch(activityRepositoryProvider);
+  return HomeNotifier(activityRepository);
 });

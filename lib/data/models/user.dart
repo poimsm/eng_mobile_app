@@ -9,8 +9,10 @@ part 'user.g.dart';
 class User with _$User {
   const factory User({
     required int id,
+    @JsonKey(name: 'total_words') required int totalWords,
     required String email,
-    required bool anonymous,
+    required bool verified,
+    required bool screenFlow,
   }) = _User;
 
   factory User.fromJson(Map<String, Object?> json) =>

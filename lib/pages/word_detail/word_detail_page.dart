@@ -533,7 +533,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
 
         if (word == null) return;
 
-        ref.read(wordListProvider.notifier).addNewWord(word);
+        ref.read(wordListProvider.notifier).addWordUI(word);
         ref.read(wordListProvider.notifier).addUserWord(word.word);
 
         if (!mounted) return;
@@ -571,7 +571,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
 
         if (word == null) return;
 
-        ref.read(wordListProvider.notifier).editWord(word);
+        ref.read(wordListProvider.notifier).editWordUI(word);
 
         if (!mounted) return;
         Navigator.pop(context, {'toast': 'Word edited'});
@@ -602,7 +602,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             .read(wordDetailProvider.notifier)
             .deleteWord(widget.word!.id);
         if (!resOk) return;
-        ref.read(wordListProvider.notifier).deleteWord(widget.word!.id);
+        ref.read(wordListProvider.notifier).deleteWordUI(widget.word!.id);
 
         if (!mounted) return;
         Navigator.pop(context, {'toast': 'Word deleted'});

@@ -1,5 +1,8 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
-import 'package:eng_mobile_app/data/network/network.dart';
+import 'package:eng_mobile_app/data/repositories/screen_flow/screen_flow_repository_impl.dart';
+import 'package:eng_mobile_app/data/repositories/screen_flow/screen_flow_repository.dart';
+import 'package:eng_mobile_app/data/repositories/word/word_repository.dart';
+import 'package:eng_mobile_app/data/repositories/word/word_repository_impl.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,22 +55,15 @@ class WordListState {
 }
 
 class WordListNotifier extends StateNotifier<WordListState> {
-  WordListNotifier() : super(WordListState());
+  WordListNotifier(this.wordRepository, this.screenFlowRepository)
+      : super(WordListState());
+
+  final WordRepository wordRepository;
+  final ScreenFlowRepository screenFlowRepository;
 
   Future<bool> fetchWords() async {
-    // state = state.copyWith(isLoading: true);
-    final resp = await Network().get('/sentence/?page=1');
-    // state = state.copyWith(isLoading: false);
-
-    if (!resp.ok) {
-      state = state.copyWith(isLoading: false);
-      return false;
-    }
-
-    final wordsData =
-        (resp.data['data'] as List).map((x) => Word.fromJson(x)).toList();
-
-    state = state.copyWith(words: wordsData);
+    final words = await wordRepository.getWords();
+    state = state.copyWith(words: words);
     return true;
   }
 
@@ -133,17 +129,12 @@ class WordListNotifier extends StateNotifier<WordListState> {
     state = state.copyWith(words: [...addedWords, ...words]);
   }
 
-  void addNewWord(Word word) async {
-    final resp = await Network().get('/sentence/?page=1');
-    if (!resp.ok) {
-      state = state.copyWith(isLoading: false);
-      return;
-    }
-
-    state = state.copyWith(words: [word, ...state.words]);
+  void addWordUI(Word word) async {
+    state = state.copyWith(isLoading: true);
+    state = state.copyWith(words: [word, ...state.words], isLoading: false);
   }
 
-  void editWord(Word word) {
+  void editWordUI(Word word) {
     List<Word> newWords = [];
 
     for (var w in state.words) {
@@ -157,7 +148,7 @@ class WordListNotifier extends StateNotifier<WordListState> {
     state = state.copyWith(words: newWords);
   }
 
-  void deleteWord(int id) {
+  void deleteWordUI(int id) {
     List<Word> newWords = [];
 
     for (var w in state.words) {
@@ -174,5 +165,7 @@ class WordListNotifier extends StateNotifier<WordListState> {
 
 final wordListProvider =
     StateNotifierProvider<WordListNotifier, WordListState>((ref) {
-  return WordListNotifier();
+  final wordRepository = ref.watch(wordRepositoryProvider);
+  final screenFlowRepository = ref.watch(screenFlowRepositoryProvider);
+  return WordListNotifier(wordRepository, screenFlowRepository);
 });

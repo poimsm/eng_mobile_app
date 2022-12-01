@@ -21,8 +21,11 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_words')
+  int get totalWords => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  bool get anonymous => throw _privateConstructorUsedError;
+  bool get verified => throw _privateConstructorUsedError;
+  bool get screenFlow => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +37,12 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({int id, String email, bool anonymous});
+  $Res call(
+      {int id,
+      @JsonKey(name: 'total_words') int totalWords,
+      String email,
+      bool verified,
+      bool screenFlow});
 }
 
 /// @nodoc
@@ -51,21 +59,31 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? id = null,
+    Object? totalWords = null,
     Object? email = null,
-    Object? anonymous = null,
+    Object? verified = null,
+    Object? screenFlow = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      totalWords: null == totalWords
+          ? _value.totalWords
+          : totalWords // ignore: cast_nullable_to_non_nullable
+              as int,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      anonymous: null == anonymous
-          ? _value.anonymous
-          : anonymous // ignore: cast_nullable_to_non_nullable
+      verified: null == verified
+          ? _value.verified
+          : verified // ignore: cast_nullable_to_non_nullable
+              as bool,
+      screenFlow: null == screenFlow
+          ? _value.screenFlow
+          : screenFlow // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -77,7 +95,12 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String email, bool anonymous});
+  $Res call(
+      {int id,
+      @JsonKey(name: 'total_words') int totalWords,
+      String email,
+      bool verified,
+      bool screenFlow});
 }
 
 /// @nodoc
@@ -90,21 +113,31 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   @override
   $Res call({
     Object? id = null,
+    Object? totalWords = null,
     Object? email = null,
-    Object? anonymous = null,
+    Object? verified = null,
+    Object? screenFlow = null,
   }) {
     return _then(_$_User(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      totalWords: null == totalWords
+          ? _value.totalWords
+          : totalWords // ignore: cast_nullable_to_non_nullable
+              as int,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      anonymous: null == anonymous
-          ? _value.anonymous
-          : anonymous // ignore: cast_nullable_to_non_nullable
+      verified: null == verified
+          ? _value.verified
+          : verified // ignore: cast_nullable_to_non_nullable
+              as bool,
+      screenFlow: null == screenFlow
+          ? _value.screenFlow
+          : screenFlow // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -114,20 +147,29 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 @JsonSerializable()
 class _$_User implements _User {
   const _$_User(
-      {required this.id, required this.email, required this.anonymous});
+      {required this.id,
+      @JsonKey(name: 'total_words') required this.totalWords,
+      required this.email,
+      required this.verified,
+      required this.screenFlow});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
   @override
   final int id;
   @override
+  @JsonKey(name: 'total_words')
+  final int totalWords;
+  @override
   final String email;
   @override
-  final bool anonymous;
+  final bool verified;
+  @override
+  final bool screenFlow;
 
   @override
   String toString() {
-    return 'User(id: $id, email: $email, anonymous: $anonymous)';
+    return 'User(id: $id, totalWords: $totalWords, email: $email, verified: $verified, screenFlow: $screenFlow)';
   }
 
   @override
@@ -136,14 +178,19 @@ class _$_User implements _User {
         (other.runtimeType == runtimeType &&
             other is _$_User &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.totalWords, totalWords) ||
+                other.totalWords == totalWords) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.anonymous, anonymous) ||
-                other.anonymous == anonymous));
+            (identical(other.verified, verified) ||
+                other.verified == verified) &&
+            (identical(other.screenFlow, screenFlow) ||
+                other.screenFlow == screenFlow));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, email, anonymous);
+  int get hashCode =>
+      Object.hash(runtimeType, id, totalWords, email, verified, screenFlow);
 
   @JsonKey(ignore: true)
   @override
@@ -162,17 +209,24 @@ class _$_User implements _User {
 abstract class _User implements User {
   const factory _User(
       {required final int id,
+      @JsonKey(name: 'total_words') required final int totalWords,
       required final String email,
-      required final bool anonymous}) = _$_User;
+      required final bool verified,
+      required final bool screenFlow}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
   @override
   int get id;
   @override
+  @JsonKey(name: 'total_words')
+  int get totalWords;
+  @override
   String get email;
   @override
-  bool get anonymous;
+  bool get verified;
+  @override
+  bool get screenFlow;
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;

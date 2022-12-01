@@ -1,6 +1,6 @@
 import 'package:eng_mobile_app/config.dart';
 import 'package:eng_mobile_app/data/models/activity.dart';
-import 'package:eng_mobile_app/pages/QuizScreen.dart';
+import 'package:eng_mobile_app/pages/quiz_screen.dart';
 import 'package:eng_mobile_app/pages/audio_bar_white.dart';
 import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
@@ -67,7 +67,7 @@ class HomePageState extends ConsumerState<HomePage> {
           isWelcome: homeState.activityRoundCounter == 1,
           onCreateUser: () {},
           onStartQuiz: () {
-            ref.read(homeProvider.notifier).retrieveActivities();
+            ref.read(homeProvider.notifier).fetchActivities();
           },
           onAddWords: () {
             Navigator.pushNamed(context, Routes.WORD_LIST);

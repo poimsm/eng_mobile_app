@@ -1,6 +1,8 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
+import 'package:eng_mobile_app/data/repositories/library/library_repository.dart';
+import 'package:eng_mobile_app/data/repositories/library/library_repository_impl.dart';
 import 'package:eng_mobile_app/pages/word_list/enums.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,38 +68,24 @@ class LibraryState {
 }
 
 class LibraryNotifier extends StateNotifier<LibraryState> {
-  LibraryNotifier() : super(LibraryState());
+  LibraryNotifier(this._libraryRepository) : super(LibraryState());
+
+  final LibraryRepository _libraryRepository;
 
   void setTotalWords(int val) async {
     state = state.copyWith(wordCounter: val);
   }
 
-  Future<bool> fetchVideos() async {
+  Future<void> fetchVideos() async {
     state = state.copyWith(isLoading: true);
-    final resp = await Network().get('/short-video');
-    state = state.copyWith(isLoading: false);
-    if (!resp.ok) return false;
-
-    final data =
-        (resp.data as List).map((x) => ShortVideo.fromJson(x)).toList();
-
-    state = state.copyWith(videos: data);
-    return true;
+    final videos = await _libraryRepository.getVideos();
+    state = state.copyWith(isLoading: false, videos: videos);
   }
 
-  Future<bool> fetchCards() async {
+  Future<void> fetchCards() async {
     state = state.copyWith(isLoading: true, loadingCard: true);
-    final resp = await Network().get('/info-card');
-    if (!resp.ok) {
-      state = state.copyWith(isLoading: false);
-      return false;
-    }
-
-    final data = (resp.data as List).map((x) => InfoCard.fromJson(x)).toList();
-
-    state = state.copyWith(cards: data);
-    state = state.copyWith(isLoading: false);
-    return true;
+    final cards = await _libraryRepository.getVideos();
+    state = state.copyWith(isLoading: false, cards: cards);
   }
 
   void setLoadingCard(bool val) {
@@ -106,11 +94,8 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
 
   void toggleFavoriteCard(InfoCard card) async {
     bool isFavoriteFlag = !card.isFavorite!;
-
-    Network().put('/info-card',
-        data: {'id': card.id, 'is_favorite': isFavoriteFlag});
-
     card = card.copyWith(isFavorite: isFavoriteFlag);
+    _libraryRepository.toggleCardFavorite(card);
 
     List<InfoCard> cards = state.cards;
 
@@ -179,11 +164,8 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
 
   void toggleFavoriteVideo(ShortVideo video) {
     bool isFavoriteFlag = !video.isFavorite!;
-
-    Network().put('/short-video',
-        data: {'id': video.id, 'is_favorite': isFavoriteFlag});
-
     video = video.copyWith(isFavorite: isFavoriteFlag);
+    _libraryRepository.toggleVideoFavorite(video);
 
     List<ShortVideo> videos = state.videos;
 
@@ -282,5 +264,6 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
 
 final libraryProvider =
     StateNotifierProvider.autoDispose<LibraryNotifier, LibraryState>((ref) {
-  return LibraryNotifier();
+  final libraryRepository = ref.watch(libraryRepositoryProvider);
+  return LibraryNotifier(libraryRepository);
 });

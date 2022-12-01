@@ -31,16 +31,20 @@ class MockServer {
       return MockReply(200, MockMyWords().json());
     }
 
-    if (endpoint.contains('/user')) {
-      return MockReply(200, MockMyWords().json());
-    }
-
     if (endpoint.contains('/library/video')) {
       return MockReply(200, MockVideos().json());
     }
 
     if (endpoint.contains('/library/card')) {
       return MockReply(200, MockCards().json());
+    }
+
+    if (endpoint.contains('/global/config')) {
+      return MockReply(200, MockBackendSettings().json());
+    }
+
+    if (endpoint.contains('/user/data')) {
+      return MockReply(200, MockUserData().json());
     }
 
     return MockReply(404, 'Not Found');
@@ -62,8 +66,24 @@ class MockServer {
       return MockReply(200, MockNewWord().json());
     }
 
-    if (endpoint.contains('/userflow/')) {
+    if (endpoint.contains('/userflow')) {
       return MockReply(200, MockUserFlow().json());
+    }
+
+    if (endpoint.contains('/user/sign-in')) {
+      return MockReply(200, MockUserSignIn().json());
+    }
+
+    if (endpoint.contains('/user/sign-up')) {
+      return MockReply(200, MockUserSignUp().json());
+    }
+
+    if (endpoint.contains('/user/delete-user')) {
+      return MockReply(200, MockUserDelete().json());
+    }
+
+    if (endpoint.contains('/user/fake-user')) {
+      return MockReply(200, MockUserFakeCreate().json());
     }
 
     return MockReply(404, 'Not Found');

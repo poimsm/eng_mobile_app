@@ -267,7 +267,9 @@ mixin _$Word {
   String get word => throw _privateConstructorUsedError;
   int get origin => throw _privateConstructorUsedError;
   int get type => throw _privateConstructorUsedError;
-  String? get meaning => throw _privateConstructorUsedError;
+  String? get meaning =>
+      throw _privateConstructorUsedError; // @Default(false) bool saved,
+  @JsonKey(name: 'saved', fromJson: savedFromJson)
   bool get saved => throw _privateConstructorUsedError;
   String? get extras => throw _privateConstructorUsedError;
   @JsonKey(name: 'source_type')
@@ -293,7 +295,7 @@ abstract class $WordCopyWith<$Res> {
       int origin,
       int type,
       String? meaning,
-      bool saved,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) bool saved,
       String? extras,
       @JsonKey(name: 'source_type') int? sourceType,
       @JsonKey(name: 'info_card') InfoCard? infoCard,
@@ -408,7 +410,7 @@ abstract class _$$_WordCopyWith<$Res> implements $WordCopyWith<$Res> {
       int origin,
       int type,
       String? meaning,
-      bool saved,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) bool saved,
       String? extras,
       @JsonKey(name: 'source_type') int? sourceType,
       @JsonKey(name: 'info_card') InfoCard? infoCard,
@@ -494,7 +496,7 @@ class _$_Word implements _Word {
       required this.origin,
       required this.type,
       this.meaning,
-      this.saved = false,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) this.saved = false,
       this.extras,
       @JsonKey(name: 'source_type') this.sourceType,
       @JsonKey(name: 'info_card') this.infoCard,
@@ -514,8 +516,9 @@ class _$_Word implements _Word {
   final int type;
   @override
   final String? meaning;
+// @Default(false) bool saved,
   @override
-  @JsonKey()
+  @JsonKey(name: 'saved', fromJson: savedFromJson)
   final bool saved;
   @override
   final String? extras;
@@ -580,7 +583,7 @@ abstract class _Word implements Word {
       required final int origin,
       required final int type,
       final String? meaning,
-      final bool saved,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) final bool saved,
       final String? extras,
       @JsonKey(name: 'source_type') final int? sourceType,
       @JsonKey(name: 'info_card') final InfoCard? infoCard,
@@ -599,7 +602,8 @@ abstract class _Word implements Word {
   int get type;
   @override
   String? get meaning;
-  @override
+  @override // @Default(false) bool saved,
+  @JsonKey(name: 'saved', fromJson: savedFromJson)
   bool get saved;
   @override
   String? get extras;
@@ -615,6 +619,343 @@ abstract class _Word implements Word {
   @override
   @JsonKey(ignore: true)
   _$$_WordCopyWith<_$_Word> get copyWith => throw _privateConstructorUsedError;
+}
+
+LocalWord _$LocalWordFromJson(Map<String, dynamic> json) {
+  return _LocalWord.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LocalWord {
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sentence')
+  String get word => throw _privateConstructorUsedError;
+  int get origin => throw _privateConstructorUsedError;
+  int get type => throw _privateConstructorUsedError;
+  String? get meaning => throw _privateConstructorUsedError;
+  @JsonKey(name: 'saved', fromJson: savedFromJson)
+  bool get saved => throw _privateConstructorUsedError;
+  String? get extras => throw _privateConstructorUsedError;
+  @JsonKey(name: 'source_type')
+  int? get sourceType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'info_card')
+  int? get infoCard => throw _privateConstructorUsedError;
+  @JsonKey(name: 'short_video')
+  int? get shortVideo => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $LocalWordCopyWith<LocalWord> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LocalWordCopyWith<$Res> {
+  factory $LocalWordCopyWith(LocalWord value, $Res Function(LocalWord) then) =
+      _$LocalWordCopyWithImpl<$Res, LocalWord>;
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'sentence') String word,
+      int origin,
+      int type,
+      String? meaning,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) bool saved,
+      String? extras,
+      @JsonKey(name: 'source_type') int? sourceType,
+      @JsonKey(name: 'info_card') int? infoCard,
+      @JsonKey(name: 'short_video') int? shortVideo});
+}
+
+/// @nodoc
+class _$LocalWordCopyWithImpl<$Res, $Val extends LocalWord>
+    implements $LocalWordCopyWith<$Res> {
+  _$LocalWordCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? word = null,
+    Object? origin = null,
+    Object? type = null,
+    Object? meaning = freezed,
+    Object? saved = null,
+    Object? extras = freezed,
+    Object? sourceType = freezed,
+    Object? infoCard = freezed,
+    Object? shortVideo = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      word: null == word
+          ? _value.word
+          : word // ignore: cast_nullable_to_non_nullable
+              as String,
+      origin: null == origin
+          ? _value.origin
+          : origin // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
+      meaning: freezed == meaning
+          ? _value.meaning
+          : meaning // ignore: cast_nullable_to_non_nullable
+              as String?,
+      saved: null == saved
+          ? _value.saved
+          : saved // ignore: cast_nullable_to_non_nullable
+              as bool,
+      extras: freezed == extras
+          ? _value.extras
+          : extras // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sourceType: freezed == sourceType
+          ? _value.sourceType
+          : sourceType // ignore: cast_nullable_to_non_nullable
+              as int?,
+      infoCard: freezed == infoCard
+          ? _value.infoCard
+          : infoCard // ignore: cast_nullable_to_non_nullable
+              as int?,
+      shortVideo: freezed == shortVideo
+          ? _value.shortVideo
+          : shortVideo // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_LocalWordCopyWith<$Res> implements $LocalWordCopyWith<$Res> {
+  factory _$$_LocalWordCopyWith(
+          _$_LocalWord value, $Res Function(_$_LocalWord) then) =
+      __$$_LocalWordCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'sentence') String word,
+      int origin,
+      int type,
+      String? meaning,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) bool saved,
+      String? extras,
+      @JsonKey(name: 'source_type') int? sourceType,
+      @JsonKey(name: 'info_card') int? infoCard,
+      @JsonKey(name: 'short_video') int? shortVideo});
+}
+
+/// @nodoc
+class __$$_LocalWordCopyWithImpl<$Res>
+    extends _$LocalWordCopyWithImpl<$Res, _$_LocalWord>
+    implements _$$_LocalWordCopyWith<$Res> {
+  __$$_LocalWordCopyWithImpl(
+      _$_LocalWord _value, $Res Function(_$_LocalWord) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? word = null,
+    Object? origin = null,
+    Object? type = null,
+    Object? meaning = freezed,
+    Object? saved = null,
+    Object? extras = freezed,
+    Object? sourceType = freezed,
+    Object? infoCard = freezed,
+    Object? shortVideo = freezed,
+  }) {
+    return _then(_$_LocalWord(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      word: null == word
+          ? _value.word
+          : word // ignore: cast_nullable_to_non_nullable
+              as String,
+      origin: null == origin
+          ? _value.origin
+          : origin // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int,
+      meaning: freezed == meaning
+          ? _value.meaning
+          : meaning // ignore: cast_nullable_to_non_nullable
+              as String?,
+      saved: null == saved
+          ? _value.saved
+          : saved // ignore: cast_nullable_to_non_nullable
+              as bool,
+      extras: freezed == extras
+          ? _value.extras
+          : extras // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sourceType: freezed == sourceType
+          ? _value.sourceType
+          : sourceType // ignore: cast_nullable_to_non_nullable
+              as int?,
+      infoCard: freezed == infoCard
+          ? _value.infoCard
+          : infoCard // ignore: cast_nullable_to_non_nullable
+              as int?,
+      shortVideo: freezed == shortVideo
+          ? _value.shortVideo
+          : shortVideo // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_LocalWord implements _LocalWord {
+  const _$_LocalWord(
+      {required this.id,
+      @JsonKey(name: 'sentence') required this.word,
+      required this.origin,
+      required this.type,
+      this.meaning,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) this.saved = false,
+      this.extras,
+      @JsonKey(name: 'source_type') this.sourceType,
+      @JsonKey(name: 'info_card') this.infoCard,
+      @JsonKey(name: 'short_video') this.shortVideo});
+
+  factory _$_LocalWord.fromJson(Map<String, dynamic> json) =>
+      _$$_LocalWordFromJson(json);
+
+  @override
+  final int id;
+  @override
+  @JsonKey(name: 'sentence')
+  final String word;
+  @override
+  final int origin;
+  @override
+  final int type;
+  @override
+  final String? meaning;
+  @override
+  @JsonKey(name: 'saved', fromJson: savedFromJson)
+  final bool saved;
+  @override
+  final String? extras;
+  @override
+  @JsonKey(name: 'source_type')
+  final int? sourceType;
+  @override
+  @JsonKey(name: 'info_card')
+  final int? infoCard;
+  @override
+  @JsonKey(name: 'short_video')
+  final int? shortVideo;
+
+  @override
+  String toString() {
+    return 'LocalWord(id: $id, word: $word, origin: $origin, type: $type, meaning: $meaning, saved: $saved, extras: $extras, sourceType: $sourceType, infoCard: $infoCard, shortVideo: $shortVideo)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_LocalWord &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.word, word) || other.word == word) &&
+            (identical(other.origin, origin) || other.origin == origin) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.meaning, meaning) || other.meaning == meaning) &&
+            (identical(other.saved, saved) || other.saved == saved) &&
+            (identical(other.extras, extras) || other.extras == extras) &&
+            (identical(other.sourceType, sourceType) ||
+                other.sourceType == sourceType) &&
+            (identical(other.infoCard, infoCard) ||
+                other.infoCard == infoCard) &&
+            (identical(other.shortVideo, shortVideo) ||
+                other.shortVideo == shortVideo));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, word, origin, type, meaning,
+      saved, extras, sourceType, infoCard, shortVideo);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_LocalWordCopyWith<_$_LocalWord> get copyWith =>
+      __$$_LocalWordCopyWithImpl<_$_LocalWord>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_LocalWordToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LocalWord implements LocalWord {
+  const factory _LocalWord(
+      {required final int id,
+      @JsonKey(name: 'sentence') required final String word,
+      required final int origin,
+      required final int type,
+      final String? meaning,
+      @JsonKey(name: 'saved', fromJson: savedFromJson) final bool saved,
+      final String? extras,
+      @JsonKey(name: 'source_type') final int? sourceType,
+      @JsonKey(name: 'info_card') final int? infoCard,
+      @JsonKey(name: 'short_video') final int? shortVideo}) = _$_LocalWord;
+
+  factory _LocalWord.fromJson(Map<String, dynamic> json) =
+      _$_LocalWord.fromJson;
+
+  @override
+  int get id;
+  @override
+  @JsonKey(name: 'sentence')
+  String get word;
+  @override
+  int get origin;
+  @override
+  int get type;
+  @override
+  String? get meaning;
+  @override
+  @JsonKey(name: 'saved', fromJson: savedFromJson)
+  bool get saved;
+  @override
+  String? get extras;
+  @override
+  @JsonKey(name: 'source_type')
+  int? get sourceType;
+  @override
+  @JsonKey(name: 'info_card')
+  int? get infoCard;
+  @override
+  @JsonKey(name: 'short_video')
+  int? get shortVideo;
+  @override
+  @JsonKey(ignore: true)
+  _$$_LocalWordCopyWith<_$_LocalWord> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 Example _$ExampleFromJson(Map<String, dynamic> json) {

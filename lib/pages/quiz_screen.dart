@@ -1,4 +1,10 @@
+import 'package:eng_mobile_app/data/models/activity.dart';
+import 'package:eng_mobile_app/pages/login_bottom_sheet.dart';
+import 'package:eng_mobile_app/routes/routes.dart';
+import 'package:eng_mobile_app/services/auth/auth_service.dart';
+import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../utils/helpers.dart';
@@ -21,18 +27,8 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  Size size = Size.zero;
-  late TextEditingController _emailCtrl;
-  late TextEditingController _passCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailCtrl = TextEditingController();
-    _passCtrl = TextEditingController();
-  }
-
   bool showAccountPopup = false;
+  Size size = Size.zero;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +63,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   _appbar() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [_avatar(), _settings()],
@@ -78,25 +74,35 @@ class _QuizScreenState extends State<QuizScreen> {
   _avatar() {
     return InkWell(
       onTap: () {
-        // showAccountPopup = true;
-        // setState(() {});
-
-        _presentActionSheet();
+        if (GetIt.I.get<AuthService>().isAuthenticated) {
+          Navigator.pushNamed(context, Routes.USER_PROFILE);
+        } else {
+          showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+              builder: (_) => LoginBottomSheet());
+        }
       },
-      child: Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.5), width: 3)),
-        child: Image.asset(
-          'assets/user_17.png',
-          width: 45,
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: Container(
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border:
+                  Border.all(color: Colors.white.withOpacity(0.5), width: 3)),
+          child: Image.asset(
+            'assets/user_17.png',
+            width: 45,
+          ),
         ),
       ),
     );
   }
 
   _settings() {
-    return Container(
+    return Padding(
+      padding: EdgeInsets.all(5),
       child: Icon(LineIcons.horizontalSliders, size: 35, color: Colors.white),
     );
   }
@@ -223,156 +229,5 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
       ),
     );
-  }
-
-  _chooseAvatar() {
-    return SizedBox(
-      width: 200,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Image.asset('assets/user_17.png', width: 40),
-          Image.asset('assets/user_17.png', width: 70),
-          Image.asset('assets/user_17.png', width: 40),
-        ],
-      ),
-    );
-  }
-
-  _emailField() {
-    return Container(
-      width: 270,
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextField(
-        maxLines: 1,
-        textCapitalization: TextCapitalization.sentences,
-        style: TextStyle(fontSize: 20),
-        decoration: InputDecoration(
-          hintText: 'Email',
-          counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
-          hintStyle: TextStyle(color: Colors.black26),
-          border: InputBorder.none,
-        ),
-        onChanged: (_) {},
-        controller: _emailCtrl,
-      ),
-    );
-  }
-
-  _passwordField() {
-    return Container(
-      width: 270,
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextField(
-        maxLines: 1,
-        textCapitalization: TextCapitalization.sentences,
-        style: TextStyle(fontSize: 20),
-        decoration: InputDecoration(
-          hintText: 'Password',
-          counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
-          hintStyle: TextStyle(color: Colors.black26),
-          border: InputBorder.none,
-        ),
-        onChanged: (_) {},
-        controller: _passCtrl,
-      ),
-    );
-  }
-
-  _createAccountBtn() {
-    return Container(
-      width: 270,
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Color(0xff6E5AA0),
-      ),
-      child: Center(
-        child: Text(
-          'Create account',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-
-  _userFooter() {
-    return SizedBox(
-      width: 150,
-      child: RichText(
-        textAlign: TextAlign.left,
-        text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-                text: 'Do you have an account?',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 19,
-                )),
-            TextSpan(
-                text: ' Log in',
-                style: TextStyle(
-                  color: Color(0xff6E5AA0),
-                  fontSize: 19,
-                  fontWeight: FontWeight.normal,
-                )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _presentActionSheet() async {
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        builder: (context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-              height: 450,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(60),
-                color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  _chooseAvatar(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  _emailField(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  _passwordField(),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  _createAccountBtn(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  _userFooter()
-                ],
-              ),
-            );
-          });
-        });
   }
 }

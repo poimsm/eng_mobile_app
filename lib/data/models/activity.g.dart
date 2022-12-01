@@ -31,7 +31,7 @@ _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
       origin: json['origin'] as int,
       type: json['type'] as int,
       meaning: json['meaning'] as String?,
-      saved: json['saved'] as bool? ?? false,
+      saved: json['saved'] == null ? false : savedFromJson(json['saved']),
       extras: json['extras'] as String?,
       sourceType: json['source_type'] as int?,
       infoCard: json['info_card'] == null
@@ -43,6 +43,33 @@ _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
     );
 
 Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
+      'id': instance.id,
+      'sentence': instance.word,
+      'origin': instance.origin,
+      'type': instance.type,
+      'meaning': instance.meaning,
+      'saved': instance.saved,
+      'extras': instance.extras,
+      'source_type': instance.sourceType,
+      'info_card': instance.infoCard,
+      'short_video': instance.shortVideo,
+    };
+
+_$_LocalWord _$$_LocalWordFromJson(Map<String, dynamic> json) => _$_LocalWord(
+      id: json['id'] as int,
+      word: json['sentence'] as String,
+      origin: json['origin'] as int,
+      type: json['type'] as int,
+      meaning: json['meaning'] as String?,
+      saved: json['saved'] == null ? false : savedFromJson(json['saved']),
+      extras: json['extras'] as String?,
+      sourceType: json['source_type'] as int?,
+      infoCard: json['info_card'] as int?,
+      shortVideo: json['short_video'] as int?,
+    );
+
+Map<String, dynamic> _$$_LocalWordToJson(_$_LocalWord instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'sentence': instance.word,
       'origin': instance.origin,

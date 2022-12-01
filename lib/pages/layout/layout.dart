@@ -323,7 +323,7 @@ class Layout extends StatelessWidget {
             height: size.height,
             color: Colors.white.withOpacity(0.5),
             child: Center(
-              child: CircularProgressIndicator(color: Colors.red),
+              child: CircularProgressIndicator(color: Colors.black87),
             ),
           )
         : Container();

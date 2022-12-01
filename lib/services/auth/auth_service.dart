@@ -3,43 +3,89 @@ import 'package:eng_mobile_app/data/models/user.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+User _fakeUser = User(
+  id: -1,
+  verified: false,
+  screenFlow: false,
+  email: 'fake@fake.com',
+  totalWords: 0,
+);
+
 class AuthService {
-  User _user = const User(id: -1, anonymous: true, email: 'fake@fake');
+  User _user = _fakeUser;
   User get user => _user;
+  bool get isAuthenticated => _user.id != -1;
 
   String _token = 'None';
   String get token => _token;
 
-  Future<bool> checkTokenValidity() async {
+  Future<bool> checkTokenValidityAndGetUser() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      String? accessToken = prefs.getInt('access') as String?;
+      String? accessToken = prefs.getString('access');
 
       if (accessToken == null) return false;
 
       _token = accessToken;
 
-      final respUser = await Network().get('/user/data');
+      final config = NetworkConfigWithJWBToken(_token).config();
 
-      if (!respUser.ok) {
-        _token = 'None';
-        return false;
-      }
+      final tokenResp = await Network(config, retries: 2)
+          .post('/token/verify', data: {'token': 'accessToken'});
+      if (!tokenResp.ok) return false;
+
+      final respUser = await Network(config, retries: 2).get('/user/data');
+      if (!respUser.ok) return false;
 
       _user = User.fromJson(respUser.data);
-
       return true;
     } catch (e, s) {
       _token = 'None';
-      printError('checkTokenValidity: $e');
+      printError('checkTokenValidityOrCreateFakeUser: $e');
       printError(s.toString());
       return false;
     }
   }
 
-  void loginOut() async {
+  // Future<bool> checkTokenValidityOrCreateFakeUser() async {
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     String? accessToken = prefs.getString('access');
+
+  //     if (accessToken != null) {
+  //       _token = accessToken;
+
+  //       final config = NetworkConfigWithJWBToken(_token).config();
+  //       final respUser = await Network(config).get('/user/data');
+
+  //       if (respUser.ok) {
+  //         _user = User.fromJson(respUser.data);
+  //         return true;
+  //       }
+  //     }
+
+  //     Response respFakeUser = await Network().post('/user/fake-user', data: {});
+
+  //     if (!respFakeUser.ok) return false;
+
+  //     await prefs.setString('access', respFakeUser.data['access']);
+  //     await prefs.setString('refresh', respFakeUser.data['refresh']);
+
+  //     _token = respFakeUser.data['access'];
+  //     _user = User.fromJson(respFakeUser.data);
+
+  //     return true;
+  //   } catch (e, s) {
+  //     _token = 'None';
+  //     printError('checkTokenValidityOrCreateFakeUser: $e');
+  //     printError(s.toString());
+  //     return false;
+  //   }
+  // }
+
+  Future loginOut() async {
     try {
-      _user = const User(id: -1, anonymous: true, email: 'fake@fake');
+      _user = _fakeUser;
       _token = 'None';
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('access');
@@ -49,10 +95,11 @@ class AuthService {
     }
   }
 
-  Future<bool> createAnonymousUser(payload) async {
+  Future<bool> signIn(SignInPayload payload) async {
     try {
+      final config = NetworkConfigWithJWBToken('None').config();
       Response response =
-          await Network().post('/user/fake-user', data: payload);
+          await Network(config).post('/user/sign-in', data: payload.toMap());
 
       if (!response.ok) return false;
 
@@ -61,37 +108,7 @@ class AuthService {
       await prefs.setString('refresh', response.data['refresh']);
 
       _token = response.data['access'];
-      _user = User.fromJson(response.data);
-
-      return true;
-    } catch (e, s) {
-      _token = 'None';
-      printError('createAnonymousUser: $e');
-      printError(s.toString());
-      return false;
-    }
-  }
-
-  Future<bool> signIn(payload) async {
-    try {
-      Response respToken = await Network().post('/token', data: payload);
-
-      if (!respToken.ok) return false;
-      _token = respToken.data['access'];
-
-      Response respUser = await Network().get('/user/data');
-
-      if (!respUser.ok) {
-        _token = 'None';
-        return false;
-      }
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('access', respToken.data['access']);
-      await prefs.setString('refresh', respToken.data['refresh']);
-
-      _token = respToken.data['access'];
-      _user = User.fromJson(respUser.data);
+      _user = User.fromJson(response.data['user']);
 
       return true;
     } catch (e, s) {
@@ -102,18 +119,73 @@ class AuthService {
     }
   }
 
-  Future<bool> createNewUser(payload) async {
+  Future<bool> signUp(SignUpPayload payload) async {
     try {
-      Response response = await Network().post('/user/register', data: payload);
+      final config = NetworkConfigWithJWBToken('None').config();
+      Response response =
+          await Network(config).post('/user/sign-up', data: payload.toMap());
 
       if (!response.ok) return false;
-      _user = User.fromJson(response.data);
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access', response.data['access']);
+      await prefs.setString('refresh', response.data['refresh']);
+
+      _token = response.data['access'];
+      _user = User.fromJson(response.data['user']);
 
       return true;
     } catch (e, s) {
-      printError('createNewUser: $e');
+      _token = 'None';
+      printError('signUp: $e');
       printError(s.toString());
       return false;
     }
+  }
+
+  // Future<bool> deleteUser(int id) async {
+  //   try {
+  //     final config = NetworkConfigWithJWBToken('None').config();
+  //     Response response =
+  //         await Network(config).post('/user/delete-user', data: {'id': id});
+
+  //     if (!response.ok) return false;
+
+  //     final prefs = await SharedPreferences.getInstance();
+  //     await prefs.setString('access', response.data['access']);
+  //     await prefs.setString('refresh', response.data['refresh']);
+
+  //     _token = response.data['access'];
+  //     _user = User.fromJson(response.data['user']);
+
+  //     return true;
+  //   } catch (e, s) {
+  //     _token = 'None';
+  //     printError('deleteUser: $e');
+  //     printError(s.toString());
+  //     return false;
+  //   }
+  // }
+}
+
+class SignInPayload {
+  SignInPayload({required this.email, required this.password});
+
+  final String email;
+  final String password;
+
+  toMap() {
+    return {'email': email, 'password': password};
+  }
+}
+
+class SignUpPayload {
+  SignUpPayload({required this.email, required this.password});
+
+  final String email;
+  final String password;
+
+  toMap() {
+    return {'email': email, 'password': password};
   }
 }

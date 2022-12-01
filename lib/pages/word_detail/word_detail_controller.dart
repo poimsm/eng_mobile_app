@@ -1,5 +1,7 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
-import 'package:eng_mobile_app/data/network/network.dart';
+import 'package:eng_mobile_app/data/repositories/word/word_repository.dart';
+import 'package:eng_mobile_app/data/repositories/word/word_repository_impl.dart';
+import 'package:eng_mobile_app/pages/word_list/enums.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,7 +38,9 @@ class WordDetailState {
 }
 
 class WordDetailNotifier extends StateNotifier<WordDetailState> {
-  WordDetailNotifier() : super(WordDetailState());
+  WordDetailNotifier(this.wordRepository) : super(WordDetailState());
+
+  final WordRepository wordRepository;
 
   void checkEnableToSaveOrEdit(
       String wordText, String meaningText, bool isNewWord, Word? word) {
@@ -62,31 +66,31 @@ class WordDetailNotifier extends StateNotifier<WordDetailState> {
     state = state.copyWith(showBanner: val);
   }
 
-  Future<Word?> createWord(Map payload) async {
+  Future<Word?> createWord(Map<String, dynamic> payload) async {
     state = state.copyWith(isLoading: true);
-
-    final resp = await Network().post('/sentence/', data: payload);
+    final newWord = await wordRepository.createWord(Word(
+        id: -1,
+        word: payload['word'],
+        meaning: payload['meaning'],
+        origin: WordOrigin.user,
+        type: WordType.normal));
     state = state.copyWith(isLoading: false);
 
-    if (!resp.ok) return null;
-    return Word.fromJson(resp.data);
+    return newWord;
   }
 
   Future<bool> deleteWord(int id) async {
     state = state.copyWith(isLoading: true);
-    final resp = await Network().delete('/sentence/', data: {'id': id});
+    final respOk = await wordRepository.deleteWord(id);
     state = state.copyWith(isLoading: false);
-    return resp.ok;
+    return respOk;
   }
 
   Future<Word?> updateWord(Map payload) async {
     state = state.copyWith(isLoading: true);
-
-    final resp = await Network().put('/sentence/', data: payload);
+    final word = await wordRepository.updateWord(payload);
     state = state.copyWith(isLoading: false);
-
-    if (!resp.ok) return null;
-    return Word.fromJson(resp.data);
+    return word;
   }
 
   void toggleAnimatedWordBtn() async {
@@ -99,5 +103,6 @@ class WordDetailNotifier extends StateNotifier<WordDetailState> {
 final wordDetailProvider =
     StateNotifierProvider.autoDispose<WordDetailNotifier, WordDetailState>(
         (ref) {
-  return WordDetailNotifier();
+  final wordRepository = ref.watch(wordRepositoryProvider);
+  return WordDetailNotifier(wordRepository);
 });

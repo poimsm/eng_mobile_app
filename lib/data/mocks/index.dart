@@ -4,3 +4,8 @@ export 'mock_new_word.dart';
 export 'mock_user_data.dart';
 export 'mock_videos.dart';
 export 'mock_cards.dart';
+export 'mock_user_sign_in.dart';
+export 'mock_user_sign_up.dart';
+export 'mock_user_fake_create.dart';
+export 'mock_user_delete.dart';
+export 'mock_backend_settings.dart';

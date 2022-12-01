@@ -19,7 +19,6 @@ class Activity with _$Activity {
       _$ActivityFromJson(json);
 }
 
-
 @freezed
 class Word with _$Word {
   const factory Word({
@@ -29,7 +28,8 @@ class Word with _$Word {
     required int origin,
     required int type,
     String? meaning,
-    @Default(false) bool saved,
+    // @Default(false) bool saved,
+    @Default(false) @JsonKey(name: 'saved', fromJson: savedFromJson) bool saved,
     String? extras,
     @JsonKey(name: 'source_type') int? sourceType,
     @JsonKey(name: 'info_card') InfoCard? infoCard,
@@ -40,14 +40,40 @@ class Word with _$Word {
 }
 
 @freezed
+class LocalWord with _$LocalWord {
+  const factory LocalWord({
+    required int id,
+    @JsonKey(name: 'sentence') required String word,
+    required int origin,
+    required int type,
+    String? meaning,
+    @Default(false) @JsonKey(name: 'saved', fromJson: savedFromJson) bool saved,
+    String? extras,
+    @JsonKey(name: 'source_type') int? sourceType,
+    @JsonKey(name: 'info_card') int? infoCard,
+    @JsonKey(name: 'short_video') int? shortVideo,
+  }) = _LocalWord;
+
+  factory LocalWord.fromJson(Map<String, Object?> json) => _$LocalWordFromJson(json);
+}
+
+bool savedFromJson(val) {
+  if (val is int) {
+    return val == 0 ? false : true;
+  }
+  return val;
+}
+
+@freezed
 class Example with _$Example {
   const factory Example({
     required int id,
     required List<Map> example,
-    @JsonKey(name: 'voice_url') required String voiceUrl,    
+    @JsonKey(name: 'voice_url') required String voiceUrl,
   }) = _Example;
 
-  factory Example.fromJson(Map<String, Object?> json) => _$ExampleFromJson(json);
+  factory Example.fromJson(Map<String, Object?> json) =>
+      _$ExampleFromJson(json);
 }
 
 @freezed
@@ -59,14 +85,13 @@ class Style with _$Style {
     @JsonKey(name: 'bottom_gradient_color') String? bottomGradientColor,
     @JsonKey(name: 'top_gradient_color') String? topGradientColor,
     @JsonKey(name: 'question_position') required double questionPosition,
-    @JsonKey(name: 'image_position') required double imagePosition,    
+    @JsonKey(name: 'image_position') required double imagePosition,
     @JsonKey(name: 'question_font_size') required double questionFontSize,
     @JsonKey(name: 'question_opacity') required double questionOpacity,
   }) = _Style;
 
   factory Style.fromJson(Map<String, Object?> json) => _$StyleFromJson(json);
 }
-
 
 @freezed
 class Question with _$Question {
