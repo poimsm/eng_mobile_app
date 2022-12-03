@@ -8,9 +8,9 @@ part of 'activity.dart';
 
 _$_Activity _$$_ActivityFromJson(Map<String, dynamic> json) => _$_Activity(
       question: Question.fromJson(json['question'] as Map<String, dynamic>),
-      word: json['word'] == null
+      sentence: json['sentence'] == null
           ? null
-          : Word.fromJson(json['word'] as Map<String, dynamic>),
+          : Sentence.fromJson(json['sentence'] as Map<String, dynamic>),
       example: json['example'] == null
           ? null
           : Example.fromJson(json['example'] as Map<String, dynamic>),
@@ -20,14 +20,14 @@ _$_Activity _$$_ActivityFromJson(Map<String, dynamic> json) => _$_Activity(
 Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
     <String, dynamic>{
       'question': instance.question,
-      'word': instance.word,
+      'sentence': instance.sentence,
       'example': instance.example,
       'style': instance.style,
     };
 
-_$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
+_$_Sentence _$$_SentenceFromJson(Map<String, dynamic> json) => _$_Sentence(
       id: json['id'] as int,
-      word: json['sentence'] as String,
+      sentence: json['sentence'] as String,
       origin: json['origin'] as int,
       type: json['type'] as int,
       meaning: json['meaning'] as String?,
@@ -42,9 +42,10 @@ _$_Word _$$_WordFromJson(Map<String, dynamic> json) => _$_Word(
           : ShortVideo.fromJson(json['short_video'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
+Map<String, dynamic> _$$_SentenceToJson(_$_Sentence instance) =>
+    <String, dynamic>{
       'id': instance.id,
-      'sentence': instance.word,
+      'sentence': instance.sentence,
       'origin': instance.origin,
       'type': instance.type,
       'meaning': instance.meaning,
@@ -55,9 +56,10 @@ Map<String, dynamic> _$$_WordToJson(_$_Word instance) => <String, dynamic>{
       'short_video': instance.shortVideo,
     };
 
-_$_LocalWord _$$_LocalWordFromJson(Map<String, dynamic> json) => _$_LocalWord(
+_$_LocalSentence _$$_LocalSentenceFromJson(Map<String, dynamic> json) =>
+    _$_LocalSentence(
       id: json['id'] as int,
-      word: json['sentence'] as String,
+      sentence: json['sentence'] as String,
       origin: json['origin'] as int,
       type: json['type'] as int,
       meaning: json['meaning'] as String?,
@@ -68,10 +70,10 @@ _$_LocalWord _$$_LocalWordFromJson(Map<String, dynamic> json) => _$_LocalWord(
       shortVideo: json['short_video'] as int?,
     );
 
-Map<String, dynamic> _$$_LocalWordToJson(_$_LocalWord instance) =>
+Map<String, dynamic> _$$_LocalSentenceToJson(_$_LocalSentence instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'sentence': instance.word,
+      'sentence': instance.sentence,
       'origin': instance.origin,
       'type': instance.type,
       'meaning': instance.meaning,

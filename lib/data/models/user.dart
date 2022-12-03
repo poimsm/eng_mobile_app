@@ -9,7 +9,7 @@ part 'user.g.dart';
 class User with _$User {
   const factory User({
     required int id,
-    @JsonKey(name: 'total_words') required int totalWords,
+    @JsonKey(name: 'total_sentences') required int totalSentences,
     required String email,
     required bool verified,
     required bool screenFlow,

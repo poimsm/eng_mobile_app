@@ -8,7 +8,7 @@ part of 'user.dart';
 
 _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       id: json['id'] as int,
-      totalWords: json['total_words'] as int,
+      totalSentences: json['total_sentences'] as int,
       email: json['email'] as String,
       verified: json['verified'] as bool,
       screenFlow: json['screenFlow'] as bool,
@@ -16,7 +16,7 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
 
 Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'id': instance.id,
-      'total_words': instance.totalWords,
+      'total_sentences': instance.totalSentences,
       'email': instance.email,
       'verified': instance.verified,
       'screenFlow': instance.screenFlow,

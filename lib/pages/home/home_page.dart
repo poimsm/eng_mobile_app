@@ -5,8 +5,8 @@ import 'package:eng_mobile_app/pages/audio_bar_white.dart';
 import 'package:eng_mobile_app/pages/home/enums.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/single_video.dart';
-import 'package:eng_mobile_app/pages/word_list/enums.dart';
-import 'package:eng_mobile_app/pages/word_list/word_list_controller.dart';
+import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
+import 'package:eng_mobile_app/pages/sentence_list/sentence_list_controller.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,8 +69,8 @@ class HomePageState extends ConsumerState<HomePage> {
           onStartQuiz: () {
             ref.read(homeProvider.notifier).fetchActivities();
           },
-          onAddWords: () {
-            Navigator.pushNamed(context, Routes.WORD_LIST);
+          onAddSentences: () {
+            Navigator.pushNamed(context, Routes.SENTENCE_LIST);
           },
         ),
       );
@@ -97,7 +97,7 @@ class HomePageState extends ConsumerState<HomePage> {
           ),
           if ([QuestionType.normal, QuestionType.describe]
                   .contains(homeState.activity!.question.type) &&
-              homeState.activity!.word != null &&
+              homeState.activity!.sentence != null &&
               homeState.showChallenge)
             Positioned(
               left: 20,
@@ -168,7 +168,7 @@ class HomePageState extends ConsumerState<HomePage> {
             Positioned(
               right: 20,
               top: size.height * 0.03,
-              child: _wordTeacher(),
+              child: _sentenceTeacher(),
             ),
           // Positioned(
           //   top: 10,
@@ -231,7 +231,7 @@ class HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  _wordTeacher() {
+  _sentenceTeacher() {
     return InkWell(
       onTap: () {
         _presentActionSheet();
@@ -441,8 +441,8 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   _challengeBubble() {
-    Word word = homeState.activity!.word!;
-    bool isGroup = word.type == WordType.group;
+    Sentence sentence = homeState.activity!.sentence!;
+    bool isGroup = sentence.type == SentenceType.group;
     return Stack(
       children: [
         Container(
@@ -453,8 +453,8 @@ class HomePageState extends ConsumerState<HomePage> {
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Color(0xff8497B0).withOpacity(0.4))),
           child: Text(
-            homeState.bubbleChallengeWord!,
-            // isGroup? getGroupRandomTail(word.group) : word.word,
+            homeState.bubbleChallengeSentence!,
+            // isGroup? getGroupRandomTail(sentence.group) : sentence.sentence,
             style: TextStyle(
               color: Colors.white,
               fontSize: isGroup ? 16 : 18,
@@ -474,12 +474,12 @@ class HomePageState extends ConsumerState<HomePage> {
   }
 
   _challengeAccepted() {
-    bool isGroup = homeState.activity!.word!.type == WordType.group;
-    String wordText = '';
+    bool isGroup = homeState.activity!.sentence!.type == SentenceType.group;
+    String sentenceText = '';
     if (isGroup) {
-      wordText = getGroupShortTail(homeState.activity!.word!.extras!);
+      sentenceText = getGroupShortTail(homeState.activity!.sentence!.extras!);
     } else {
-      wordText = homeState.activity!.word!.word;
+      sentenceText = homeState.activity!.sentence!.sentence;
     }
     return InkWell(
       onTap: () {
@@ -514,7 +514,7 @@ class HomePageState extends ConsumerState<HomePage> {
               SizedBox(height: 20),
               AnimatedDefaultTextStyle(
                 textAlign: TextAlign.center,
-                child: Text(wordText),
+                child: Text(sentenceText),
                 style: homeState.challengeAnimated
                     ? TextStyle(
                         color: Colors.white,
@@ -589,7 +589,8 @@ class HomePageState extends ConsumerState<HomePage> {
     Widget question;
 
     if (activity.question.type == QuestionType.teacher) {
-      List<String> questionList = activity.question.question.split("[word]");
+      List<String> questionList =
+          activity.question.question.split("[sentence]");
       question = Container(
         color: Colors.black.withOpacity(activity.style.questionOpacity),
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
@@ -657,14 +658,14 @@ class HomePageState extends ConsumerState<HomePage> {
       width: size.width,
       height: size.height * 0.15,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        _myWordsBtn(),
+        _mySentencesBtn(),
         homeState.isRecording ? _stopBtn() : _micBtn(),
         _onNextBtn(),
       ]),
     );
   }
 
-  _myWordsBtn() {
+  _mySentencesBtn() {
     return Stack(
       children: [
         SizedBox(
@@ -673,7 +674,7 @@ class HomePageState extends ConsumerState<HomePage> {
           child: Center(
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.WORD_LIST);
+                Navigator.pushNamed(context, Routes.SENTENCE_LIST);
               },
               child: Container(
                 padding: EdgeInsets.all(8),
@@ -688,7 +689,7 @@ class HomePageState extends ConsumerState<HomePage> {
             ),
           ),
         ),
-        if (homeState.newWords)
+        if (homeState.newSentences)
           Positioned(
               top: 0,
               right: 0,
@@ -726,11 +727,11 @@ class HomePageState extends ConsumerState<HomePage> {
 
         int idx = homeState.currentIndex + (activity == null ? 0 : -1);
         Activity lastActivity = homeState.activities[idx];
-        Word? word = acceptedChallenge ? lastActivity.word : null;
+        Sentence? sentence = acceptedChallenge ? lastActivity.sentence : null;
 
         ref
-            .read(wordListProvider.notifier)
-            .addHistory(question: lastActivity.question, word: word);
+            .read(sentenceListProvider.notifier)
+            .addHistory(question: lastActivity.question, sentence: sentence);
       },
       child: Container(
         padding: EdgeInsets.all(8),
@@ -747,7 +748,7 @@ class HomePageState extends ConsumerState<HomePage> {
     return InkWell(
       onTap: () {
         ref.read(homeProvider.notifier).toggleRecording();
-        ref.read(homeProvider.notifier).bubbleChallengeWordTrigger();
+        ref.read(homeProvider.notifier).bubbleChallengeSentenceTrigger();
       },
       child: Container(
         padding: EdgeInsets.all(homeState.isRecording ? 27 : 12),
@@ -823,7 +824,7 @@ class HomePageState extends ConsumerState<HomePage> {
                             ChallengeStates.accepted) return;
                         ref
                             .read(homeProvider.notifier)
-                            .onWordClicked(ChallengeStates.accepted, 1500);
+                            .onSentenceClicked(ChallengeStates.accepted, 1500);
                         ref
                             .read(homeProvider.notifier)
                             .speak('Challenge accepted!');
@@ -849,18 +850,18 @@ class HomePageState extends ConsumerState<HomePage> {
                     );
             }
 
-            infoBoxWord(Size size) {
+            infoBoxSentence(Size size) {
               String msg = '';
 
               Activity act = homeState.activity!;
-              bool isGroup = act.word!.type == WordType.group;
+              bool isGroup = act.sentence!.type == SentenceType.group;
 
               if (state == ChallengeStates.instructions) {
-                msg = homeState.activity!.word!.word;
+                msg = homeState.activity!.sentence!.sentence;
               }
 
               if (state == ChallengeStates.meaning) {
-                if (act.word!.sourceType == SourceType.infoCard) {
+                if (act.sentence!.sourceType == SourceType.infoCard) {
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     decoration: BoxDecoration(
@@ -874,14 +875,15 @@ class HomePageState extends ConsumerState<HomePage> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(30),
                               child: Config.MOCK
-                                  ? Image.asset(act.word!.infoCard!.imageUrl)
+                                  ? Image.asset(
+                                      act.sentence!.infoCard!.imageUrl)
                                   : Image.network(
-                                      act.word!.infoCard!.imageUrl))),
+                                      act.sentence!.infoCard!.imageUrl))),
                     ),
                   );
                 }
 
-                if (act.word!.sourceType == SourceType.shortVideo) {
+                if (act.sentence!.sourceType == SourceType.shortVideo) {
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     decoration: BoxDecoration(
@@ -918,13 +920,13 @@ class HomePageState extends ConsumerState<HomePage> {
                               borderRadius: BorderRadius.circular(10),
                               child: Config.MOCK
                                   ? Image.asset(
-                                      act.word!.shortVideo!.cover,
+                                      act.sentence!.shortVideo!.cover,
                                       width: size.width * 0.65,
                                       height: size.width * 1,
                                       fit: BoxFit.cover,
                                     )
                                   : Image.network(
-                                      act.word!.shortVideo!.cover,
+                                      act.sentence!.shortVideo!.cover,
                                       width: size.width * 0.65,
                                       height: size.width * 1,
                                       fit: BoxFit.cover,
@@ -943,7 +945,8 @@ class HomePageState extends ConsumerState<HomePage> {
                                     onTap: () {
                                       ref
                                           .read(homeProvider.notifier)
-                                          .toggleVideo(act.word!.shortVideo);
+                                          .toggleVideo(
+                                              act.sentence!.shortVideo);
                                       Navigator.pop(context);
                                       // showVideo = true;
                                       // setState(() {});
@@ -974,9 +977,9 @@ class HomePageState extends ConsumerState<HomePage> {
                 }
 
                 if (isGroup) {
-                  msg = getGroupHead(act.word!.extras!);
+                  msg = getGroupHead(act.sentence!.extras!);
                 } else {
-                  msg = act.word!.meaning!;
+                  msg = act.sentence!.meaning!;
                 }
               }
 
@@ -1064,16 +1067,16 @@ class HomePageState extends ConsumerState<HomePage> {
                                           height: 20,
                                         ),
                                         ...List.generate(
-                                            getGroupTailList(homeState
-                                                    .activity!.word!.extras!)
+                                            getGroupTailList(homeState.activity!
+                                                    .sentence!.extras!)
                                                 .length, (i) {
                                           if (i > 3) {
                                             return Container();
                                           }
 
                                           return Text(
-                                            getGroupTailList(homeState
-                                                .activity!.word!.extras!)[i],
+                                            getGroupTailList(homeState.activity!
+                                                .sentence!.extras!)[i],
                                             style: TextStyle(fontSize: 22),
                                           );
                                         }),
@@ -1162,16 +1165,16 @@ class HomePageState extends ConsumerState<HomePage> {
               );
             }
 
-            wordSheet() {
+            sentenceSheet() {
               return Container(
                   width: size.width,
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 30),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    infoBoxWord(size),
+                    infoBoxSentence(size),
                   ]));
             }
 
-            return wordSheet();
+            return sentenceSheet();
           });
         });
   }

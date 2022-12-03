@@ -4,8 +4,8 @@ import 'package:eng_mobile_app/pages/login/login_page.dart';
 import 'package:eng_mobile_app/pages/library/library_page.dart';
 import 'package:eng_mobile_app/pages/new_version/new_version_page.dart';
 import 'package:eng_mobile_app/pages/user_profile/user_profile_page.dart';
-import 'package:eng_mobile_app/pages/word_detail/word_detail_page.dart';
-import 'package:eng_mobile_app/pages/word_list/word_list_page.dart';
+import 'package:eng_mobile_app/pages/sentence_detail/sentence_detail_page.dart';
+import 'package:eng_mobile_app/pages/sentence_list/sentence_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:eng_mobile_app/pages/home/home_page.dart';
@@ -17,11 +17,11 @@ abstract class Pages {
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     Routes.HOME: (_) => const HomePage(),
-    Routes.WORD_LIST: (_) => const WordListPage(),
-    Routes.WORD_DETAIL: (_) => WordDetailPage(),
+    Routes.SENTENCE_LIST: (_) => const SentenceListPage(),
+    Routes.SENTENCE_DETAIL: (_) => SentenceDetailPage(),
     Routes.LOGIN: (_) => const LoignPage(),
     Routes.CHALLENGE: (_) => ChallengePage(),
-    Routes.LIBRARY: (_) => LibraryPage(totalWords: 0),
+    Routes.LIBRARY: (_) => LibraryPage(totalSentences: 0),
     Routes.ERROR: (_) => ErrorPage(),
     Routes.NEW_APP_VERSION: (_) => NewAppVersionPage(),
     Routes.USER_PROFILE: (_) => UserProfilePage(),

@@ -1,10 +1,10 @@
-class WordOrigin {
+class SentenceOrigin {
   static int get random => 0;
   static int get resource => 1;
   static int get user => 2;
 }
 
-class WordType {
+class SentenceType {
   static int get normal => 0;
   static int get group => 1;
 }

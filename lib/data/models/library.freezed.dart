@@ -25,7 +25,7 @@ mixin _$ShortVideo {
   String get url => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_favorite')
   bool? get isFavorite => throw _privateConstructorUsedError;
-  List<Word> get words => throw _privateConstructorUsedError;
+  List<Sentence> get sentences => throw _privateConstructorUsedError;
   List<String> get collocations => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $ShortVideoCopyWith<$Res> {
       String cover,
       String url,
       @JsonKey(name: 'is_favorite') bool? isFavorite,
-      List<Word> words,
+      List<Sentence> sentences,
       List<String> collocations});
 }
 
@@ -66,7 +66,7 @@ class _$ShortVideoCopyWithImpl<$Res, $Val extends ShortVideo>
     Object? cover = null,
     Object? url = null,
     Object? isFavorite = freezed,
-    Object? words = null,
+    Object? sentences = null,
     Object? collocations = null,
   }) {
     return _then(_value.copyWith(
@@ -86,10 +86,10 @@ class _$ShortVideoCopyWithImpl<$Res, $Val extends ShortVideo>
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
               as bool?,
-      words: null == words
-          ? _value.words
-          : words // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+      sentences: null == sentences
+          ? _value.sentences
+          : sentences // ignore: cast_nullable_to_non_nullable
+              as List<Sentence>,
       collocations: null == collocations
           ? _value.collocations
           : collocations // ignore: cast_nullable_to_non_nullable
@@ -111,7 +111,7 @@ abstract class _$$_ShortVideoCopyWith<$Res>
       String cover,
       String url,
       @JsonKey(name: 'is_favorite') bool? isFavorite,
-      List<Word> words,
+      List<Sentence> sentences,
       List<String> collocations});
 }
 
@@ -130,7 +130,7 @@ class __$$_ShortVideoCopyWithImpl<$Res>
     Object? cover = null,
     Object? url = null,
     Object? isFavorite = freezed,
-    Object? words = null,
+    Object? sentences = null,
     Object? collocations = null,
   }) {
     return _then(_$_ShortVideo(
@@ -150,10 +150,10 @@ class __$$_ShortVideoCopyWithImpl<$Res>
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
               as bool?,
-      words: null == words
-          ? _value._words
-          : words // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+      sentences: null == sentences
+          ? _value._sentences
+          : sentences // ignore: cast_nullable_to_non_nullable
+              as List<Sentence>,
       collocations: null == collocations
           ? _value._collocations
           : collocations // ignore: cast_nullable_to_non_nullable
@@ -170,9 +170,9 @@ class _$_ShortVideo implements _ShortVideo {
       required this.cover,
       required this.url,
       @JsonKey(name: 'is_favorite') this.isFavorite,
-      required final List<Word> words,
+      required final List<Sentence> sentences,
       required final List<String> collocations})
-      : _words = words,
+      : _sentences = sentences,
         _collocations = collocations;
 
   factory _$_ShortVideo.fromJson(Map<String, dynamic> json) =>
@@ -187,11 +187,11 @@ class _$_ShortVideo implements _ShortVideo {
   @override
   @JsonKey(name: 'is_favorite')
   final bool? isFavorite;
-  final List<Word> _words;
+  final List<Sentence> _sentences;
   @override
-  List<Word> get words {
+  List<Sentence> get sentences {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_words);
+    return EqualUnmodifiableListView(_sentences);
   }
 
   final List<String> _collocations;
@@ -203,7 +203,7 @@ class _$_ShortVideo implements _ShortVideo {
 
   @override
   String toString() {
-    return 'ShortVideo(id: $id, cover: $cover, url: $url, isFavorite: $isFavorite, words: $words, collocations: $collocations)';
+    return 'ShortVideo(id: $id, cover: $cover, url: $url, isFavorite: $isFavorite, sentences: $sentences, collocations: $collocations)';
   }
 
   @override
@@ -216,7 +216,8 @@ class _$_ShortVideo implements _ShortVideo {
             (identical(other.url, url) || other.url == url) &&
             (identical(other.isFavorite, isFavorite) ||
                 other.isFavorite == isFavorite) &&
-            const DeepCollectionEquality().equals(other._words, _words) &&
+            const DeepCollectionEquality()
+                .equals(other._sentences, _sentences) &&
             const DeepCollectionEquality()
                 .equals(other._collocations, _collocations));
   }
@@ -229,7 +230,7 @@ class _$_ShortVideo implements _ShortVideo {
       cover,
       url,
       isFavorite,
-      const DeepCollectionEquality().hash(_words),
+      const DeepCollectionEquality().hash(_sentences),
       const DeepCollectionEquality().hash(_collocations));
 
   @JsonKey(ignore: true)
@@ -252,7 +253,7 @@ abstract class _ShortVideo implements ShortVideo {
       required final String cover,
       required final String url,
       @JsonKey(name: 'is_favorite') final bool? isFavorite,
-      required final List<Word> words,
+      required final List<Sentence> sentences,
       required final List<String> collocations}) = _$_ShortVideo;
 
   factory _ShortVideo.fromJson(Map<String, dynamic> json) =
@@ -268,7 +269,7 @@ abstract class _ShortVideo implements ShortVideo {
   @JsonKey(name: 'is_favorite')
   bool? get isFavorite;
   @override
-  List<Word> get words;
+  List<Sentence> get sentences;
   @override
   List<String> get collocations;
   @override
@@ -290,7 +291,7 @@ mixin _$InfoCard {
   String get voiceUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_favorite')
   bool? get isFavorite => throw _privateConstructorUsedError;
-  List<Word> get words => throw _privateConstructorUsedError;
+  List<Sentence> get sentences => throw _privateConstructorUsedError;
   List<String> get collocations => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -309,7 +310,7 @@ abstract class $InfoCardCopyWith<$Res> {
       @JsonKey(name: 'image_url') String imageUrl,
       @JsonKey(name: 'voice_url') String voiceUrl,
       @JsonKey(name: 'is_favorite') bool? isFavorite,
-      List<Word> words,
+      List<Sentence> sentences,
       List<String> collocations});
 }
 
@@ -330,7 +331,7 @@ class _$InfoCardCopyWithImpl<$Res, $Val extends InfoCard>
     Object? imageUrl = null,
     Object? voiceUrl = null,
     Object? isFavorite = freezed,
-    Object? words = null,
+    Object? sentences = null,
     Object? collocations = null,
   }) {
     return _then(_value.copyWith(
@@ -350,10 +351,10 @@ class _$InfoCardCopyWithImpl<$Res, $Val extends InfoCard>
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
               as bool?,
-      words: null == words
-          ? _value.words
-          : words // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+      sentences: null == sentences
+          ? _value.sentences
+          : sentences // ignore: cast_nullable_to_non_nullable
+              as List<Sentence>,
       collocations: null == collocations
           ? _value.collocations
           : collocations // ignore: cast_nullable_to_non_nullable
@@ -374,7 +375,7 @@ abstract class _$$_InfoCardCopyWith<$Res> implements $InfoCardCopyWith<$Res> {
       @JsonKey(name: 'image_url') String imageUrl,
       @JsonKey(name: 'voice_url') String voiceUrl,
       @JsonKey(name: 'is_favorite') bool? isFavorite,
-      List<Word> words,
+      List<Sentence> sentences,
       List<String> collocations});
 }
 
@@ -393,7 +394,7 @@ class __$$_InfoCardCopyWithImpl<$Res>
     Object? imageUrl = null,
     Object? voiceUrl = null,
     Object? isFavorite = freezed,
-    Object? words = null,
+    Object? sentences = null,
     Object? collocations = null,
   }) {
     return _then(_$_InfoCard(
@@ -413,10 +414,10 @@ class __$$_InfoCardCopyWithImpl<$Res>
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
               as bool?,
-      words: null == words
-          ? _value._words
-          : words // ignore: cast_nullable_to_non_nullable
-              as List<Word>,
+      sentences: null == sentences
+          ? _value._sentences
+          : sentences // ignore: cast_nullable_to_non_nullable
+              as List<Sentence>,
       collocations: null == collocations
           ? _value._collocations
           : collocations // ignore: cast_nullable_to_non_nullable
@@ -433,9 +434,9 @@ class _$_InfoCard implements _InfoCard {
       @JsonKey(name: 'image_url') required this.imageUrl,
       @JsonKey(name: 'voice_url') required this.voiceUrl,
       @JsonKey(name: 'is_favorite') this.isFavorite,
-      required final List<Word> words,
+      required final List<Sentence> sentences,
       required final List<String> collocations})
-      : _words = words,
+      : _sentences = sentences,
         _collocations = collocations;
 
   factory _$_InfoCard.fromJson(Map<String, dynamic> json) =>
@@ -452,11 +453,11 @@ class _$_InfoCard implements _InfoCard {
   @override
   @JsonKey(name: 'is_favorite')
   final bool? isFavorite;
-  final List<Word> _words;
+  final List<Sentence> _sentences;
   @override
-  List<Word> get words {
+  List<Sentence> get sentences {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_words);
+    return EqualUnmodifiableListView(_sentences);
   }
 
   final List<String> _collocations;
@@ -468,7 +469,7 @@ class _$_InfoCard implements _InfoCard {
 
   @override
   String toString() {
-    return 'InfoCard(id: $id, imageUrl: $imageUrl, voiceUrl: $voiceUrl, isFavorite: $isFavorite, words: $words, collocations: $collocations)';
+    return 'InfoCard(id: $id, imageUrl: $imageUrl, voiceUrl: $voiceUrl, isFavorite: $isFavorite, sentences: $sentences, collocations: $collocations)';
   }
 
   @override
@@ -483,7 +484,8 @@ class _$_InfoCard implements _InfoCard {
                 other.voiceUrl == voiceUrl) &&
             (identical(other.isFavorite, isFavorite) ||
                 other.isFavorite == isFavorite) &&
-            const DeepCollectionEquality().equals(other._words, _words) &&
+            const DeepCollectionEquality()
+                .equals(other._sentences, _sentences) &&
             const DeepCollectionEquality()
                 .equals(other._collocations, _collocations));
   }
@@ -496,7 +498,7 @@ class _$_InfoCard implements _InfoCard {
       imageUrl,
       voiceUrl,
       isFavorite,
-      const DeepCollectionEquality().hash(_words),
+      const DeepCollectionEquality().hash(_sentences),
       const DeepCollectionEquality().hash(_collocations));
 
   @JsonKey(ignore: true)
@@ -519,7 +521,7 @@ abstract class _InfoCard implements InfoCard {
       @JsonKey(name: 'image_url') required final String imageUrl,
       @JsonKey(name: 'voice_url') required final String voiceUrl,
       @JsonKey(name: 'is_favorite') final bool? isFavorite,
-      required final List<Word> words,
+      required final List<Sentence> sentences,
       required final List<String> collocations}) = _$_InfoCard;
 
   factory _InfoCard.fromJson(Map<String, dynamic> json) = _$_InfoCard.fromJson;
@@ -536,7 +538,7 @@ abstract class _InfoCard implements InfoCard {
   @JsonKey(name: 'is_favorite')
   bool? get isFavorite;
   @override
-  List<Word> get words;
+  List<Sentence> get sentences;
   @override
   List<String> get collocations;
   @override

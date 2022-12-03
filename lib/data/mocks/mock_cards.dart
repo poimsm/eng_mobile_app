@@ -8,7 +8,7 @@ class MockCards {
           "image_url": "assets/dev/card09.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 600,
               "sentence": "Angry",
@@ -40,7 +40,7 @@ class MockCards {
           "image_url": "assets/dev/card07.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 601,
               "sentence": "But",
@@ -70,7 +70,7 @@ class MockCards {
           "image_url": "assets/dev/card06.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 602,
               "sentence": "Excellent",
@@ -99,7 +99,7 @@ class MockCards {
           "image_url": "assets/dev/card12.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 603,
               "sentence": "Starving",
@@ -129,7 +129,7 @@ class MockCards {
           "image_url": "assets/dev/card13.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 604,
               "sentence": "Costly",
@@ -159,7 +159,7 @@ class MockCards {
           "image_url": "assets/dev/card14.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 605,
               "sentence": "Hilarious",
@@ -189,7 +189,7 @@ class MockCards {
           "image_url": "assets/dev/card01.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 606,
               "sentence": "Pull off",
@@ -216,7 +216,7 @@ class MockCards {
           "image_url": "assets/dev/card02.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 607,
               "sentence": "Take apart",
@@ -237,7 +237,7 @@ class MockCards {
           "image_url": "assets/dev/card03.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 608,
               "sentence": "Come across",
@@ -259,7 +259,7 @@ class MockCards {
           "image_url": "assets/dev/card10.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 609,
               "sentence": "",
@@ -287,7 +287,7 @@ class MockCards {
           "image_url": "assets/dev/x39.png",
           "audio_url": "question",
           "saved": false,
-          "words": [
+          "sentences": [
             {
               "id": 610,
               "sentence": "",

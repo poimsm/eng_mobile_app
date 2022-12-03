@@ -173,19 +173,19 @@ String getGroupRandomTail(String extras) {
 String toastMsgBasedOnLength({required bool willSave, required int length}) {
   String msg = '';
   if (willSave && length <= 1) {
-    msg = '$length word saved';
+    msg = '$length sentence saved';
   }
 
   if (willSave && length > 1) {
-    msg = '$length words saved';
+    msg = '$length sentences saved';
   }
 
   if (!willSave && length <= 1) {
-    msg = '$length word removed';
+    msg = '$length sentence removed';
   }
 
   if (!willSave && length > 1) {
-    msg = '$length words removed';
+    msg = '$length sentences removed';
   }
   return msg;
 }

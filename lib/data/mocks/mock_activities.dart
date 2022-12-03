@@ -19,7 +19,7 @@ class MockActivities {
             "voice_url": "assets/dev/n02.mp3",
             "image_url": "assets/dev/c00.jpg"
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "sentence": "Beers",
@@ -31,7 +31,7 @@ class MockActivities {
               "image_url": "assets/dev/card09.png",
               "audio_url": "question",
               "saved": false,
-              "words": [],
+              "sentences": [],
               "examples": [
                 "a mad [scheme, idea, man, person, dog]",
                 "are you mad at me?",
@@ -49,7 +49,7 @@ class MockActivities {
               "id": 1,
               "cover": "assets/dev/h03.png",
               "url": "assets/dev/a03.mp4",
-              "words": []
+              "sentences": []
             }
           },
           "example": {
@@ -96,7 +96,7 @@ class MockActivities {
             "voice_url": "assets/dev/k08.mp3",
             "image_url": "assets/dev/t04.jpg"
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "sentence": "",
@@ -150,7 +150,7 @@ class MockActivities {
             "voice_url": "assets/dev/q01.mp3",
             "image_url": "assets/dev/q001.jpg"
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "type": 0,
@@ -216,7 +216,7 @@ class MockActivities {
             "voice_url": "assets/dev/ee02.mp3",
             "image_url": ""
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "sentence": "Fossils",
@@ -263,11 +263,11 @@ class MockActivities {
           "question": {
             "id": 1,
             "type": 2,
-            "question": "Think you are a teacher and you have to explain what [word]Pull Off[word] means",
+            "question": "Think you are a teacher and you have to explain what [sentence]Pull Off[sentence] means",
             "voice_url": "assets/dev/teach02.mp3",
             "image_url": "assets/dev/teacher_back_01.png"
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "sentence": "Fossils",
@@ -279,7 +279,7 @@ class MockActivities {
               "image_url": "assets/dev/card09.png",
               "audio_url": "question",
               "saved": false,
-              "words": [],
+              "sentences": [],
               "examples": [
                 "a mad [scheme, idea, man, person, dog]",
                 "are you mad at me?",
@@ -355,7 +355,7 @@ class MockActivities {
             "voice_url": "assets/dev/pic01.mp3",
             "image_url": "assets/dev/d03.jpg"
           },
-          "word": null,
+          "sentence": null,
           "example": {
             "id": 101,
             "example": [
@@ -398,7 +398,7 @@ class MockActivities {
             "voice_url": "assets/dev/k03.mp3",
             "image_url": "assets/dev/c03.jpg"
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "type": 0,
@@ -464,7 +464,7 @@ class MockActivities {
             "voice_url": "assets/dev/ee03.mp3",
             "image_url": ""
           },
-          "word": {
+          "sentence": {
             "id": 101,
             "origin": 0,
             "sentence": "Forecast",

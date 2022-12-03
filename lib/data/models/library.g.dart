@@ -12,8 +12,8 @@ _$_ShortVideo _$$_ShortVideoFromJson(Map<String, dynamic> json) =>
       cover: json['cover'] as String,
       url: json['url'] as String,
       isFavorite: json['is_favorite'] as bool?,
-      words: (json['words'] as List<dynamic>)
-          .map((e) => Word.fromJson(e as Map<String, dynamic>))
+      sentences: (json['sentences'] as List<dynamic>)
+          .map((e) => Sentence.fromJson(e as Map<String, dynamic>))
           .toList(),
       collocations: (json['collocations'] as List<dynamic>)
           .map((e) => e as String)
@@ -26,7 +26,7 @@ Map<String, dynamic> _$$_ShortVideoToJson(_$_ShortVideo instance) =>
       'cover': instance.cover,
       'url': instance.url,
       'is_favorite': instance.isFavorite,
-      'words': instance.words,
+      'sentences': instance.sentences,
       'collocations': instance.collocations,
     };
 
@@ -35,8 +35,8 @@ _$_InfoCard _$$_InfoCardFromJson(Map<String, dynamic> json) => _$_InfoCard(
       imageUrl: json['image_url'] as String,
       voiceUrl: json['voice_url'] as String,
       isFavorite: json['is_favorite'] as bool?,
-      words: (json['words'] as List<dynamic>)
-          .map((e) => Word.fromJson(e as Map<String, dynamic>))
+      sentences: (json['sentences'] as List<dynamic>)
+          .map((e) => Sentence.fromJson(e as Map<String, dynamic>))
           .toList(),
       collocations: (json['collocations'] as List<dynamic>)
           .map((e) => e as String)
@@ -49,6 +49,6 @@ Map<String, dynamic> _$$_InfoCardToJson(_$_InfoCard instance) =>
       'image_url': instance.imageUrl,
       'voice_url': instance.voiceUrl,
       'is_favorite': instance.isFavorite,
-      'words': instance.words,
+      'sentences': instance.sentences,
       'collocations': instance.collocations,
     };

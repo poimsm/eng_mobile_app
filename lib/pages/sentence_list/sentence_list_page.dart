@@ -3,38 +3,38 @@ import 'dart:async';
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/pages/layout/controller.dart';
 import 'package:eng_mobile_app/pages/library/library_page.dart';
-import 'package:eng_mobile_app/pages/word_detail/word_detail_page.dart';
-import 'package:eng_mobile_app/pages/word_list/enums.dart';
-import 'package:eng_mobile_app/pages/word_list/word_list_controller.dart';
+import 'package:eng_mobile_app/pages/sentence_detail/sentence_detail_page.dart';
+import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
+import 'package:eng_mobile_app/pages/sentence_list/sentence_list_controller.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class WordListPage extends ConsumerStatefulWidget {
-  const WordListPage({super.key});
+class SentenceListPage extends ConsumerStatefulWidget {
+  const SentenceListPage({super.key});
 
   @override
-  WordListPageState createState() => WordListPageState();
+  SentenceListPageState createState() => SentenceListPageState();
 }
 
-class WordListPageState extends ConsumerState<WordListPage> {
+class SentenceListPageState extends ConsumerState<SentenceListPage> {
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 500), () {
-      ref.read(wordListProvider.notifier).fetchWords();
-      ref.read(wordListProvider.notifier).toggleAnimatedWordBtn();
+      ref.read(sentenceListProvider.notifier).fetchSentences();
+      ref.read(sentenceListProvider.notifier).toggleAnimatedSentenceBtn();
     });
 
     super.initState();
   }
 
   Size size = Size.zero;
-  late WordListState wordListState;
+  late SentenceListState sentenceListState;
   @override
   Widget build(BuildContext context) {
-    wordListState = ref.watch(wordListProvider);
+    sentenceListState = ref.watch(sentenceListProvider);
     size = MediaQuery.of(context).size;
     return SizedBox(
         height: size.height,
@@ -45,7 +45,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
             _appbar(),
             // _title('YOURS'),
             // SizedBox(height: 200,),
-            _myWords(),
+            _mySentences(),
             Divider(
               height: 50,
             ),
@@ -66,19 +66,21 @@ class WordListPageState extends ConsumerState<WordListPage> {
                 fontWeight: FontWeight.bold)));
   }
 
-  _myWords() {
+  _mySentences() {
     return Column(
       children: [
-        wordListState.isLoading ? _loadingWords() : _scrolleableWordList(),
+        sentenceListState.isLoading
+            ? _loadingSentences()
+            : _scrolleableSentenceList(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [_getWordsBtn(), _addWordBtn()],
+          children: [_getSentencesBtn(), _addSentenceBtn()],
         )
       ],
     );
   }
 
-  _loadingWords() {
+  _loadingSentences() {
     return SizedBox(
       width: size.width,
       height: size.height * 0.55,
@@ -91,19 +93,19 @@ class WordListPageState extends ConsumerState<WordListPage> {
     );
   }
 
-  _scrolleableWordList() {
-    Widget words = Container(
+  _scrolleableSentenceList() {
+    Widget sentences = Container(
       padding: EdgeInsets.symmetric(horizontal: 15),
       width: size.width,
       height: size.height * 0.55,
-      child: wordListState.words.isNotEmpty
-          ? _wordList()
+      child: sentenceListState.sentences.isNotEmpty
+          ? _sentenceList()
           : SizedBox(
               height: size.height * 0.55,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Oops… There are no words',
+                  Text('Oops… There are no sentences',
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.7), fontSize: 21)),
                   SizedBox(
@@ -147,8 +149,8 @@ class WordListPageState extends ConsumerState<WordListPage> {
 
     return Stack(
       children: [
-        words,
-        if (wordListState.showListBlinker)
+        sentences,
+        if (sentenceListState.showListBlinker)
           Container(
               height: size.height * 0.5,
               width: size.width,
@@ -168,15 +170,16 @@ class WordListPageState extends ConsumerState<WordListPage> {
 
   _historyList() {
     return ListView.builder(
-        itemCount: wordListState.history.length,
-        itemBuilder: (context, i) => _historyItem(wordListState.history[i]));
+        itemCount: sentenceListState.history.length,
+        itemBuilder: (context, i) =>
+            _historyItem(sentenceListState.history[i]));
   }
 
   _historyItem(HistoryItem item) {
     Widget questionChild;
 
     if (item.questionType == QuestionType.teacher) {
-      List<String> questionSplit = item.questionText.split("[word]");
+      List<String> questionSplit = item.questionText.split("[sentence]");
 
       questionChild = RichText(
         textAlign: TextAlign.left,
@@ -219,7 +222,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
                   fontSize: 18,
                 )),
             TextSpan(
-                text: ' ${item.wordText}  ',
+                text: ' ${item.sentenceText}  ',
                 style: TextStyle(
                   color: Color(0xff7562A5),
                   fontWeight: FontWeight.normal,
@@ -271,7 +274,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
           ]),
           InkWell(
             onTap: () {
-              ref.read(wordListProvider.notifier).deleteAllLocalWords();
+              ref.read(sentenceListProvider.notifier).deleteAllLocalSentences();
               // Navigator.pushNamed(context, Routes.STORE);
             },
             child: Container(
@@ -291,25 +294,25 @@ class WordListPageState extends ConsumerState<WordListPage> {
     );
   }
 
-  _getWordsBtn() {
+  _getSentencesBtn() {
     return InkWell(
         onTap: () async {
-          // ref.read(wordListProvider.notifier).toggleListBlinker();
+          // ref.read(sentenceListProvider.notifier).toggleListBlinker();
           // return;
 
           final resp = await Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    LibraryPage(totalWords: wordListState.words.length)),
+                builder: (context) => LibraryPage(
+                    totalSentences: sentenceListState.sentences.length)),
           );
 
           if (resp != null) {
             ref
-                .read(wordListProvider.notifier)
-                .favoriteWordHandler(resp['words']);
+                .read(sentenceListProvider.notifier)
+                .favoriteSentenceHandler(resp['sentences']);
             // if (resp['shouldBlink']) {
-            //   ref.read(wordListProvider.notifier).toggleListBlinker();
+            //   ref.read(sentenceListProvider.notifier).toggleListBlinker();
             // }
           }
         },
@@ -323,22 +326,22 @@ class WordListPageState extends ConsumerState<WordListPage> {
     //     borderRadius: BorderRadius.circular(20),
     //     border: Border.all(color: Colors.black)
     //   ),
-    //   child: Text('Get words', style: TextStyle(
+    //   child: Text('Get sentences', style: TextStyle(
     //     fontSize: 18,
     //     fontWeight: FontWeight.bold
     //   ),),
     // );
   }
 
-  _addWordBtn() {
-    bool animate = wordListState.animateAddWordBtn;
+  _addSentenceBtn() {
+    bool animate = sentenceListState.animateAddSentenceBtn;
     return InkWell(
       onTap: () async {
         final resp = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  WordDetailPage(isNewWord: true, word: null)),
+                  SentenceDetailPage(isNewSentence: true, sentence: null)),
         );
 
         if (resp != null) {
@@ -364,41 +367,41 @@ class WordListPageState extends ConsumerState<WordListPage> {
           duration: const Duration(milliseconds: 300),
           child: Icon(
             Icons.add,
-            // size: wordListState.animateAddWordBtn ? 45:37,
+            // size: sentenceListState.animateAddSentenceBtn ? 45:37,
             size: 40,
             // color: Colors.white,
             color: animate ? Color(0xff6E5AA0) : Colors.white,
-            // color: Colors.white.withOpacity(wordListState.animateAddWordBtn? 1: 0.8)
+            // color: Colors.white.withOpacity(sentenceListState.animateAddSentenceBtn? 1: 0.8)
           ),
         ),
-        // Icon(Icons.add, size: wordListState.animateAddWordBtn ? 42:37, color: Colors.white),
+        // Icon(Icons.add, size: sentenceListState.animateAddSentenceBtn ? 42:37, color: Colors.white),
       ),
     );
   }
 
-  _wordList() {
+  _sentenceList() {
     return ListView.builder(
-        itemCount: wordListState.words.length + 1,
+        itemCount: sentenceListState.sentences.length + 1,
         itemBuilder: (context, i) {
-          if (i == wordListState.words.length) {
+          if (i == sentenceListState.sentences.length) {
             return SizedBox(
               height: 100,
               width: 10,
             );
           }
 
-          return _wordNormalItem(wordListState.words[i]);
+          return _sentenceNormalItem(sentenceListState.sentences[i]);
         });
   }
 
-  _wordNormalItem(Word word) {
+  _sentenceNormalItem(Sentence sentence) {
     return InkWell(
       onTap: () async {
         final resp = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  WordDetailPage(isNewWord: false, word: word)),
+                  SentenceDetailPage(isNewSentence: false, sentence: sentence)),
         );
 
         if (resp != null) {
@@ -411,19 +414,20 @@ class WordListPageState extends ConsumerState<WordListPage> {
         padding: EdgeInsets.symmetric(vertical: 20),
         width: size.width * 0.8,
         child: Row(
-          mainAxisAlignment: word.origin == WordOrigin.resource
+          mainAxisAlignment: sentence.origin == SentenceOrigin.resource
               ? MainAxisAlignment.spaceBetween
               : MainAxisAlignment.center,
           children: [
-            if (word.origin == WordOrigin.resource) Container(width: 25),
+            if (sentence.origin == SentenceOrigin.resource)
+              Container(width: 25),
             Text(
-              word.type == WordType.group
-                  ? getGroupHead(word.extras!)
-                  : word.word,
+              sentence.type == SentenceType.group
+                  ? getGroupHead(sentence.extras!)
+                  : sentence.sentence,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, color: Color(0xff6E5AA0)),
             ),
-            if (word.origin == WordOrigin.resource)
+            if (sentence.origin == SentenceOrigin.resource)
               SizedBox(
                 width: 30,
                 // child: Image.asset('assets/bookmark.png', width: 30),

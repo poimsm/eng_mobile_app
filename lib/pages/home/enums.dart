@@ -1,5 +1,5 @@
-enum WordActionStep {
-  word,
+enum SentenceActionStep {
+  sentence,
   meaning,
   example,
 }

@@ -15,9 +15,9 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class LibraryPage extends ConsumerStatefulWidget {
-  const LibraryPage({Key? key, required this.totalWords}) : super(key: key);
+  const LibraryPage({Key? key, required this.totalSentences}) : super(key: key);
 
-  final int totalWords;
+  final int totalSentences;
 
   @override
   LibraryPageState createState() => LibraryPageState();
@@ -31,7 +31,9 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
     Future.delayed(Duration(seconds: 0), () {
       ref.read(libraryProvider.notifier).fetchCards();
       ref.read(libraryProvider.notifier).fetchVideos();
-      ref.read(libraryProvider.notifier).setTotalWords(widget.totalWords);
+      ref
+          .read(libraryProvider.notifier)
+          .setTotalSentences(widget.totalSentences);
     });
   }
 
@@ -50,7 +52,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
           }
 
           Navigator.of(context).pop({
-            'words': libraryState.words,
+            'sentences': libraryState.sentences,
           });
           return true;
         },
@@ -66,7 +68,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                           icon: Icon(Icons.arrow_back, color: Colors.white),
                           onPressed: () {
                             Navigator.of(context).pop({
-                              'words': libraryState.words,
+                              'sentences': libraryState.sentences,
                             });
                           },
                         ),
@@ -84,7 +86,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                                 color: Colors.black.withOpacity(0.1),
                               ),
                               child: AnimatedDefaultTextStyle(
-                                style: libraryState.animateWords
+                                style: libraryState.animateSentences
                                     ? TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
@@ -96,8 +98,8 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                 duration: Duration(milliseconds: 200),
-                                child:
-                                    Text('${libraryState.wordCounter} Words'),
+                                child: Text(
+                                    '${libraryState.sentenceCounter} Sentences'),
                               ),
                             ),
                           )
@@ -171,13 +173,13 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                           .read(libraryProvider.notifier)
                           .toggleFavoriteVideo(video);
                     },
-                    onBack: (hasSavedWords) async {
+                    onBack: (hasSavedSentences) async {
                       ref.read(libraryProvider.notifier).toggleVideo();
-                      if (hasSavedWords) {
+                      if (hasSavedSentences) {
                         await sleep(300);
                         ref
                             .read(libraryProvider.notifier)
-                            .toggleAnimateTotalWords();
+                            .toggleAnimateTotalSentences();
                       }
                     },
                   ))
@@ -339,7 +341,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
         if (libraryState.blocker) return;
         ref.read(libraryProvider.notifier).toggleFavoriteCard(card);
         context.read<Screen>().showToast(toastMsgBasedOnLength(
-            length: card.words.length, willSave: !card.isFavorite!));
+            length: card.sentences.length, willSave: !card.isFavorite!));
       },
       child: Card(
         shape: RoundedRectangleBorder(

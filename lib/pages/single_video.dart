@@ -26,7 +26,7 @@ class SingleVideo extends ConsumerStatefulWidget {
 
 class SingleVideoState extends ConsumerState<SingleVideo> {
   Size size = Size.zero;
-  bool savedWords = false;
+  bool savedSentences = false;
   bool pressedToggleFav = false;
 
   late VideoPlayerController _controller;
@@ -43,7 +43,7 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
     _controller.play();
 
     if (widget.enableFavoriteBtn) {
-      savedWords = widget.video.isFavorite!;
+      savedSentences = widget.video.isFavorite!;
     }
   }
 
@@ -177,8 +177,8 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
         pressedToggleFav = !pressedToggleFav;
         widget.onToggleFavorite!();
         context.read<Screen>().showToast(toastMsgBasedOnLength(
-            length: widget.video.words.length, willSave: !savedWords));
-        savedWords = !savedWords;
+            length: widget.video.sentences.length, willSave: !savedSentences));
+        savedSentences = !savedSentences;
         setState(() {});
       },
       child: Container(
@@ -187,9 +187,10 @@ class SingleVideoState extends ConsumerState<SingleVideo> {
               border: Border.all(color: Colors.white.withOpacity(0)),
               borderRadius: BorderRadius.circular(20),
               color: Colors.white.withOpacity(0.7)),
-          child: Icon(savedWords ? Icons.bookmark : Icons.bookmark_outline,
-              color:
-                  savedWords ? Colors.black87 : Colors.black.withOpacity(0.9),
+          child: Icon(savedSentences ? Icons.bookmark : Icons.bookmark_outline,
+              color: savedSentences
+                  ? Colors.black87
+                  : Colors.black.withOpacity(0.9),
               size: 35)),
     );
   }

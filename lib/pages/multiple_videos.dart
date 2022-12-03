@@ -12,16 +12,16 @@ class MultipleVideos extends ConsumerStatefulWidget {
       {super.key,
       required this.videos,
       required this.activeIndex,
-      this.totalWords = 3,
+      this.totalSentences = 3,
       required this.onNext,
-      required this.onSaveWords});
+      required this.onSaveSentences});
 
   // final VoidCallback onExit;
   final List<ShortVideo> videos;
   final int activeIndex;
   final VoidCallback onNext;
-  final VoidCallback onSaveWords;
-  final int totalWords;
+  final VoidCallback onSaveSentences;
+  final int totalSentences;
 
   @override
   MultipleVideosState createState() => MultipleVideosState();
@@ -29,7 +29,7 @@ class MultipleVideos extends ConsumerStatefulWidget {
 
 class MultipleVideosState extends ConsumerState<MultipleVideos> {
   Size size = Size.zero;
-  bool savedWord = false;
+  bool savedSentence = false;
 
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -104,7 +104,7 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         _collect(),
         _next()
-        // _collectWordsBtn(),
+        // _collectSentencesBtn(),
       ]),
     );
   }
@@ -112,9 +112,11 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
   _collect() {
     return InkWell(
       onTap: () {
-        widget.onSaveWords();
-        context.read<Screen>().showToast('${widget.totalWords} word saved');
-        savedWord = true;
+        widget.onSaveSentences();
+        context
+            .read<Screen>()
+            .showToast('${widget.totalSentences} sentence saved');
+        savedSentence = true;
         setState(() {});
       },
       child: Container(
@@ -126,7 +128,7 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
         child: Row(
           children: [
             Icon(
-              savedWord ? Icons.bookmark : LineIcons.bookmark,
+              savedSentence ? Icons.bookmark : LineIcons.bookmark,
               color: Colors.white,
               size: 30,
             ),
@@ -134,7 +136,7 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
               width: 5,
             ),
             Text(
-              savedWord ? 'Saved' : 'Save Words',
+              savedSentence ? 'Saved' : 'Save Sentences',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -180,11 +182,11 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
     );
   }
 
-  _collectWordsBtn() {
+  _collectSentencesBtn() {
     return InkWell(
       onTap: () {
         // ref.read(homeProvider.notifier).stopVideo();
-        // ref.read(homeProvider.notifier).collectWords();
+        // ref.read(homeProvider.notifier).collectSentences();
       },
       child: Container(
         width: 350,
@@ -203,7 +205,7 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
                   width: 15,
                 ),
                 Text(
-                  'Collect Words',
+                  'Collect Sentences',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -221,7 +223,7 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
   _onNextBtn4() {
     return InkWell(
       onTap: () {
-        // ref.read(homeProvider.notifier).collectWords();
+        // ref.read(homeProvider.notifier).collectSentences();
       },
       child: Container(
         padding: EdgeInsets.all(8),

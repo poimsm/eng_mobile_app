@@ -7,7 +7,7 @@ class MockVideos {
           "id": 0,
           "cover": "assets/dev/h06.png",
           "url": "assets/dev/a06.mp4",
-          "words": [
+          "sentences": [
               {
                 "id": 100,
                 "sentence": "So am I",
@@ -53,7 +53,7 @@ class MockVideos {
           "id": 1,
           "cover": "assets/dev/h03.png",
           "url": "assets/dev/a03.mp4",
-          "words": [
+          "sentences": [
               {
                 "id": 200,
                 "sentence": "Significant",
@@ -89,7 +89,7 @@ class MockVideos {
           "id": 2,
           "cover": "assets/dev/h08.png",
           "url": "assets/dev/a08.mp4",
-          "words": [
+          "sentences": [
               {
                 "id": 300,
                 "sentence": "Freezing",
@@ -153,7 +153,7 @@ class MockVideos {
           "id": 3,
           "cover": "assets/dev/h01.png",
           "url": "assets/dev/a01.mp4",
-          "words": [
+          "sentences": [
               {
                 "id": 500,
                 "sentence": "Hit me up",
@@ -208,7 +208,7 @@ class MockVideos {
           "id": 4,
           "cover": "assets/dev/h04.png",
           "url": "assets/dev/a04.mp4",
-          "words": [
+          "sentences": [
               {
                 "id": 400,
                 "sentence": "Not too bad",
@@ -245,7 +245,7 @@ class MockVideos {
           "id": 5,
           "cover": "assets/dev/h07.png",
           "url": "assets/dev/a07.mp4",
-          "words": [
+          "sentences": [
               {
                 "id": 100,
                 "sentence": "So am I",

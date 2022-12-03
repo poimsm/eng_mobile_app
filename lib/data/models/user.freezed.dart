@@ -21,8 +21,8 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'total_words')
-  int get totalWords => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_sentences')
+  int get totalSentences => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   bool get verified => throw _privateConstructorUsedError;
   bool get screenFlow => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'total_words') int totalWords,
+      @JsonKey(name: 'total_sentences') int totalSentences,
       String email,
       bool verified,
       bool screenFlow});
@@ -59,7 +59,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? id = null,
-    Object? totalWords = null,
+    Object? totalSentences = null,
     Object? email = null,
     Object? verified = null,
     Object? screenFlow = null,
@@ -69,9 +69,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      totalWords: null == totalWords
-          ? _value.totalWords
-          : totalWords // ignore: cast_nullable_to_non_nullable
+      totalSentences: null == totalSentences
+          ? _value.totalSentences
+          : totalSentences // ignore: cast_nullable_to_non_nullable
               as int,
       email: null == email
           ? _value.email
@@ -97,7 +97,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'total_words') int totalWords,
+      @JsonKey(name: 'total_sentences') int totalSentences,
       String email,
       bool verified,
       bool screenFlow});
@@ -113,7 +113,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   @override
   $Res call({
     Object? id = null,
-    Object? totalWords = null,
+    Object? totalSentences = null,
     Object? email = null,
     Object? verified = null,
     Object? screenFlow = null,
@@ -123,9 +123,9 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      totalWords: null == totalWords
-          ? _value.totalWords
-          : totalWords // ignore: cast_nullable_to_non_nullable
+      totalSentences: null == totalSentences
+          ? _value.totalSentences
+          : totalSentences // ignore: cast_nullable_to_non_nullable
               as int,
       email: null == email
           ? _value.email
@@ -148,7 +148,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 class _$_User implements _User {
   const _$_User(
       {required this.id,
-      @JsonKey(name: 'total_words') required this.totalWords,
+      @JsonKey(name: 'total_sentences') required this.totalSentences,
       required this.email,
       required this.verified,
       required this.screenFlow});
@@ -158,8 +158,8 @@ class _$_User implements _User {
   @override
   final int id;
   @override
-  @JsonKey(name: 'total_words')
-  final int totalWords;
+  @JsonKey(name: 'total_sentences')
+  final int totalSentences;
   @override
   final String email;
   @override
@@ -169,7 +169,7 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, totalWords: $totalWords, email: $email, verified: $verified, screenFlow: $screenFlow)';
+    return 'User(id: $id, totalSentences: $totalSentences, email: $email, verified: $verified, screenFlow: $screenFlow)';
   }
 
   @override
@@ -178,8 +178,8 @@ class _$_User implements _User {
         (other.runtimeType == runtimeType &&
             other is _$_User &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.totalWords, totalWords) ||
-                other.totalWords == totalWords) &&
+            (identical(other.totalSentences, totalSentences) ||
+                other.totalSentences == totalSentences) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.verified, verified) ||
                 other.verified == verified) &&
@@ -190,7 +190,7 @@ class _$_User implements _User {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, totalWords, email, verified, screenFlow);
+      Object.hash(runtimeType, id, totalSentences, email, verified, screenFlow);
 
   @JsonKey(ignore: true)
   @override
@@ -209,7 +209,7 @@ class _$_User implements _User {
 abstract class _User implements User {
   const factory _User(
       {required final int id,
-      @JsonKey(name: 'total_words') required final int totalWords,
+      @JsonKey(name: 'total_sentences') required final int totalSentences,
       required final String email,
       required final bool verified,
       required final bool screenFlow}) = _$_User;
@@ -219,8 +219,8 @@ abstract class _User implements User {
   @override
   int get id;
   @override
-  @JsonKey(name: 'total_words')
-  int get totalWords;
+  @JsonKey(name: 'total_sentences')
+  int get totalSentences;
   @override
   String get email;
   @override

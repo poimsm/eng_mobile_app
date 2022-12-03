@@ -34,7 +34,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     setState(() => loading = true);
     final respOk = await GetIt.I.get<AuthService>().signIn(SignInPayload(
           email: _emailTextCtrl.text,
-          password: _passTextCtrl.text,
+          passsentence: _passTextCtrl.text,
         ));
     setState(() => loading = false);
     return respOk;
@@ -45,7 +45,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     // final uu = GetIt.I.get<AuthService>();
     final respOk = await GetIt.I.get<AuthService>().signUp(SignUpPayload(
           email: _emailTextCtrl.text,
-          password: _passTextCtrl.text,
+          passsentence: _passTextCtrl.text,
         ));
     setState(() => loading = false);
     return respOk;
@@ -58,7 +58,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
   List<String> states = ['creating_account', 'choosing_eng_level', 'login_in'];
   String currentState = 'creating_account';
   double height = 500;
-  bool hidePassword = false;
+  bool hidePasssentence = false;
   bool loading = false;
 
   FormModel signInModel = FormModel();
@@ -148,7 +148,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     );
   }
 
-  passwordField() {
+  passsentenceField() {
     return Container(
       width: 290,
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
@@ -163,10 +163,10 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
             width: 200,
             child: TextField(
               maxLines: 1,
-              obscureText: hidePassword,
+              obscureText: hidePasssentence,
               style: TextStyle(fontSize: 20),
               decoration: InputDecoration(
-                hintText: 'Password',
+                hintText: 'Passsentence',
                 counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
                 hintStyle: TextStyle(color: Colors.black26),
                 border: InputBorder.none,
@@ -186,11 +186,11 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
           ),
           InkWell(
             onTap: () {
-              hidePassword = !hidePassword;
+              hidePasssentence = !hidePasssentence;
               setState(() {});
             },
             child: Icon(
-              hidePassword ? Icons.visibility_off : Icons.visibility,
+              hidePasssentence ? Icons.visibility_off : Icons.visibility,
               color: Colors.grey,
               size: 25,
             ),
@@ -257,11 +257,11 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     );
   }
 
-  forgotPassword(VoidCallback callback) {
+  forgotPasssentence(VoidCallback callback) {
     return Container(
         width: 290,
         alignment: Alignment.centerRight,
-        child: Text('Forgot password?',
+        child: Text('Forgot passsentence?',
             style: TextStyle(
               color: Color(0xff6E5AA0),
               fontSize: 17,
@@ -383,11 +383,11 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
       SizedBox(
         height: 20,
       ),
-      passwordField(),
+      passsentenceField(),
       SizedBox(
         height: 20,
       ),
-      forgotPassword(() {
+      forgotPasssentence(() {
         Navigator.pop(context);
       }),
       SizedBox(
@@ -409,7 +409,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
         if (!respOk) {
           setState(() {
             signInModel = FormModel(
-                showServerErr: true, errMsg: 'Password or email incorrect');
+                showServerErr: true, errMsg: 'Passsentence or email incorrect');
           });
           return;
         }
@@ -439,7 +439,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
       SizedBox(
         height: 15,
       ),
-      passwordField(),
+      passsentenceField(),
       SizedBox(
         height: 25,
       ),

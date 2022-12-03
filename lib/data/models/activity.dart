@@ -10,7 +10,7 @@ part 'activity.g.dart';
 class Activity with _$Activity {
   const factory Activity({
     required Question question,
-    Word? word,
+    Sentence? sentence,
     Example? example,
     required Style style,
   }) = _Activity;
@@ -20,11 +20,11 @@ class Activity with _$Activity {
 }
 
 @freezed
-class Word with _$Word {
-  const factory Word({
+class Sentence with _$Sentence {
+  const factory Sentence({
     required int id,
     // @JsonKey(fromJson: User._addressFromJson,toJson: User._addressToJson) Address? address,
-    @JsonKey(name: 'sentence') required String word,
+    @JsonKey(name: 'sentence') required String sentence,
     required int origin,
     required int type,
     String? meaning,
@@ -34,16 +34,16 @@ class Word with _$Word {
     @JsonKey(name: 'source_type') int? sourceType,
     @JsonKey(name: 'info_card') InfoCard? infoCard,
     @JsonKey(name: 'short_video') ShortVideo? shortVideo,
-  }) = _Word;
+  }) = _Sentence;
 
-  factory Word.fromJson(Map<String, Object?> json) => _$WordFromJson(json);
+  factory Sentence.fromJson(Map<String, Object?> json) => _$SentenceFromJson(json);
 }
 
 @freezed
-class LocalWord with _$LocalWord {
-  const factory LocalWord({
+class LocalSentence with _$LocalSentence {
+  const factory LocalSentence({
     required int id,
-    @JsonKey(name: 'sentence') required String word,
+    required String sentence,
     required int origin,
     required int type,
     String? meaning,
@@ -52,9 +52,9 @@ class LocalWord with _$LocalWord {
     @JsonKey(name: 'source_type') int? sourceType,
     @JsonKey(name: 'info_card') int? infoCard,
     @JsonKey(name: 'short_video') int? shortVideo,
-  }) = _LocalWord;
+  }) = _LocalSentence;
 
-  factory LocalWord.fromJson(Map<String, Object?> json) => _$LocalWordFromJson(json);
+  factory LocalSentence.fromJson(Map<String, Object?> json) => _$LocalSentenceFromJson(json);
 }
 
 bool savedFromJson(val) {

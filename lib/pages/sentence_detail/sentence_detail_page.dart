@@ -3,52 +3,53 @@ import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/pages/home/home_controller.dart';
 import 'package:eng_mobile_app/pages/single_video.dart';
-import 'package:eng_mobile_app/pages/word_detail/word_detail_controller.dart';
-import 'package:eng_mobile_app/pages/word_list/enums.dart';
-import 'package:eng_mobile_app/pages/word_list/word_list_controller.dart';
+import 'package:eng_mobile_app/pages/sentence_detail/sentence_detail_controller.dart';
+import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
+import 'package:eng_mobile_app/pages/sentence_list/sentence_list_controller.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:line_icons/line_icons.dart';
 
-class WordDetailPage extends ConsumerStatefulWidget {
-  const WordDetailPage({super.key, this.isNewWord = false, this.word});
+class SentenceDetailPage extends ConsumerStatefulWidget {
+  const SentenceDetailPage(
+      {super.key, this.isNewSentence = false, this.sentence});
 
-  final Word? word;
-  final bool isNewWord;
+  final Sentence? sentence;
+  final bool isNewSentence;
 
   @override
-  WordDetailPageState createState() => WordDetailPageState();
+  SentenceDetailPageState createState() => SentenceDetailPageState();
 }
 
-class WordDetailPageState extends ConsumerState<WordDetailPage> {
+class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
   bool meaningSwitch = true;
 
-  late TextEditingController wordCtrl;
+  late TextEditingController sentenceCtrl;
   late TextEditingController meaningCtrl;
 
   @override
   void initState() {
     super.initState();
 
-    wordCtrl = TextEditingController();
+    sentenceCtrl = TextEditingController();
     meaningCtrl = TextEditingController();
 
-    if (!widget.isNewWord) {
-      if (widget.word!.type == WordType.group) {
-        wordCtrl.text = getGroupHead(widget.word!.extras!);
-        meaningCtrl.text = getGroupFullTail(widget.word!.extras!);
+    if (!widget.isNewSentence) {
+      if (widget.sentence!.type == SentenceType.group) {
+        sentenceCtrl.text = getGroupHead(widget.sentence!.extras!);
+        meaningCtrl.text = getGroupFullTail(widget.sentence!.extras!);
       } else {
-        wordCtrl.text = widget.word!.word;
-        meaningCtrl.text = widget.word!.meaning ?? '';
+        sentenceCtrl.text = widget.sentence!.sentence;
+        meaningCtrl.text = widget.sentence!.meaning ?? '';
       }
     }
   }
 
   @override
   void dispose() {
-    wordCtrl.dispose();
+    sentenceCtrl.dispose();
     meaningCtrl.dispose();
     super.dispose();
   }
@@ -57,32 +58,33 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
   bool showBanner = true;
   Map args = {};
 
-  late WordDetailState wordDetailState;
+  late SentenceDetailState sentenceDetailState;
 
   @override
   Widget build(BuildContext context) {
-    wordDetailState = ref.watch(wordDetailProvider);
+    sentenceDetailState = ref.watch(sentenceDetailProvider);
 
     size = MediaQuery.of(context).size;
-    showBanner =
-        widget.word == null || widget.word!.origin != WordOrigin.resource;
+    showBanner = widget.sentence == null ||
+        widget.sentence!.origin != SentenceOrigin.resource;
 
     Widget solution = _meaningInput();
 
-    if (widget.word != null && widget.word!.origin == WordOrigin.resource) {
-      if (widget.word!.sourceType == SourceType.infoCard) {
-        solution = _solutionCard(widget.word!.infoCard!);
+    if (widget.sentence != null &&
+        widget.sentence!.origin == SentenceOrigin.resource) {
+      if (widget.sentence!.sourceType == SourceType.infoCard) {
+        solution = _solutionCard(widget.sentence!.infoCard!);
       }
 
-      if (widget.word!.sourceType == SourceType.shortVideo) {
-        solution = _solutionVideo(widget.word!.shortVideo!);
+      if (widget.sentence!.sourceType == SourceType.shortVideo) {
+        solution = _solutionVideo(widget.sentence!.shortVideo!);
       }
     }
 
     return WillPopScope(
       onWillPop: () async {
-        if (wordDetailState.showVideo) {
-          ref.read(wordDetailProvider.notifier).setShowVideo(false);
+        if (sentenceDetailState.showVideo) {
+          ref.read(sentenceDetailProvider.notifier).setShowVideo(false);
           return false;
         }
         return true;
@@ -100,20 +102,22 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                     SizedBox(height: 10),
                     if (showBanner) _banner(),
                     SizedBox(height: 20),
-                    _wordInput(),
+                    _sentenceInput(),
                     SizedBox(height: 45),
                     solution,
                   ],
                 ),
               )),
-              if (wordDetailState.showVideo)
+              if (sentenceDetailState.showVideo)
                 SingleVideo(
                     enableFavoriteBtn: false,
-                    video: widget.word!.shortVideo!,
+                    video: widget.sentence!.shortVideo!,
                     onBack: (_) {
-                      ref.read(wordDetailProvider.notifier).setShowVideo(false);
+                      ref
+                          .read(sentenceDetailProvider.notifier)
+                          .setShowVideo(false);
                     }),
-              if (wordDetailState.isLoading)
+              if (sentenceDetailState.isLoading)
                 Positioned(
                   top: 0,
                   left: 0,
@@ -178,7 +182,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                           fontWeight: FontWeight.bold,
                         )),
                     TextSpan(
-                        text: ' words',
+                        text: ' sentences',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
@@ -206,33 +210,33 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           ]),
           Row(
             children: [
-              // if (!widget.isNewWord)
+              // if (!widget.isNewSentence)
               //   Padding(
               //     padding: EdgeInsets.only(right: 15),
               //     child: IconButton(
               //       onPressed: () {
               //         ref
-              //             .read(wordListProvider.notifier)
-              //             .deleteWord(widget.word!.id);
-              //         Navigator.pop(context, {'toast': 'Word deleted'});
+              //             .read(sentenceListProvider.notifier)
+              //             .deleteSentence(widget.sentence!.id);
+              //         Navigator.pop(context, {'toast': 'Sentence deleted'});
               //       },
               //       icon:
               //           Icon(LineIcons.trash, size: 35, color: Colors.black54),
               //       // icon: Icon(Icons.delete_outline, size: 35, color: Colors.black54),
               //     ),
               //   ),
-              if (!widget.isNewWord)
+              if (!widget.isNewSentence)
                 Padding(
                   padding: EdgeInsets.only(right: 15),
                   child: _deleteBtn(),
                 ),
-              if (widget.isNewWord)
+              if (widget.isNewSentence)
                 Padding(
                   padding: EdgeInsets.only(right: 15),
                   child: _saveBtn(),
                 ),
-              if (!widget.isNewWord &&
-                  widget.word!.origin != WordOrigin.resource)
+              if (!widget.isNewSentence &&
+                  widget.sentence!.origin != SentenceOrigin.resource)
                 Padding(
                   padding: EdgeInsets.only(right: 15),
                   child: _editBtn(),
@@ -244,7 +248,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
     );
   }
 
-  _wordInput() {
+  _sentenceInput() {
     return Column(
       children: [
         SizedBox(
@@ -252,13 +256,13 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
           child: Row(
             children: [
               Text(
-                'Word or phrase',
+                'Sentence or phrase',
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 21, color: Colors.black54),
               ),
               IconButton(
                 onPressed: () {
-                  ref.read(homeProvider.notifier).speak(wordCtrl.text);
+                  ref.read(homeProvider.notifier).speak(sentenceCtrl.text);
                 },
                 icon: Icon(Icons.volume_down_outlined,
                     size: 30, color: Colors.black54),
@@ -274,13 +278,13 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
             borderRadius: BorderRadius.circular(15),
           ),
           child: TextField(
-            enabled: widget.word == null ||
-                (widget.word != null &&
-                    widget.word!.origin != WordOrigin.resource),
+            enabled: widget.sentence == null ||
+                (widget.sentence != null &&
+                    widget.sentence!.origin != SentenceOrigin.resource),
             maxLines: 1,
             maxLength: 20,
             textCapitalization: TextCapitalization.sentences,
-            style: TextStyle(fontSize: widget.isNewWord ? 20 : 20),
+            style: TextStyle(fontSize: widget.isNewSentence ? 20 : 20),
             decoration: InputDecoration(
               counter: Offstage(),
               hintText: 'Example: Give it a shot',
@@ -291,13 +295,13 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
               //         borderSide: BorderSide(color: Colors.black),
               //      ),
             ),
-            controller: wordCtrl,
+            controller: sentenceCtrl,
             onChanged: (_) {
-              ref.read(wordDetailProvider.notifier).checkEnableToSaveOrEdit(
-                  wordCtrl.text,
+              ref.read(sentenceDetailProvider.notifier).checkEnableToSaveOrEdit(
+                  sentenceCtrl.text,
                   meaningCtrl.text,
-                  widget.isNewWord,
-                  widget.word);
+                  widget.isNewSentence,
+                  widget.sentence);
             },
           ),
         ),
@@ -349,7 +353,7 @@ class WordDetailPageState extends ConsumerState<WordDetailPage> {
                     child: InkWell(
                       onTap: () {
                         ref
-                            .read(wordDetailProvider.notifier)
+                            .read(sentenceDetailProvider.notifier)
                             .setShowVideo(true);
                       },
                       child: Container(
@@ -512,11 +516,13 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
               ),
               controller: meaningCtrl,
               onChanged: (_) {
-                ref.read(wordDetailProvider.notifier).checkEnableToSaveOrEdit(
-                    wordCtrl.text,
-                    meaningCtrl.text,
-                    widget.isNewWord,
-                    widget.word);
+                ref
+                    .read(sentenceDetailProvider.notifier)
+                    .checkEnableToSaveOrEdit(
+                        sentenceCtrl.text,
+                        meaningCtrl.text,
+                        widget.isNewSentence,
+                        widget.sentence);
               },
             ),
           ),
@@ -527,28 +533,32 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
   _saveBtn() {
     return InkWell(
       onTap: () async {
-        if (!wordDetailState.enableToSaveOrEdit) return;
-        final word = await ref.read(wordDetailProvider.notifier).createWord(
-            {'sentence': wordCtrl.text, 'meaning': meaningCtrl.text});
+        if (!sentenceDetailState.enableToSaveOrEdit) return;
+        final sentence = await ref
+            .read(sentenceDetailProvider.notifier)
+            .createSentence(
+                {'sentence': sentenceCtrl.text, 'meaning': meaningCtrl.text});
 
-        if (word == null) return;
+        if (sentence == null) return;
 
-        ref.read(wordListProvider.notifier).addWordUI(word);
-        ref.read(wordListProvider.notifier).addUserWord(word.word);
+        ref.read(sentenceListProvider.notifier).addSentenceUI(sentence);
+        ref
+            .read(sentenceListProvider.notifier)
+            .addUserSentence(sentence.sentence);
 
         if (!mounted) return;
-        Navigator.pop(context, {'toast': 'Word added'});
+        Navigator.pop(context, {'toast': 'Sentence added'});
       },
       child: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 15),
           decoration: BoxDecoration(
-              color: Color(0xff6E5AA0)
-                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.2),
+              color: Color(0xff6E5AA0).withOpacity(
+                  sentenceDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
-              widget.isNewWord ? 'Save' : 'Edit',
+              widget.isNewSentence ? 'Save' : 'Edit',
               style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -561,27 +571,28 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
   _editBtn() {
     return InkWell(
       onTap: () async {
-        if (!wordDetailState.enableToSaveOrEdit) return;
+        if (!sentenceDetailState.enableToSaveOrEdit) return;
 
-        final word = await ref.read(wordDetailProvider.notifier).updateWord({
-          'id': widget.word!.id,
-          'sentence': wordCtrl.text,
+        final sentence =
+            await ref.read(sentenceDetailProvider.notifier).updateSentence({
+          'id': widget.sentence!.id,
+          'sentence': sentenceCtrl.text,
           'meaning': meaningCtrl.text
         });
 
-        if (word == null) return;
+        if (sentence == null) return;
 
-        ref.read(wordListProvider.notifier).editWordUI(word);
+        ref.read(sentenceListProvider.notifier).editSentenceUI(sentence);
 
         if (!mounted) return;
-        Navigator.pop(context, {'toast': 'Word edited'});
+        Navigator.pop(context, {'toast': 'Sentence edited'});
       },
       child: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 22),
           decoration: BoxDecoration(
-              color: Color(0xff6E5AA0)
-                  .withOpacity(wordDetailState.enableToSaveOrEdit ? 1 : 0.2),
+              color: Color(0xff6E5AA0).withOpacity(
+                  sentenceDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
@@ -599,13 +610,15 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
     return InkWell(
       onTap: () async {
         final resOk = await ref
-            .read(wordDetailProvider.notifier)
-            .deleteWord(widget.word!.id);
+            .read(sentenceDetailProvider.notifier)
+            .deleteSentence(widget.sentence!.id);
         if (!resOk) return;
-        ref.read(wordListProvider.notifier).deleteWordUI(widget.word!.id);
+        ref
+            .read(sentenceListProvider.notifier)
+            .deleteSentenceUI(widget.sentence!.id);
 
         if (!mounted) return;
-        Navigator.pop(context, {'toast': 'Word deleted'});
+        Navigator.pop(context, {'toast': 'Sentence deleted'});
       },
       child: Container(
           height: 40,

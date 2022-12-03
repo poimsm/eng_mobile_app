@@ -282,7 +282,7 @@ Write it here! We are always looking for ways to improve
                     width: 5,
                   ),
                   Text(
-                    'words',
+                    'sentences',
                     style: TextStyle(fontSize: 21, color: Color(0xff7F7AE0)),
                   )
                 ],

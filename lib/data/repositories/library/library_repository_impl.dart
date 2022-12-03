@@ -1,7 +1,7 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
-import 'package:eng_mobile_app/pages/word_list/enums.dart';
+import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
 import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
@@ -38,18 +38,19 @@ class LibraryRepositoryImpl implements LibraryRepository {
       }
 
       if (card.isFavorite!) {
-        for (final word in card.words) {
-          final cardWord =
-              word.copyWith(infoCard: card, sourceType: SourceType.infoCard);
-          await _localDatabase.createLocalWord(convertWordToLocal(cardWord));
+        for (final sentence in card.sentences) {
+          final cardSentence = sentence.copyWith(
+              infoCard: card, sourceType: SourceType.infoCard);
+          await _localDatabase
+              .createLocalSentence(convertSentenceToLocal(cardSentence));
         }
       } else {
-        await _localDatabase.deleteLocalWordsByCardId(card.id);
+        await _localDatabase.deleteLocalSentencesByCardId(card.id);
       }
 
       return true;
     } catch (e) {
-      printError('addCardToWordList - ${e.toString()}');
+      printError('addCardToSentenceList - ${e.toString()}');
       return false;
     }
   }
@@ -70,32 +71,33 @@ class LibraryRepositoryImpl implements LibraryRepository {
     }
 
     if (video.isFavorite!) {
-      for (final word in video.words) {
-        final videoWord =
-            word.copyWith(shortVideo: video, sourceType: SourceType.shortVideo);
-        await _localDatabase.createLocalWord(convertWordToLocal(videoWord));
+      for (final sentence in video.sentences) {
+        final videoSentence = sentence.copyWith(
+            shortVideo: video, sourceType: SourceType.shortVideo);
+        await _localDatabase
+            .createLocalSentence(convertSentenceToLocal(videoSentence));
       }
     } else {
-      await _localDatabase.deleteLocalWordsByVideoId(video.id);
+      await _localDatabase.deleteLocalSentencesByVideoId(video.id);
     }
     return true;
   }
 
-  LocalWord convertWordToLocal(Word word) {
-    LocalWord localWord = LocalWord(
-      id: word.id,
-      word: word.word,
-      meaning: word.meaning,
-      origin: word.origin,
-      type: word.type,
-      sourceType: word.sourceType,
-      extras: word.extras,
+  LocalSentence convertSentenceToLocal(Sentence sentence) {
+    LocalSentence localSentence = LocalSentence(
+      id: sentence.id,
+      sentence: sentence.sentence,
+      meaning: sentence.meaning,
+      origin: sentence.origin,
+      type: sentence.type,
+      sourceType: sentence.sourceType,
+      extras: sentence.extras,
       saved: true,
-      infoCard: word.infoCard != null ? word.infoCard!.id : null,
-      shortVideo: word.shortVideo != null ? word.shortVideo!.id : null,
+      infoCard: sentence.infoCard != null ? sentence.infoCard!.id : null,
+      shortVideo: sentence.shortVideo != null ? sentence.shortVideo!.id : null,
     );
 
-    return localWord;
+    return localSentence;
   }
 }
 

@@ -7,7 +7,7 @@ import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/repositories/activity/activity_repository.dart';
 import 'package:eng_mobile_app/data/repositories/activity/activity_repository_impl.dart';
 import 'package:eng_mobile_app/pages/home/enums.dart';
-import 'package:eng_mobile_app/pages/word_list/enums.dart';
+import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
 
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,12 +33,12 @@ class HomeState {
       this.exampleText = '',
       this.showQuestionExample = false,
       this.showFail = false,
-      this.newWords = false,
+      this.newSentences = false,
       this.exampleArry = const [],
       this.challengeAnimated = false,
       this.seconds = 0,
       this.exampleAnimated = false,
-      this.bubbleChallengeWord,
+      this.bubbleChallengeSentence,
       this.showNextBtn = true,
       this.activityCounter = 1,
       this.showQuizScreen = true,
@@ -70,11 +70,11 @@ class HomeState {
   bool showQuestionExample;
   List<Map> exampleArry;
   bool showFail;
-  bool newWords;
+  bool newSentences;
   bool challengeAnimated;
   bool exampleAnimated;
   int seconds;
-  String? bubbleChallengeWord;
+  String? bubbleChallengeSentence;
   bool showNextBtn;
   int activityCounter;
   bool showQuizScreen;
@@ -108,11 +108,11 @@ class HomeState {
     showQuestionExample,
     showFail,
     exampleArry,
-    newWords,
+    newSentences,
     challengeAnimated,
     seconds,
     exampleAnimated,
-    bubbleChallengeWord,
+    bubbleChallengeSentence,
     showNextBtn,
     activityCounter,
     showQuizScreen,
@@ -150,11 +150,12 @@ class HomeState {
       showQuestionExample: showQuestionExample ?? this.showQuestionExample,
       showFail: showFail ?? this.showFail,
       exampleArry: exampleArry ?? this.exampleArry,
-      newWords: newWords ?? this.newWords,
+      newSentences: newSentences ?? this.newSentences,
       challengeAnimated: challengeAnimated ?? this.challengeAnimated,
       seconds: seconds ?? this.seconds,
       exampleAnimated: exampleAnimated ?? this.exampleAnimated,
-      bubbleChallengeWord: bubbleChallengeWord ?? this.bubbleChallengeWord,
+      bubbleChallengeSentence:
+          bubbleChallengeSentence ?? this.bubbleChallengeSentence,
       showNextBtn: showNextBtn ?? this.showNextBtn,
       activityCounter: activityCounter ?? this.activityCounter,
       showQuizScreen: showQuizScreen ?? this.showQuizScreen,
@@ -190,8 +191,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
   bool micBlocked = false;
   ActivityRepository activityRepository;
 
-  void toggleNewWord() {
-    state = state.copyWith(newWords: true);
+  void toggleNewSentence() {
+    state = state.copyWith(newSentences: true);
   }
 
   void toggleChallengeAnimated() async {
@@ -215,7 +216,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
     state = state.copyWith(isLoading: false);
 
-    if (activities[0].word != null) {
+    if (activities[0].sentence != null) {
       await sleep(1000);
       state = state.copyWith(showChallenge: true);
     }
@@ -259,7 +260,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         showExample: false,
         showChallenge: false,
         showQuestionExample: false,
-        bubbleChallengeWord: null,
+        bubbleChallengeSentence: null,
         activityCounter: state.activityCounter + 1,
         challengeState: ChallengeStates.instructions,
         hasAudioSaved: false);
@@ -326,7 +327,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     // }
   }
 
-  void onWordClicked(val, [sleepTime = 0]) async {
+  void onSentenceClicked(val, [sleepTime = 0]) async {
     state = state.copyWith(challengeState: val);
     if (sleepTime > 0) {
       await sleep(sleepTime);
@@ -532,9 +533,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
     if (state.showExample) {
       currentExamplePlay++;
       final ex = state.activity!.example!;
-      String word =
-          state.activity!.word != null ? state.activity!.word!.word : '';
-      _playExample(ex, currentExamplePlay, word);
+      String sentence = state.activity!.sentence != null
+          ? state.activity!.sentence!.sentence
+          : '';
+      _playExample(ex, currentExamplePlay, sentence);
       await player.setAsset(ex.voiceUrl);
       player.play();
     } else {
@@ -544,12 +546,12 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  void _playExample(Example ex, int index, String word) async {
+  void _playExample(Example ex, int index, String sentence) async {
     for (var i = 0; i < ex.example.length; i++) {
       if (index != currentExamplePlay) break;
 
       state = state.copyWith(
-          exampleArry: _buildExample(ex.example[i]['text'], word));
+          exampleArry: _buildExample(ex.example[i]['text'], sentence));
       await sleep(ex.example[i]['duration']);
     }
 
@@ -557,11 +559,12 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(showExample: false);
   }
 
-  void bubbleChallengeWordTrigger() {
-    Word word = state.activity!.word!;
-    bool isGroup = word.type == WordType.group;
-    String wordText = isGroup ? getGroupRandomTail(word.extras!) : word.word;
-    state = state.copyWith(bubbleChallengeWord: wordText);
+  void bubbleChallengeSentenceTrigger() {
+    Sentence sentence = state.activity!.sentence!;
+    bool isGroup = sentence.type == SentenceType.group;
+    String sentenceText =
+        isGroup ? getGroupRandomTail(sentence.extras!) : sentence.sentence;
+    state = state.copyWith(bubbleChallengeSentence: sentenceText);
   }
 
   void toggleBlocker({int milliseconds = 800}) async {
@@ -571,16 +574,16 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 }
 
-List<Map> _buildExample(exampleText, String targetWord) {
+List<Map> _buildExample(exampleText, String targetSentence) {
   final rr = exampleText.split(" ");
 
-  List<Map> words = [];
+  List<Map> sentences = [];
 
   for (var elem in rr) {
-    words.add({
+    sentences.add({
       "text": elem,
       "highlight": (elem as String).toLowerCase().trim() ==
-          targetWord.toLowerCase().trim()
+          targetSentence.toLowerCase().trim()
     });
   }
 
@@ -590,7 +593,7 @@ List<Map> _buildExample(exampleText, String targetWord) {
   bool prev = false;
   bool highlight = false;
   int index = 0;
-  for (var elem in words) {
+  for (var elem in sentences) {
     if (elem['highlight']) {
       highlight = true;
     } else {

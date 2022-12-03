@@ -1,0 +1,7 @@
+class MockNewSentence {
+  json() {
+    return '''
+      []
+  ''';
+  }
+}

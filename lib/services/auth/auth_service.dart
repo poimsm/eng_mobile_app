@@ -8,7 +8,7 @@ User _fakeUser = User(
   verified: false,
   screenFlow: false,
   email: 'fake@fake.com',
-  totalWords: 0,
+  totalSentences: 0,
 );
 
 class AuthService {
@@ -169,23 +169,23 @@ class AuthService {
 }
 
 class SignInPayload {
-  SignInPayload({required this.email, required this.password});
+  SignInPayload({required this.email, required this.passsentence});
 
   final String email;
-  final String password;
+  final String passsentence;
 
   toMap() {
-    return {'email': email, 'password': password};
+    return {'email': email, 'passsentence': passsentence};
   }
 }
 
 class SignUpPayload {
-  SignUpPayload({required this.email, required this.password});
+  SignUpPayload({required this.email, required this.passsentence});
 
   final String email;
-  final String password;
+  final String passsentence;
 
   toMap() {
-    return {'email': email, 'password': password};
+    return {'email': email, 'passsentence': passsentence};
   }
 }

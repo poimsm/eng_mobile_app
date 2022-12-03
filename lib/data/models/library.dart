@@ -13,7 +13,7 @@ class ShortVideo with _$ShortVideo {
     required String cover,
     required String url,
     @JsonKey(name: 'is_favorite') bool? isFavorite,
-    required List<Word> words,
+    required List<Sentence> sentences,
     required List<String> collocations,
   }) = _ShortVideo;
 
@@ -28,7 +28,7 @@ class InfoCard with _$InfoCard {
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'voice_url') required String voiceUrl,
     @JsonKey(name: 'is_favorite') bool? isFavorite,
-    required List<Word> words,
+    required List<Sentence> sentences,
     required List<String> collocations,
   }) = _InfoCard;
 

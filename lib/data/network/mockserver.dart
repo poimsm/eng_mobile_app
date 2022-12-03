@@ -27,8 +27,8 @@ class MockServer {
       return MockReply(200, MockActivities().json());
     }
 
-    if (endpoint.contains('/word')) {
-      return MockReply(200, MockMyWords().json());
+    if (endpoint.contains('/sentence')) {
+      return MockReply(200, MockMySentences().json());
     }
 
     if (endpoint.contains('/library/video')) {
@@ -62,8 +62,8 @@ class MockServer {
     //   return MockReply(200, MockAccessToken().json());
     // }
 
-    if (endpoint.contains('/word/')) {
-      return MockReply(200, MockNewWord().json());
+    if (endpoint.contains('/sentence/')) {
+      return MockReply(200, MockNewSentence().json());
     }
 
     if (endpoint.contains('/userflow')) {

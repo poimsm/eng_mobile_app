@@ -1,4 +1,4 @@
-List<Map> words = [
+List<Map> sentences = [
     {
         "text": "Contrary",
         "active": true,
@@ -281,7 +281,7 @@ List<Map> words = [
         "time": 0
     },
     {
-        "text": "words,",
+        "text": "sentences,",
         "active": false,
         "bold": false,
         "time": 0
@@ -347,7 +347,7 @@ List<Map> words = [
         "time": 0
     },
     {
-        "text": "words,",
+        "text": "sentences,",
         "active": false,
         "bold": false,
         "time": 0

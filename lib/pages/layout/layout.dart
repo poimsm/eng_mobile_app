@@ -87,17 +87,17 @@ class Layout extends StatelessWidget {
                   //         color: Colors.black.withOpacity(0.9),
                   //         fontSize: 18,
                   //         fontWeight: FontWeight.bold)),
-                  Text('Try to use this word in your answer 👈', style: TextStyle(
-                    fontSize: 18,
-                    color: Color(0xff595959)
-                  ),),
+                  Text(
+                    'Try to use this sentence in your answer 👈',
+                    style: TextStyle(fontSize: 18, color: Color(0xff595959)),
+                  ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text('Classical ipsum!', style: TextStyle(
-                    fontSize: 28,
-                    color: Color(0xff595959)
-                  ),),
+                  Text(
+                    'Classical ipsum!',
+                    style: TextStyle(fontSize: 28, color: Color(0xff595959)),
+                  ),
                   SizedBox(
                     height: 40,
                   ),
@@ -169,7 +169,8 @@ class Layout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Hello world how are you being doing today morning? Will it cost that much right?',
+                  Text(
+                      'Hello world how are you being doing today morning? Will it cost that much right?',
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.9),
                           fontSize: 24,
@@ -179,8 +180,8 @@ class Layout extends StatelessWidget {
                   ),
                   RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(children: _wordList())),
-                      SizedBox(
+                      text: TextSpan(children: _sentenceList())),
+                  SizedBox(
                     height: 20,
                   ),
                   _exampleChallengeBtn()
@@ -207,18 +208,24 @@ class Layout extends StatelessWidget {
     );
   }
 
-  _wordList() {
-    return List.generate(words.length, (i) {
+  _sentenceList() {
+    return List.generate(sentences.length, (i) {
       return TextSpan(
-          text: ' ' + words[i]['text'],
+          text: ' ' + sentences[i]['text'],
           style: TextStyle(
-            color: words[i]['active'] ? Color(0xff6E5AA0) : words[i]['bold']? Colors.black54 : Colors.grey,
-            fontWeight: words[i]['bold'] ? FontWeight.bold : FontWeight.normal,
-            fontSize: words[i]['bold'] ? 22 : 18.5,
+            color: sentences[i]['active']
+                ? Color(0xff6E5AA0)
+                : sentences[i]['bold']
+                    ? Colors.black54
+                    : Colors.grey,
+            fontWeight:
+                sentences[i]['bold'] ? FontWeight.bold : FontWeight.normal,
+            fontSize: sentences[i]['bold'] ? 22 : 18.5,
           ));
     });
   }
-   _exampleTwoChallengeBtns() {
+
+  _exampleTwoChallengeBtns() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -234,8 +241,7 @@ class Layout extends StatelessWidget {
       width: 130,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black54)
-          ),
+          border: Border.all(color: Colors.black54)),
       child: Center(
           child: Text(
         txt,
@@ -270,18 +276,20 @@ class Layout extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.play_circle_fill, color: Colors.white),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Text(
-        'Listen',
-        style: TextStyle(
-            fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-      ),
+            'Listen',
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
   }
 
-  _infoWordModal(Size size) {
+  _infoSentenceModal(Size size) {
     return Container(
       height: size.height,
       width: size.width,

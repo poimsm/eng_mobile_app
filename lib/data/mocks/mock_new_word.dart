@@ -1,7 +1,0 @@
-class MockNewWord {
-  json() {
-    return '''
-      []
-  ''';
-  }
-}

@@ -14,12 +14,12 @@ class QuizScreen extends StatefulWidget {
       {super.key,
       required this.isWelcome,
       required this.onStartQuiz,
-      required this.onAddWords,
+      required this.onAddSentences,
       required this.onCreateUser});
 
   final bool isWelcome;
   final VoidCallback onStartQuiz;
-  final VoidCallback onAddWords;
+  final VoidCallback onAddSentences;
   final VoidCallback onCreateUser;
 
   @override
@@ -52,7 +52,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     height: size.height * (widget.isWelcome ? 0.05 : 0.04)),
                 _startQuizBtn(),
                 if (!widget.isWelcome) SizedBox(height: size.height * 0.03),
-                if (!widget.isWelcome) _addWordsBtn(),
+                if (!widget.isWelcome) _addSentencesBtn(),
               ],
             ),
           ),
@@ -193,7 +193,7 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  _addWordsBtn() {
+  _addSentencesBtn() {
     return Material(
       // borderRadius: BorderRadius.circular(25),
       color: Colors.transparent,
@@ -201,7 +201,7 @@ class _QuizScreenState extends State<QuizScreen> {
       child: InkWell(
         onTap: () async {
           // await sleep(150);
-          widget.onAddWords();
+          widget.onAddSentences();
         },
         borderRadius: BorderRadius.circular(25),
         child: Container(

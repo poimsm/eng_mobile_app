@@ -24,10 +24,10 @@ class ActivityRepositoryImpl implements ActivityRepository {
       return (resp.data as List).map((x) => Activity.fromJson(x)).toList();
     }
 
-    final localWords = await _localDB.getLocalWords();
+    final localSentences = await _localDB.getLocalSentences();
 
-    final resp = await _network
-        .post('/daily-activities-limited', data: {'local_words': localWords});
+    final resp = await _network.post('/daily-activities-limited',
+        data: {'local_sentences': localSentences});
     return (resp.data as List).map((x) => Activity.fromJson(x)).toList();
   }
 }
