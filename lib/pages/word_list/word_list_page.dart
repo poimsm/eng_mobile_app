@@ -271,6 +271,7 @@ class WordListPageState extends ConsumerState<WordListPage> {
           ]),
           InkWell(
             onTap: () {
+              ref.read(wordListProvider.notifier).deleteAllLocalWords();
               // Navigator.pushNamed(context, Routes.STORE);
             },
             child: Container(

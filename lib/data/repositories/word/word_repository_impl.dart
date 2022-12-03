@@ -1,8 +1,6 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
-import 'package:eng_mobile_app/pages/word_list/enums.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
-import 'package:eng_mobile_app/services/global/global_service.dart';
 import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
 import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +30,7 @@ class WordRepositoryImpl implements WordRepository {
             .toList();
       }
 
-      final localWords = await _localDatabase.getWords();
+      final localWords = await _localDatabase.getLocalWords();
 
       List<Map> localWordsMap = [];
       for (var lw in localWords) {
@@ -58,7 +56,7 @@ class WordRepositoryImpl implements WordRepository {
       return Word.fromJson(resp.data);
     }
 
-    final id = await _localDatabase.createWord(convertWordToLocal(word));
+    final id = await _localDatabase.createLocalWord(convertWordToLocal(word));
     return word.copyWith(id: id);
   }
 
@@ -70,7 +68,7 @@ class WordRepositoryImpl implements WordRepository {
       return Word.fromJson(resp.data);
     }
 
-    await _localDatabase.updateWord(payload);
+    await _localDatabase.updateLocalWord(payload);
     Map<String, dynamic> wordMap =
         await _localDatabase.getWordById(payload['id']);
 
@@ -83,13 +81,18 @@ class WordRepositoryImpl implements WordRepository {
       await _network.delete('/sentence/', data: {'id': id});
       return true;
     }
-    await _localDatabase.deleteWordById(id);
+    await _localDatabase.deleteLocalWordById(id);
     return true;
   }
 
   @override
   Future<bool> migrateLocalWordsToUser(int id) async {
     return true;
+  }
+
+  @override
+  Future<void> deleteAllLocalWords() async {
+    _localDatabase.deleteAllLocalWords();
   }
 
   LocalWord convertWordToLocal(Word word) {
@@ -99,7 +102,7 @@ class WordRepositoryImpl implements WordRepository {
         meaning: word.meaning,
         origin: word.origin,
         type: word.type,
-        sourceType: SourceType.infoCard,
+        sourceType: word.sourceType,
         extras: word.extras,
         saved: true,
         infoCard: word.infoCard != null ? word.infoCard!.id : null,

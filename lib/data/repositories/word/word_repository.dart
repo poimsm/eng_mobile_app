@@ -5,5 +5,6 @@ abstract class WordRepository {
   Future<Word?> updateWord(Map payload);
   Future<Word?> createWord(Word word);
   Future<bool> deleteWord(int id);
+  Future<void> deleteAllLocalWords();
   Future<bool> migrateLocalWordsToUser(int id);
 }

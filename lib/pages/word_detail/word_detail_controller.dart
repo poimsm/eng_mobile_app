@@ -70,7 +70,7 @@ class WordDetailNotifier extends StateNotifier<WordDetailState> {
     state = state.copyWith(isLoading: true);
     final newWord = await wordRepository.createWord(Word(
         id: -1,
-        word: payload['word'],
+        word: payload['sentence'],
         meaning: payload['meaning'],
         origin: WordOrigin.user,
         type: WordType.normal));

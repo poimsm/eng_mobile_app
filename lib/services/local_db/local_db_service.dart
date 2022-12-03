@@ -33,7 +33,7 @@ class LocalDBService {
     return true;
   }
 
-  Future<int> createWord(LocalWord word) async {
+  Future<int> createLocalWord(LocalWord word) async {
     final Completer<int> completer = Completer<int>();
 
     await _database!.transaction((txn) async {
@@ -59,26 +59,31 @@ class LocalDBService {
     return completer.future;
   }
 
-  Future updateWord(Map payload) async {
+  Future updateLocalWord(Map payload) async {
     await _database!.rawUpdate(
         'UPDATE words SET sentence = ?, meaning = ? WHERE id = ?',
         [payload['id'], payload['word'], payload['meaning']]);
   }
 
-  Future deleteWordsByVideoId(int id) async {
+  Future deleteAllLocalWords() async {
+    await _database!.rawDelete('DELETE FROM words');
+  }
+
+  Future deleteLocalWordsByVideoId(int id) async {
     await _database!.rawDelete('DELETE FROM words WHERE short_video = ?', [id]);
   }
 
-  Future deleteWordsByCardId(int id) async {
+  Future deleteLocalWordsByCardId(int id) async {
     await _database!.rawDelete('DELETE FROM words WHERE info_card = ?', [id]);
   }
 
-  Future deleteWordById(int id) async {
+  Future deleteLocalWordById(int id) async {
     await _database!.rawDelete('DELETE FROM words WHERE id = ?', [id]);
   }
 
-  Future<List<LocalWord>> getWords() async {
-    List list = await _database!.rawQuery('SELECT * FROM words');
+  Future<List<LocalWord>> getLocalWords() async {
+    List list =
+        await _database!.rawQuery('SELECT * FROM words ORDER BY id DESC');
     List<LocalWord> words = list.map((e) => LocalWord.fromJson(e)).toList();
     return words;
   }

@@ -84,7 +84,7 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
 
   Future<void> fetchCards() async {
     state = state.copyWith(isLoading: true, loadingCard: true);
-    final cards = await _libraryRepository.getVideos();
+    final cards = await _libraryRepository.getCards();
     state = state.copyWith(isLoading: false, cards: cards);
   }
 

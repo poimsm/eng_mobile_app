@@ -67,6 +67,10 @@ class WordListNotifier extends StateNotifier<WordListState> {
     return true;
   }
 
+  Future<void> deleteAllLocalWords() async {
+    wordRepository.deleteAllLocalWords();
+  }
+
   void toggleListBlinker() async {
     await sleep(500);
     state = state.copyWith(showListBlinker: true);

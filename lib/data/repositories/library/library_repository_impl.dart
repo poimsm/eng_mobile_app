@@ -39,10 +39,12 @@ class LibraryRepositoryImpl implements LibraryRepository {
 
       if (card.isFavorite!) {
         for (final word in card.words) {
-          await _localDatabase.createWord(convertWordToLocal(word));
+          final cardWord =
+              word.copyWith(infoCard: card, sourceType: SourceType.infoCard);
+          await _localDatabase.createLocalWord(convertWordToLocal(cardWord));
         }
       } else {
-        await _localDatabase.deleteWordsByCardId(card.id);
+        await _localDatabase.deleteLocalWordsByCardId(card.id);
       }
 
       return true;
@@ -69,26 +71,29 @@ class LibraryRepositoryImpl implements LibraryRepository {
 
     if (video.isFavorite!) {
       for (final word in video.words) {
-        await _localDatabase.createWord(convertWordToLocal(word));
+        final videoWord =
+            word.copyWith(shortVideo: video, sourceType: SourceType.shortVideo);
+        await _localDatabase.createLocalWord(convertWordToLocal(videoWord));
       }
     } else {
-      await _localDatabase.deleteWordsByVideoId(video.id);
+      await _localDatabase.deleteLocalWordsByVideoId(video.id);
     }
     return true;
   }
 
   LocalWord convertWordToLocal(Word word) {
     LocalWord localWord = LocalWord(
-        id: word.id,
-        word: word.word,
-        meaning: word.meaning,
-        origin: word.origin,
-        type: word.type,
-        sourceType: SourceType.infoCard,
-        extras: word.extras,
-        saved: true,
-        infoCard: word.infoCard != null ? word.infoCard!.id : null,
-        shortVideo: word.shortVideo != null ? word.shortVideo!.id : null);
+      id: word.id,
+      word: word.word,
+      meaning: word.meaning,
+      origin: word.origin,
+      type: word.type,
+      sourceType: word.sourceType,
+      extras: word.extras,
+      saved: true,
+      infoCard: word.infoCard != null ? word.infoCard!.id : null,
+      shortVideo: word.shortVideo != null ? word.shortVideo!.id : null,
+    );
 
     return localWord;
   }
