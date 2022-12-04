@@ -256,7 +256,7 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
           child: Row(
             children: [
               Text(
-                'Sentence or phrase',
+                'Word or phrase',
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 21, color: Colors.black54),
               ),
@@ -547,7 +547,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             .addUserSentence(sentence.sentence);
 
         if (!mounted) return;
-        Navigator.pop(context, {'toast': 'Sentence added'});
+        Navigator.pop(context, {'toast': 'Word added'});
       },
       child: Container(
           height: 40,

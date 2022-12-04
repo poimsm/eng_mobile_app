@@ -21,6 +21,7 @@ class ActivityRepositoryImpl implements ActivityRepository {
   Future<List<Activity>> getActivities() async {
     if (_authService.isAuthenticated) {
       final resp = await _network.get('/daily-activities');
+      if (!resp.ok) return [];
       return (resp.data as List).map((x) => Activity.fromJson(x)).toList();
     }
 
@@ -28,6 +29,7 @@ class ActivityRepositoryImpl implements ActivityRepository {
 
     final resp = await _network.post('/daily-activities-limited',
         data: {'local_sentences': localSentences});
+    if (!resp.ok) return [];
     return (resp.data as List).map((x) => Activity.fromJson(x)).toList();
   }
 }

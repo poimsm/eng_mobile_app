@@ -202,15 +202,20 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   Future<bool> fetchActivities() async {
-    state = state.copyWith(
-        isLoading: true,
-        showQuizScreen: false,
-        activityRoundCounter: state.activityRoundCounter + 1);
+    state = state.copyWith(isLoading: true, showQuizScreen: false);
 
     final activities = await activityRepository.getActivities();
 
+    if (activities.isEmpty) {
+      state = state.copyWith(showQuizScreen: true, isLoading: false);
+      return false;
+    }
+
     state = state.copyWith(
-        activities: activities, activity: activities[0], isLoading: false);
+        activityRoundCounter: state.activityRoundCounter + 1,
+        activities: activities,
+        activity: activities[0],
+        isLoading: false);
 
     playVoice(state.activity!.question.voiceUrl, shouldStop: false);
 

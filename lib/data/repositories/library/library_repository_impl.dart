@@ -14,18 +14,25 @@ class LibraryRepositoryImpl implements LibraryRepository {
   LibraryRepositoryImpl(
       {required network, required localDatabase, required authService})
       : _network = network,
-        _localDatabase = localDatabase,
+        _localDB = localDatabase,
         _authService = authService;
 
   final Network _network;
-  final LocalDBService _localDatabase;
+  final LocalDBService _localDB;
   final AuthService _authService;
 
   @override
   Future<List<InfoCard>> getCards() async {
     final resp = await _network.get('/info-card');
     if (!resp.ok) return [];
-    return (resp.data as List).map((x) => InfoCard.fromJson(x)).toList();
+    List<InfoCard> cards =
+        (resp.data as List).map((x) => InfoCard.fromJson(x)).toList();
+
+    if (!_authService.isAuthenticated) {
+      cards = await _checkFavoriteInfoCardAgainstLocalData(cards);
+    }
+
+    return cards;
   }
 
   @override
@@ -41,16 +48,16 @@ class LibraryRepositoryImpl implements LibraryRepository {
         for (final sentence in card.sentences) {
           final cardSentence = sentence.copyWith(
               infoCard: card, sourceType: SourceType.infoCard);
-          await _localDatabase
+          await _localDB
               .createLocalSentence(convertSentenceToLocal(cardSentence));
         }
       } else {
-        await _localDatabase.deleteLocalSentencesByCardId(card.id);
+        await _localDB.deleteLocalSentencesByCardId(card.id);
       }
 
       return true;
     } catch (e) {
-      printError('addCardToSentenceList - ${e.toString()}');
+      printError('toggleCardFavorite - ${e.toString()}');
       return false;
     }
   }
@@ -59,7 +66,15 @@ class LibraryRepositoryImpl implements LibraryRepository {
   Future<List<ShortVideo>> getVideos() async {
     final resp = await _network.get('/short-video');
     if (!resp.ok) return [];
-    return (resp.data as List).map((x) => ShortVideo.fromJson(x)).toList();
+
+    List<ShortVideo> videos =
+        (resp.data as List).map((x) => ShortVideo.fromJson(x)).toList();
+
+    if (!_authService.isAuthenticated) {
+      videos = await _checkFavoriteVideoAgainstLocalData(videos);
+    }
+
+    return videos;
   }
 
   @override
@@ -74,11 +89,11 @@ class LibraryRepositoryImpl implements LibraryRepository {
       for (final sentence in video.sentences) {
         final videoSentence = sentence.copyWith(
             shortVideo: video, sourceType: SourceType.shortVideo);
-        await _localDatabase
+        await _localDB
             .createLocalSentence(convertSentenceToLocal(videoSentence));
       }
     } else {
-      await _localDatabase.deleteLocalSentencesByVideoId(video.id);
+      await _localDB.deleteLocalSentencesByVideoId(video.id);
     }
     return true;
   }
@@ -98,6 +113,62 @@ class LibraryRepositoryImpl implements LibraryRepository {
     );
 
     return localSentence;
+  }
+
+  Future<List<ShortVideo>> _checkFavoriteVideoAgainstLocalData(
+      List<ShortVideo> videos) async {
+    final sentences = await _localDB.getLocalSentences();
+
+    List<int> favVideoIds = [];
+
+    for (var sen in sentences) {
+      if (sen.shortVideo != null) {
+        favVideoIds.add(sen.shortVideo!);
+      }
+    }
+
+    List<ShortVideo> result = [];
+    for (var video in videos) {
+      bool isFavVideo = false;
+      for (var id in favVideoIds) {
+        if (id == video.id) {
+          isFavVideo = true;
+          break;
+        }
+      }
+
+      result.add(video.copyWith(isFavorite: isFavVideo));
+    }
+
+    return result;
+  }
+
+  Future<List<InfoCard>> _checkFavoriteInfoCardAgainstLocalData(
+      List<InfoCard> cards) async {
+    final sentences = await _localDB.getLocalSentences();
+
+    List<int> favCardIds = [];
+
+    for (var sen in sentences) {
+      if (sen.infoCard != null) {
+        favCardIds.add(sen.infoCard!);
+      }
+    }
+
+    List<InfoCard> result = [];
+    for (var card in cards) {
+      bool isFavVideo = false;
+      for (var id in favCardIds) {
+        if (id == card.id) {
+          isFavVideo = true;
+          break;
+        }
+      }
+
+      result.add(card.copyWith(isFavorite: isFavVideo));
+    }
+
+    return result;
   }
 }
 
