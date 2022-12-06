@@ -113,9 +113,7 @@ class MultipleVideosState extends ConsumerState<MultipleVideos> {
     return InkWell(
       onTap: () {
         widget.onSaveSentences();
-        context
-            .read<Screen>()
-            .showToast('${widget.totalSentences} sentence saved');
+        context.read<Screen>().showToast('${widget.totalSentences} word saved');
         savedSentence = true;
         setState(() {});
       },

@@ -127,18 +127,18 @@ class Network {
 
       request!.headers.set('content-type', 'application/json');
 
-      String token = 'None';
-
       if (_config['auth_service'] != null) {
         final authService = _config['auth_service'] as AuthService;
-        token = authService.token;
+        String token = authService.token;
+        if (token != 'None') {
+          request.headers.set('Authorization', 'Bearer $token');
+        }
       }
 
-      if (_config['token'] != null) {
-        token = _config['token'];
+      if (_config['token'] != null && _config['token'] != 'None') {
+        String token = _config['token'];
+        request.headers.set('Authorization', 'Bearer $token');
       }
-
-      request.headers.set('AuthorizationX', 'Bearer $token');
 
       if (payload != null) {
         request.headers.contentLength =
@@ -152,19 +152,21 @@ class Network {
       int statusCode = response.statusCode;
       httpClient.close();
 
-      if (authErrorHandler(statusCode, url.path)) return Response(ok: false);
-
-      if (serverErrorHandler(
-          reply, statusCode, url.path, method.toString(), false)) {
-        return Response(ok: false);
-      }
-
       final data = reply != '' ? jsonDecode(reply) : '';
       log(reply);
 
+      if (authErrorHandler(statusCode, url.path)) {
+        return Response(ok: false, data: data, statusCode: statusCode);
+      }
+
+      if (serverErrorHandler(
+          reply, statusCode, url.path, method.toString(), false)) {
+        return Response(ok: false, data: data, statusCode: statusCode);
+      }
+
       printDebug('RESPONSE <<<-- | $statusCode | ${url.path} | $data');
 
-      return Response(ok: true, data: data);
+      return Response(ok: true, data: data, statusCode: statusCode);
     } on TimeoutException catch (_) {
       printError(
           'Network --> ${method.toString()}($url) | Server connection timed out');

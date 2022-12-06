@@ -12,7 +12,7 @@ class User with _$User {
     @JsonKey(name: 'total_sentences') required int totalSentences,
     required String email,
     required bool verified,
-    required bool screenFlow,
+    @JsonKey(name: 'screen_flow') required bool screenFlow,
   }) = _User;
 
   factory User.fromJson(Map<String, Object?> json) =>

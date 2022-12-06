@@ -50,8 +50,7 @@ class SentenceRepositoryImpl implements SentenceRepository {
   @override
   Future<Sentence?> createSentence(Sentence sentence) async {
     if (_authService.isAuthenticated) {
-      final resp = await _network.post('/sentence/',
-          data: {'sentence': sentence, 'meaning': sentence.meaning});
+      final resp = await _network.post('/sentence/', data: sentence.toJson());
       if (!resp.ok) return null;
       return Sentence.fromJson(resp.data);
     }
@@ -87,8 +86,13 @@ class SentenceRepositoryImpl implements SentenceRepository {
   }
 
   @override
-  Future<bool> migrateLocalSentencesToUser(int id) async {
-    return true;
+  Future<void> migrateLocalSentencesToUser() async {
+    final localSentences = await _localDatabase.getLocalSentences(desc: false);
+
+    await _network.post('/save-local-sentences',
+        data: {'local_sentences': localSentences});
+
+    _localDatabase.deleteAllLocalSentences();
   }
 
   @override

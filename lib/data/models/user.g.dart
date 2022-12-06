@@ -11,7 +11,7 @@ _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       totalSentences: json['total_sentences'] as int,
       email: json['email'] as String,
       verified: json['verified'] as bool,
-      screenFlow: json['screenFlow'] as bool,
+      screenFlow: json['screen_flow'] as bool,
     );
 
 Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
@@ -19,5 +19,5 @@ Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{
       'total_sentences': instance.totalSentences,
       'email': instance.email,
       'verified': instance.verified,
-      'screenFlow': instance.screenFlow,
+      'screen_flow': instance.screenFlow,
     };

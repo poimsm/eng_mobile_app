@@ -89,7 +89,7 @@ class SentenceDetailNotifier extends StateNotifier<SentenceDetailState> {
     return respOk;
   }
 
-  Future<Sentence?> updateSentence(Map payload) async {
+  Future<Sentence?> updateSentence(Map<String, dynamic> payload) async {
     state = state.copyWith(isLoading: true);
     final sentence = await sentenceRepository.updateSentence(payload);
     state = state.copyWith(isLoading: false);

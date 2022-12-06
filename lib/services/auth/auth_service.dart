@@ -31,7 +31,7 @@ class AuthService {
       final config = NetworkConfigWithJWBToken(_token).config();
 
       final tokenResp = await Network(config, retries: 2)
-          .post('/token/verify', data: {'token': 'accessToken'});
+          .post('/token/verify', data: {'token': _token});
       if (!tokenResp.ok) return false;
 
       final respUser = await Network(config, retries: 2).get('/user/data');
@@ -95,13 +95,13 @@ class AuthService {
     }
   }
 
-  Future<bool> signIn(SignInPayload payload) async {
+  Future<Response> signIn(SignInPayload payload) async {
     try {
       final config = NetworkConfigWithJWBToken('None').config();
       Response response =
           await Network(config).post('/user/sign-in', data: payload.toMap());
 
-      if (!response.ok) return false;
+      if (!response.ok) return response;
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('access', response.data['access']);
@@ -110,22 +110,22 @@ class AuthService {
       _token = response.data['access'];
       _user = User.fromJson(response.data['user']);
 
-      return true;
+      return response;
     } catch (e, s) {
       _token = 'None';
       printError('signIn: $e');
       printError(s.toString());
-      return false;
+      return Response(ok: false);
     }
   }
 
-  Future<bool> signUp(SignUpPayload payload) async {
+  Future<Response> signUp(SignUpPayload payload) async {
     try {
       final config = NetworkConfigWithJWBToken('None').config();
       Response response =
           await Network(config).post('/user/sign-up', data: payload.toMap());
 
-      if (!response.ok) return false;
+      if (!response.ok) return response;
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('access', response.data['access']);
@@ -134,12 +134,12 @@ class AuthService {
       _token = response.data['access'];
       _user = User.fromJson(response.data['user']);
 
-      return true;
+      return response;
     } catch (e, s) {
       _token = 'None';
       printError('signUp: $e');
       printError(s.toString());
-      return false;
+      return Response(ok: false);
     }
   }
 
@@ -169,23 +169,23 @@ class AuthService {
 }
 
 class SignInPayload {
-  SignInPayload({required this.email, required this.passsentence});
+  SignInPayload({required this.email, required this.password});
 
   final String email;
-  final String passsentence;
+  final String password;
 
   toMap() {
-    return {'email': email, 'passsentence': passsentence};
+    return {'email': email, 'password': password};
   }
 }
 
 class SignUpPayload {
-  SignUpPayload({required this.email, required this.passsentence});
+  SignUpPayload({required this.email, required this.password});
 
   final String email;
-  final String passsentence;
+  final String password;
 
   toMap() {
-    return {'email': email, 'passsentence': passsentence};
+    return {'email': email, 'password': password};
   }
 }

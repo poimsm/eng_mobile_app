@@ -1,21 +1,20 @@
 import 'package:eng_mobile_app/pages/layout/controller.dart';
+import 'package:eng_mobile_app/pages/login_popup/login_popup_controller.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
-import 'package:eng_mobile_app/services/auth/auth_service.dart';
-import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class LoginBottomSheet extends StatefulWidget {
-  const LoginBottomSheet({super.key});
+class LoginPopup extends ConsumerStatefulWidget {
+  const LoginPopup({super.key});
 
   @override
-  LoginBottomSheetState createState() => LoginBottomSheetState();
+  LoginPopupState createState() => LoginPopupState();
 }
 
-class LoginBottomSheetState extends State<LoginBottomSheet> {
+class LoginPopupState extends ConsumerState<LoginPopup> {
   @override
   void initState() {
     super.initState();
@@ -30,42 +29,23 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     super.dispose();
   }
 
-  Future<bool> signIn() async {
-    setState(() => loading = true);
-    final respOk = await GetIt.I.get<AuthService>().signIn(SignInPayload(
-          email: _emailTextCtrl.text,
-          passsentence: _passTextCtrl.text,
-        ));
-    setState(() => loading = false);
-    return respOk;
-  }
-
-  Future<bool> signUp() async {
-    setState(() => loading = true);
-    // final uu = GetIt.I.get<AuthService>();
-    final respOk = await GetIt.I.get<AuthService>().signUp(SignUpPayload(
-          email: _emailTextCtrl.text,
-          passsentence: _passTextCtrl.text,
-        ));
-    setState(() => loading = false);
-    return respOk;
-  }
-
   Size size = Size.zero;
   late TextEditingController _emailTextCtrl;
   late TextEditingController _passTextCtrl;
 
   List<String> states = ['creating_account', 'choosing_eng_level', 'login_in'];
   String currentState = 'creating_account';
-  double height = 500;
-  bool hidePasssentence = false;
-  bool loading = false;
+  double height = 540;
+  bool hidePassword = false;
 
-  FormModel signInModel = FormModel();
-  FormModel signUpModel = FormModel();
+  late LoginState loginState;
+  late LoginPopupNotifier loginProvider;
 
   @override
   Widget build(BuildContext context) {
+    loginState = ref.watch(loginPopupProvider);
+    loginProvider = ref.read(loginPopupProvider.notifier);
+
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
@@ -148,7 +128,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     );
   }
 
-  passsentenceField() {
+  passwordField() {
     return Container(
       width: 290,
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
@@ -163,10 +143,10 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
             width: 200,
             child: TextField(
               maxLines: 1,
-              obscureText: hidePasssentence,
+              obscureText: hidePassword,
               style: TextStyle(fontSize: 20),
               decoration: InputDecoration(
-                hintText: 'Passsentence',
+                hintText: 'Password',
                 counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
                 hintStyle: TextStyle(color: Colors.black26),
                 border: InputBorder.none,
@@ -178,7 +158,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
                 // if (!emailValid) {
                 //   showInvalidEmail = true;
                 //   setState(() {});
-                //   return;
+                //   return;n
                 // }
               },
               controller: _passTextCtrl,
@@ -186,11 +166,11 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
           ),
           InkWell(
             onTap: () {
-              hidePasssentence = !hidePasssentence;
+              hidePassword = !hidePassword;
               setState(() {});
             },
             child: Icon(
-              hidePasssentence ? Icons.visibility_off : Icons.visibility,
+              hidePassword ? Icons.visibility_off : Icons.visibility,
               color: Colors.grey,
               size: 25,
             ),
@@ -211,7 +191,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
           color: Color(0xff6E5AA0),
         ),
         child: Center(
-          child: loading
+          child: loginState.loading
               ? SpinKitRing(
                   lineWidth: 4,
                   color: Colors.white,
@@ -257,11 +237,11 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
     );
   }
 
-  forgotPasssentence(VoidCallback callback) {
+  forgotPassword(VoidCallback callback) {
     return Container(
         width: 290,
         alignment: Alignment.centerRight,
-        child: Text('Forgot passsentence?',
+        child: Text('Forgot password?',
             style: TextStyle(
               color: Color(0xff6E5AA0),
               fontSize: 17,
@@ -276,7 +256,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Create account 👻',
+            'Join free 👻',
             style: TextStyle(
                 fontSize: 26,
                 color: Colors.black87,
@@ -286,12 +266,30 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
             height: 10,
           ),
           Text(
-            'Never stop learning ever! Join this awesome app :)',
+            'Become a user and save your progress every day. Join this awesome and energetic study app :)',
             style: TextStyle(fontSize: 18, color: Colors.black54),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          // Text(
+          //   '👉 Save your progress anytime!',
+          //   style: TextStyle(fontSize: 18, color: Colors.black54),
+          // ),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          // Text(
+          //   '👉 Keep a custome vocabulary list',
+          //   style: TextStyle(fontSize: 18, color: Colors.black54),
+          // ),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          // Text(
+          //   '👉 Be cool 😎 and unlock more features',
+          //   style: TextStyle(fontSize: 18, color: Colors.black54),
+          // ),
+          // SizedBox(
+          //   height: 10,
+          // ),
         ],
       ),
     );
@@ -383,36 +381,30 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
       SizedBox(
         height: 20,
       ),
-      passsentenceField(),
+      passwordField(),
       SizedBox(
         height: 20,
       ),
-      forgotPasssentence(() {
+      forgotPassword(() {
         Navigator.pop(context);
       }),
       SizedBox(
-        height: signInModel.showServerErr ? 25 : 15,
+        height: loginState.showServerErr ? 25 : 15,
       ),
-      if (signInModel.showServerErr) errorMsg(signInModel.errMsg),
+      if (loginState.showServerErr) errorMsg(loginState.errMsg),
       SizedBox(
         height: 25,
       ),
       footerBtn('Sign In', () async {
-        setState(() => signInModel = FormModel());
-
         if (_passTextCtrl.text.isEmpty || _emailTextCtrl.text.isEmpty) {
           return;
         }
 
-        final respOk = await signIn();
+        loginProvider.ressetErrorsAndStartLoading();
 
-        if (!respOk) {
-          setState(() {
-            signInModel = FormModel(
-                showServerErr: true, errMsg: 'Passsentence or email incorrect');
-          });
-          return;
-        }
+        final respOk = await loginProvider.signIn(
+            email: _emailTextCtrl.text, password: _passTextCtrl.text);
+        if (!respOk) return;
 
         final screen = context.read<Screen>();
         screen.showToast('Welcome to FALOU!');
@@ -430,44 +422,33 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
         height: 25,
       ),
       emailField(context),
-      if (signUpModel.showInvalidEmailErr)
-        SizedBox(
-          height: 5,
-        ),
-      if (signUpModel.showInvalidEmailErr)
-        errorMsg(signUpModel.errMsg, fontSize: 17),
+      SizedBox(
+        height: loginState.showInvalidEmailErr ? 0 : 5,
+      ),
+      if (loginState.showInvalidEmailErr)
+        errorMsg(loginState.errMsg, fontSize: 17),
       SizedBox(
         height: 15,
       ),
-      passsentenceField(),
+      passwordField(),
       SizedBox(
-        height: 25,
+        height: loginState.showServerErr ? 15 : 25,
       ),
-      if (signUpModel.showServerErr) errorMsg(signUpModel.errMsg),
+      if (loginState.showServerErr) errorMsg(loginState.errMsg),
+      SizedBox(
+        height: 15,
+      ),
       footerBtn('Sign Up', () async {
         if (_passTextCtrl.text.isEmpty || _emailTextCtrl.text.isEmpty) {
           return;
         }
 
-        setState(() => signUpModel = FormModel());
+        final valid = loginProvider.checkValidEmail(_emailTextCtrl.text);
+        if (!valid) return;
 
-        final bool emailValid = RegExp(
-                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(_emailTextCtrl.text);
-
-        if (!emailValid) {
-          setState(() => {
-                signUpModel = FormModel(
-                    errMsg: '  Invalid email', showInvalidEmailErr: true)
-              });
-          return;
-        }
-
-        final respOk = await signUp();
-
-        if (!respOk) {
-          return;
-        }
+        final respOk = await loginProvider.signUp(
+            email: _emailTextCtrl.text, password: _passTextCtrl.text);
+        if (!respOk) return;
 
         final screen = context.read<Screen>();
         screen.showToast('Welcome to FALOU!');
@@ -482,7 +463,7 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
         _emailTextCtrl.text = '';
         _passTextCtrl.text = '';
         currentState = states[2];
-        height = 440;
+        height = 460;
         setState(() {});
       })
     ];
@@ -505,23 +486,5 @@ class LoginBottomSheetState extends State<LoginBottomSheet> {
         Navigator.pop(context);
       }),
     ];
-  }
-}
-
-class FormModel {
-  FormModel({
-    this.showInvalidEmailErr = false,
-    this.showServerErr = false,
-    this.errMsg = '',
-  });
-  bool showInvalidEmailErr;
-  bool showServerErr;
-  String errMsg;
-  FormModel copyWith({showInvalidEmailErr, showServerErr, errMsg}) {
-    return FormModel(
-      showInvalidEmailErr: showInvalidEmailErr ?? this.showInvalidEmailErr,
-      showServerErr: showServerErr ?? this.showServerErr,
-      errMsg: errMsg ?? this.errMsg,
-    );
   }
 }

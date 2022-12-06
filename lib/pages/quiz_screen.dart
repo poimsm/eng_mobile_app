@@ -1,5 +1,5 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
-import 'package:eng_mobile_app/pages/login_bottom_sheet.dart';
+import 'package:eng_mobile_app/pages/login_popup/login_popup.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
 import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
@@ -81,7 +81,7 @@ class _QuizScreenState extends State<QuizScreen> {
               context: context,
               backgroundColor: Colors.transparent,
               isScrollControlled: true,
-              builder: (_) => LoginBottomSheet());
+              builder: (_) => LoginPopup());
         }
       },
       child: Padding(

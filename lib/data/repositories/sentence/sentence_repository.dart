@@ -6,5 +6,5 @@ abstract class SentenceRepository {
   Future<Sentence?> createSentence(Sentence sentence);
   Future<bool> deleteSentence(int id);
   Future<void> deleteAllLocalSentences();
-  Future<bool> migrateLocalSentencesToUser(int id);
+  Future<void> migrateLocalSentencesToUser();
 }

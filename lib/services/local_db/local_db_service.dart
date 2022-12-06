@@ -83,9 +83,9 @@ class LocalDBService {
     await _database!.rawDelete('DELETE FROM sentences WHERE id = ?', [id]);
   }
 
-  Future<List<LocalSentence>> getLocalSentences() async {
-    List list =
-        await _database!.rawQuery('SELECT * FROM sentences ORDER BY id DESC');
+  Future<List<LocalSentence>> getLocalSentences({bool desc = true}) async {
+    List list = await _database!.rawQuery(
+        'SELECT * FROM sentences ORDER BY id ${desc ? 'DESC' : 'ASC'}');
     List<LocalSentence> sentences =
         list.map((e) => LocalSentence.fromJson(e)).toList();
     return sentences;

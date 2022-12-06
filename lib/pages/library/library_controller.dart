@@ -92,10 +92,12 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
     state = state.copyWith(loadingCard: val);
   }
 
-  void toggleFavoriteCard(InfoCard card) async {
+  Future toggleFavoriteCard(InfoCard card) async {
     bool isFavoriteFlag = !card.isFavorite!;
     card = card.copyWith(isFavorite: isFavoriteFlag);
-    _libraryRepository.toggleCardFavorite(card);
+    final ids = await _libraryRepository.toggleCardFavorite(card);
+
+    if (ids.isEmpty) return;
 
     List<InfoCard> cards = state.cards;
 
@@ -110,7 +112,8 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
 
     for (var i = 0; i < card.sentences.length; i++) {
       cardSentences.add(Sentence(
-          id: card.sentences[i].id,
+          // id: card.sentences[i].id,
+          id: ids[i],
           sentence: card.sentences[i].sentence,
           origin: card.sentences[i].origin,
           type: card.sentences[i].type,
@@ -137,7 +140,7 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
       newSentences.removeWhere((Map w) => w['info_card_id'] == card.id);
     } else {
       for (var i = 0; i < cardSentences.length; i++) {
-        newSentences.add({
+        newSentences.insert(0, {
           'type': 'card',
           'info_card_id': card.id,
           'action': isFavoriteFlag ? 'add' : 'delete',
@@ -209,7 +212,7 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
       newSentences.removeWhere((Map w) => w['short_video_id'] == video.id);
     } else {
       for (var i = 0; i < videoSentences.length; i++) {
-        newSentences.add({
+        newSentences.insert(0, {
           'type': 'video',
           'short_video_id': video.id,
           'action': isFavoriteFlag ? 'add' : 'delete',

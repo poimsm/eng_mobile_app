@@ -21,12 +21,12 @@ class ErrorPage extends StatelessWidget {
           Text(
             'Something went wrong.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 19, color: Colors.black54),
+            style: TextStyle(fontSize: 20, color: Colors.black54),
           ),
           Text(
             'Please try again later',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 19, color: Colors.black54),
+            style: TextStyle(fontSize: 20, color: Colors.black54),
           ),
         ],
       ),

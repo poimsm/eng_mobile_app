@@ -337,9 +337,11 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
 
   _toggleFavCardBtn(InfoCard card) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (libraryState.blocker) return;
-        ref.read(libraryProvider.notifier).toggleFavoriteCard(card);
+        context.read<Screen>().startLoading();
+        await ref.read(libraryProvider.notifier).toggleFavoriteCard(card);
+        context.read<Screen>().stopLoading();
         context.read<Screen>().showToast(toastMsgBasedOnLength(
             length: card.sentences.length, willSave: !card.isFavorite!));
       },

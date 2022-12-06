@@ -551,14 +551,14 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
       },
       child: Container(
           height: 40,
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: EdgeInsets.symmetric(horizontal: 17),
           decoration: BoxDecoration(
               color: Color(0xff6E5AA0).withOpacity(
                   sentenceDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
-              widget.isNewSentence ? 'Save' : 'Edit',
+              widget.isNewSentence ? 'Save' : 'Save',
               style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -585,18 +585,18 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
         ref.read(sentenceListProvider.notifier).editSentenceUI(sentence);
 
         if (!mounted) return;
-        Navigator.pop(context, {'toast': 'Sentence edited'});
+        Navigator.pop(context, {'toast': 'Saved'});
       },
       child: Container(
           height: 40,
-          padding: EdgeInsets.symmetric(horizontal: 22),
+          padding: EdgeInsets.symmetric(horizontal: 17),
           decoration: BoxDecoration(
               color: Color(0xff6E5AA0).withOpacity(
                   sentenceDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Text(
-              'Edit',
+              'Save',
               style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -618,7 +618,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             .deleteSentenceUI(widget.sentence!.id);
 
         if (!mounted) return;
-        Navigator.pop(context, {'toast': 'Sentence deleted'});
+        Navigator.pop(context, {'toast': 'Deleted'});
       },
       child: Container(
           height: 40,

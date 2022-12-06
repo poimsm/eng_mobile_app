@@ -25,6 +25,7 @@ mixin _$User {
   int get totalSentences => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   bool get verified => throw _privateConstructorUsedError;
+  @JsonKey(name: 'screen_flow')
   bool get screenFlow => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,7 +43,7 @@ abstract class $UserCopyWith<$Res> {
       @JsonKey(name: 'total_sentences') int totalSentences,
       String email,
       bool verified,
-      bool screenFlow});
+      @JsonKey(name: 'screen_flow') bool screenFlow});
 }
 
 /// @nodoc
@@ -100,7 +101,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       @JsonKey(name: 'total_sentences') int totalSentences,
       String email,
       bool verified,
-      bool screenFlow});
+      @JsonKey(name: 'screen_flow') bool screenFlow});
 }
 
 /// @nodoc
@@ -151,7 +152,7 @@ class _$_User implements _User {
       @JsonKey(name: 'total_sentences') required this.totalSentences,
       required this.email,
       required this.verified,
-      required this.screenFlow});
+      @JsonKey(name: 'screen_flow') required this.screenFlow});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -165,6 +166,7 @@ class _$_User implements _User {
   @override
   final bool verified;
   @override
+  @JsonKey(name: 'screen_flow')
   final bool screenFlow;
 
   @override
@@ -212,7 +214,7 @@ abstract class _User implements User {
       @JsonKey(name: 'total_sentences') required final int totalSentences,
       required final String email,
       required final bool verified,
-      required final bool screenFlow}) = _$_User;
+      @JsonKey(name: 'screen_flow') required final bool screenFlow}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -226,6 +228,7 @@ abstract class _User implements User {
   @override
   bool get verified;
   @override
+  @JsonKey(name: 'screen_flow')
   bool get screenFlow;
   @override
   @JsonKey(ignore: true)

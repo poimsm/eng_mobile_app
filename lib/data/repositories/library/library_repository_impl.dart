@@ -36,29 +36,32 @@ class LibraryRepositoryImpl implements LibraryRepository {
   }
 
   @override
-  Future<bool> toggleCardFavorite(InfoCard card) async {
+  Future<List<int>> toggleCardFavorite(InfoCard card) async {
     try {
       if (_authService.isAuthenticated) {
-        await _network.put('/info-card',
+        final res = await _network.put('/info-card',
             data: {'id': card.id, 'is_favorite': card.isFavorite});
-        return true;
+        if (!res.ok) return [];
+        return List<int>.from(res.data['ids']);
       }
 
+      List<int> ids = [];
       if (card.isFavorite!) {
         for (final sentence in card.sentences) {
           final cardSentence = sentence.copyWith(
               infoCard: card, sourceType: SourceType.infoCard);
-          await _localDB
+          final id = await _localDB
               .createLocalSentence(convertSentenceToLocal(cardSentence));
+          ids.add(id);
         }
       } else {
         await _localDB.deleteLocalSentencesByCardId(card.id);
       }
 
-      return true;
+      return ids;
     } catch (e) {
       printError('toggleCardFavorite - ${e.toString()}');
-      return false;
+      return [];
     }
   }
 
