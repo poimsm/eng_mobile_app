@@ -1,8 +1,5 @@
-import 'package:eng_mobile_app/data/models/activity.dart';
-import 'package:eng_mobile_app/pages/login_popup/login_popup.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
-import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
@@ -74,15 +71,7 @@ class _QuizScreenState extends State<QuizScreen> {
   _avatar() {
     return InkWell(
       onTap: () {
-        if (GetIt.I.get<AuthService>().isAuthenticated) {
-          Navigator.pushNamed(context, Routes.USER_PROFILE);
-        } else {
-          showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.transparent,
-              isScrollControlled: true,
-              builder: (_) => LoginPopup());
-        }
+        Navigator.pushNamed(context, Routes.USER_PROFILE);
       },
       child: Padding(
         padding: EdgeInsets.all(5),

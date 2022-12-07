@@ -13,7 +13,7 @@ class LoginState {
     this.enableToSaveOrEdit = false,
     this.showVideo = false,
     this.showBanner = false,
-    this.showInvalidEmailErr = false,
+    this.showEmailErr = false,
     this.showServerErr = false,
     this.errMsg = '',
   });
@@ -23,7 +23,7 @@ class LoginState {
   bool enableToSaveOrEdit;
   bool showVideo;
   bool showBanner;
-  bool showInvalidEmailErr;
+  bool showEmailErr;
   bool showServerErr;
   String errMsg;
 
@@ -33,7 +33,7 @@ class LoginState {
     enableToSaveOrEdit,
     showVideo,
     showBanner,
-    showInvalidEmailErr,
+    showEmailErr,
     showServerErr,
     errMsg,
   }) {
@@ -43,7 +43,7 @@ class LoginState {
       enableToSaveOrEdit: enableToSaveOrEdit ?? this.enableToSaveOrEdit,
       showVideo: showVideo ?? this.showVideo,
       showBanner: showBanner ?? this.showBanner,
-      showInvalidEmailErr: showInvalidEmailErr ?? this.showInvalidEmailErr,
+      showEmailErr: showEmailErr ?? this.showEmailErr,
       showServerErr: showServerErr ?? this.showServerErr,
       errMsg: errMsg ?? this.errMsg,
     );
@@ -58,14 +58,13 @@ class LoginPopupNotifier extends StateNotifier<LoginState> {
   final SentenceRepository _sentenceRepository;
 
   bool checkValidEmail(String email) {
-    state = state.copyWith(showInvalidEmailErr: false);
+    state = state.copyWith(showEmailErr: false);
     final bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
 
     if (!emailValid) {
-      state =
-          state.copyWith(errMsg: 'Invalid email', showInvalidEmailErr: true);
+      state = state.copyWith(errMsg: 'Invalid email', showEmailErr: true);
     }
 
     return emailValid;
@@ -90,10 +89,7 @@ class LoginPopupNotifier extends StateNotifier<LoginState> {
 
   void ressetErrorsAndStartLoading() async {
     state = state.copyWith(
-        showInvalidEmailErr: false,
-        showServerErr: false,
-        errMsg: '',
-        loading: true);
+        showEmailErr: false, showServerErr: false, errMsg: '', loading: true);
   }
 
   Future<bool> signIn({required String email, required String password}) async {
@@ -106,14 +102,15 @@ class LoginPopupNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(loading: false);
 
     if (!resp.ok) {
-      String message = 'Something went wrong. Please try again later.';
-
       if (resp.data != null &&
           resp.data['error_code'] == ErrorCodes.EMAIL_OR_PASS_INCORRECT) {
-        message = 'Email or password incorrect';
+        state = state.copyWith(
+            showServerErr: true, errMsg: 'Email or password incorrect');
+        return false;
       }
 
-      state = state.copyWith(showServerErr: true, errMsg: message);
+      state = state.copyWith(
+          showServerErr: true, errMsg: 'Oops! Something went wrong');
       return false;
     }
 
@@ -130,14 +127,15 @@ class LoginPopupNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(loading: false);
 
     if (!resp.ok) {
-      String message = 'Something went wrong. Please try again later.';
-
       if (resp.data != null &&
           resp.data['error_code'] == ErrorCodes.EMAIL_EXISTS) {
-        message = 'Email already exists';
+        state =
+            state.copyWith(showEmailErr: true, errMsg: 'Email already exists');
+        return false;
       }
 
-      state = state.copyWith(showServerErr: true, errMsg: message);
+      state = state.copyWith(
+          showServerErr: true, errMsg: 'Oops! Something went wrong');
       return false;
     }
 

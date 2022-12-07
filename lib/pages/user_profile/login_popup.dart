@@ -1,11 +1,12 @@
 import 'package:eng_mobile_app/pages/layout/controller.dart';
-import 'package:eng_mobile_app/pages/login_popup/login_popup_controller.dart';
 import 'package:eng_mobile_app/routes/routes.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+
+import 'login_popup_controller.dart';
 
 class LoginPopup extends ConsumerStatefulWidget {
   const LoginPopup({super.key});
@@ -33,9 +34,9 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
   late TextEditingController _emailTextCtrl;
   late TextEditingController _passTextCtrl;
 
-  List<String> states = ['creating_account', 'choosing_eng_level', 'login_in'];
-  String currentState = 'creating_account';
-  double height = 540;
+  List<String> states = ['start', 'sign_up', 'sign_in'];
+  String currentState = 'start';
+  double height = 420;
   bool hidePassword = false;
 
   late LoginState loginState;
@@ -43,24 +44,25 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     loginState = ref.watch(loginPopupProvider);
     loginProvider = ref.read(loginPopupProvider.notifier);
 
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
-          color: Colors.white,
-        ),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(60),
+        color: Colors.white,
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
-            if (currentState == states[0])
-              ...createAccountStart(context, setState),
+            if (currentState == states[0]) ...welcomeUser(context, setState),
             if (currentState == states[1])
-              ...createAccountFinish(context, setState),
-            if (currentState == states[2]) ...loginInUser(context, setState),
+              // ...createAccountFinish(context, setState),
+              ...signUp(context, setState),
+            if (currentState == states[2]) ...signIn(context, setState),
           ],
         ),
       ),
@@ -92,6 +94,29 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
       child: TextField(
         maxLines: 1,
         textCapitalization: TextCapitalization.sentences,
+        style: TextStyle(fontSize: 20),
+        decoration: InputDecoration(
+          hintText: 'Your name',
+          counterStyle: TextStyle(fontSize: 15, color: Colors.black38),
+          hintStyle: TextStyle(color: Colors.black26),
+          border: InputBorder.none,
+        ),
+        onChanged: (_) {},
+        controller: _emailTextCtrl,
+      ),
+    );
+  }
+
+  usernameField(BuildContext context) {
+    return Container(
+      width: 290,
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextField(
+        maxLines: 1,
         style: TextStyle(fontSize: 20),
         decoration: InputDecoration(
           hintText: 'Your name',
@@ -295,13 +320,38 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
     );
   }
 
+  loginTitle2() {
+    return SizedBox(
+      width: 290,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Join free 👻',
+            style: TextStyle(
+                fontSize: 26,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Become a user and save your progress every day. Join this awesome and energetic study app :)',
+            style: TextStyle(fontSize: 18, color: Colors.black54),
+          ),
+        ],
+      ),
+    );
+  }
+
   bubbleEngLvl(String lvl, bool isActive) {
     return Container(
-      height: 50,
+      height: 70,
       width: 150,
       decoration: BoxDecoration(
-        color: isActive ? Colors.yellow.shade100 : Color(0xfff1f1f1),
-        borderRadius: BorderRadius.circular(15),
+        color: isActive ? Color(0xffFBFACD) : Color(0xfff1f1f1),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: Text(
@@ -323,7 +373,7 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               bubbleEngLvl('Begginer', false),
-              bubbleEngLvl('Intermediate', false),
+              bubbleEngLvl('Intermediate', true),
             ],
           ),
           SizedBox(
@@ -340,7 +390,7 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
       width: 300,
       child: Text(
         'Pick your English level',
-        style: TextStyle(fontSize: 21, color: Colors.black87),
+        style: TextStyle(fontSize: 19, color: Colors.black54),
       ),
     );
   }
@@ -368,7 +418,7 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
     );
   }
 
-  List<Widget> loginInUser(BuildContext context, StateSetter setState) {
+  List<Widget> signIn(BuildContext context, StateSetter setState) {
     return [
       SizedBox(
         height: 15,
@@ -393,7 +443,7 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
       ),
       if (loginState.showServerErr) errorMsg(loginState.errMsg),
       SizedBox(
-        height: 25,
+        height: 20,
       ),
       footerBtn('Sign In', () async {
         if (_passTextCtrl.text.isEmpty || _emailTextCtrl.text.isEmpty) {
@@ -415,29 +465,99 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
     ];
   }
 
-  List<Widget> createAccountStart(BuildContext context, StateSetter setState) {
+  List<Widget> welcomeUser(BuildContext context, StateSetter setState) {
     return [
-      loginTitle(),
+      SizedBox(
+        height: 10,
+      ),
+      SizedBox(
+        width: double.infinity,
+        child: Text(
+          'Become a user',
+          style: TextStyle(
+              fontSize: 26, color: Colors.black87, fontWeight: FontWeight.w500),
+        ),
+      ),
+      SizedBox(
+        height: 15,
+      ),
+      Image.asset(
+        'assets/avatars_01.png',
+        width: 200,
+      ),
+      SizedBox(
+        height: 15,
+      ),
+      Text(
+        'And save your progress every day. Join this awesome and energetic study app :)',
+        style: TextStyle(fontSize: 18, color: Colors.black54),
+      ),
+      SizedBox(
+        height: 25,
+      ),
+      footerBtn('Sign Up', () async {
+        currentState = states[1];
+        height = 590;
+        setState(() {});
+      }),
+      SizedBox(
+        height: 25,
+      ),
+      footerText(() {
+        _emailTextCtrl.text = '';
+        _passTextCtrl.text = '';
+        currentState = states[2];
+        height = 440;
+        setState(() {});
+      })
+    ];
+  }
+
+  List<Widget> signUp(BuildContext context, StateSetter setState) {
+    return [
+      // SizedBox(height: 10,),
+      SizedBox(
+        width: double.infinity,
+        child: Text(
+          'Create account',
+          style: TextStyle(
+              fontSize: 26, color: Colors.black87, fontWeight: FontWeight.w500),
+        ),
+      ),
+
       SizedBox(
         height: 25,
       ),
       emailField(context),
-      SizedBox(
-        height: loginState.showInvalidEmailErr ? 0 : 5,
-      ),
-      if (loginState.showInvalidEmailErr)
-        errorMsg(loginState.errMsg, fontSize: 17),
+
+      if (loginState.showEmailErr) ...[
+        SizedBox(
+          height: 7,
+        ),
+        errorMsg(loginState.errMsg),
+      ],
       SizedBox(
         height: 15,
       ),
       passwordField(),
       SizedBox(
-        height: loginState.showServerErr ? 15 : 25,
+        height: 30,
       ),
-      if (loginState.showServerErr) errorMsg(loginState.errMsg),
+      chooseLevel(),
       SizedBox(
         height: 15,
       ),
+      englishLevel(),
+      SizedBox(
+        height: 25,
+      ),
+      if (loginState.showServerErr) ...[
+        errorMsg(loginState.errMsg),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+
       footerBtn('Sign Up', () async {
         if (_passTextCtrl.text.isEmpty || _emailTextCtrl.text.isEmpty) {
           return;
@@ -459,32 +579,6 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
       SizedBox(
         height: 25,
       ),
-      footerText(() {
-        _emailTextCtrl.text = '';
-        _passTextCtrl.text = '';
-        currentState = states[2];
-        height = 460;
-        setState(() {});
-      })
-    ];
-  }
-
-  List<Widget> createAccountFinish(BuildContext context, StateSetter setState) {
-    return [
-      SizedBox(
-        height: 25,
-      ),
-      chooseLevel(),
-      SizedBox(
-        height: 25,
-      ),
-      englishLevel(),
-      SizedBox(
-        height: 65,
-      ),
-      footerBtn('Finish', () {
-        Navigator.pop(context);
-      }),
     ];
   }
 }
