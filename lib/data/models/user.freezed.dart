@@ -21,8 +21,6 @@ User _$UserFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$User {
   int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'total_sentences')
-  int get totalSentences => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   bool get verified => throw _privateConstructorUsedError;
   @JsonKey(name: 'screen_flow')
@@ -40,7 +38,6 @@ abstract class $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'total_sentences') int totalSentences,
       String email,
       bool verified,
       @JsonKey(name: 'screen_flow') bool screenFlow});
@@ -60,7 +57,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @override
   $Res call({
     Object? id = null,
-    Object? totalSentences = null,
     Object? email = null,
     Object? verified = null,
     Object? screenFlow = null,
@@ -69,10 +65,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalSentences: null == totalSentences
-          ? _value.totalSentences
-          : totalSentences // ignore: cast_nullable_to_non_nullable
               as int,
       email: null == email
           ? _value.email
@@ -98,7 +90,6 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'total_sentences') int totalSentences,
       String email,
       bool verified,
       @JsonKey(name: 'screen_flow') bool screenFlow});
@@ -114,7 +105,6 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   @override
   $Res call({
     Object? id = null,
-    Object? totalSentences = null,
     Object? email = null,
     Object? verified = null,
     Object? screenFlow = null,
@@ -123,10 +113,6 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalSentences: null == totalSentences
-          ? _value.totalSentences
-          : totalSentences // ignore: cast_nullable_to_non_nullable
               as int,
       email: null == email
           ? _value.email
@@ -149,7 +135,6 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 class _$_User implements _User {
   const _$_User(
       {required this.id,
-      @JsonKey(name: 'total_sentences') required this.totalSentences,
       required this.email,
       required this.verified,
       @JsonKey(name: 'screen_flow') required this.screenFlow});
@@ -158,9 +143,6 @@ class _$_User implements _User {
 
   @override
   final int id;
-  @override
-  @JsonKey(name: 'total_sentences')
-  final int totalSentences;
   @override
   final String email;
   @override
@@ -171,7 +153,7 @@ class _$_User implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, totalSentences: $totalSentences, email: $email, verified: $verified, screenFlow: $screenFlow)';
+    return 'User(id: $id, email: $email, verified: $verified, screenFlow: $screenFlow)';
   }
 
   @override
@@ -180,8 +162,6 @@ class _$_User implements _User {
         (other.runtimeType == runtimeType &&
             other is _$_User &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.totalSentences, totalSentences) ||
-                other.totalSentences == totalSentences) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.verified, verified) ||
                 other.verified == verified) &&
@@ -191,8 +171,7 @@ class _$_User implements _User {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, totalSentences, email, verified, screenFlow);
+  int get hashCode => Object.hash(runtimeType, id, email, verified, screenFlow);
 
   @JsonKey(ignore: true)
   @override
@@ -211,7 +190,6 @@ class _$_User implements _User {
 abstract class _User implements User {
   const factory _User(
       {required final int id,
-      @JsonKey(name: 'total_sentences') required final int totalSentences,
       required final String email,
       required final bool verified,
       @JsonKey(name: 'screen_flow') required final bool screenFlow}) = _$_User;
@@ -220,9 +198,6 @@ abstract class _User implements User {
 
   @override
   int get id;
-  @override
-  @JsonKey(name: 'total_sentences')
-  int get totalSentences;
   @override
   String get email;
   @override
@@ -233,4 +208,216 @@ abstract class _User implements User {
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;
+}
+
+UserStats _$UserStatsFromJson(Map<String, dynamic> json) {
+  return _UserStats.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UserStats {
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_sentences')
+  int get totalSentences => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_videos')
+  int get totalVideos => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_cards')
+  int get totalCards => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $UserStatsCopyWith<UserStats> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UserStatsCopyWith<$Res> {
+  factory $UserStatsCopyWith(UserStats value, $Res Function(UserStats) then) =
+      _$UserStatsCopyWithImpl<$Res, UserStats>;
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'total_sentences') int totalSentences,
+      @JsonKey(name: 'total_videos') int totalVideos,
+      @JsonKey(name: 'total_cards') int totalCards});
+}
+
+/// @nodoc
+class _$UserStatsCopyWithImpl<$Res, $Val extends UserStats>
+    implements $UserStatsCopyWith<$Res> {
+  _$UserStatsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? totalSentences = null,
+    Object? totalVideos = null,
+    Object? totalCards = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalSentences: null == totalSentences
+          ? _value.totalSentences
+          : totalSentences // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalVideos: null == totalVideos
+          ? _value.totalVideos
+          : totalVideos // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalCards: null == totalCards
+          ? _value.totalCards
+          : totalCards // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_UserStatsCopyWith<$Res> implements $UserStatsCopyWith<$Res> {
+  factory _$$_UserStatsCopyWith(
+          _$_UserStats value, $Res Function(_$_UserStats) then) =
+      __$$_UserStatsCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'total_sentences') int totalSentences,
+      @JsonKey(name: 'total_videos') int totalVideos,
+      @JsonKey(name: 'total_cards') int totalCards});
+}
+
+/// @nodoc
+class __$$_UserStatsCopyWithImpl<$Res>
+    extends _$UserStatsCopyWithImpl<$Res, _$_UserStats>
+    implements _$$_UserStatsCopyWith<$Res> {
+  __$$_UserStatsCopyWithImpl(
+      _$_UserStats _value, $Res Function(_$_UserStats) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? totalSentences = null,
+    Object? totalVideos = null,
+    Object? totalCards = null,
+  }) {
+    return _then(_$_UserStats(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalSentences: null == totalSentences
+          ? _value.totalSentences
+          : totalSentences // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalVideos: null == totalVideos
+          ? _value.totalVideos
+          : totalVideos // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalCards: null == totalCards
+          ? _value.totalCards
+          : totalCards // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_UserStats implements _UserStats {
+  const _$_UserStats(
+      {required this.id,
+      @JsonKey(name: 'total_sentences') required this.totalSentences,
+      @JsonKey(name: 'total_videos') required this.totalVideos,
+      @JsonKey(name: 'total_cards') required this.totalCards});
+
+  factory _$_UserStats.fromJson(Map<String, dynamic> json) =>
+      _$$_UserStatsFromJson(json);
+
+  @override
+  final int id;
+  @override
+  @JsonKey(name: 'total_sentences')
+  final int totalSentences;
+  @override
+  @JsonKey(name: 'total_videos')
+  final int totalVideos;
+  @override
+  @JsonKey(name: 'total_cards')
+  final int totalCards;
+
+  @override
+  String toString() {
+    return 'UserStats(id: $id, totalSentences: $totalSentences, totalVideos: $totalVideos, totalCards: $totalCards)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_UserStats &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.totalSentences, totalSentences) ||
+                other.totalSentences == totalSentences) &&
+            (identical(other.totalVideos, totalVideos) ||
+                other.totalVideos == totalVideos) &&
+            (identical(other.totalCards, totalCards) ||
+                other.totalCards == totalCards));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, totalSentences, totalVideos, totalCards);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_UserStatsCopyWith<_$_UserStats> get copyWith =>
+      __$$_UserStatsCopyWithImpl<_$_UserStats>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_UserStatsToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UserStats implements UserStats {
+  const factory _UserStats(
+          {required final int id,
+          @JsonKey(name: 'total_sentences') required final int totalSentences,
+          @JsonKey(name: 'total_videos') required final int totalVideos,
+          @JsonKey(name: 'total_cards') required final int totalCards}) =
+      _$_UserStats;
+
+  factory _UserStats.fromJson(Map<String, dynamic> json) =
+      _$_UserStats.fromJson;
+
+  @override
+  int get id;
+  @override
+  @JsonKey(name: 'total_sentences')
+  int get totalSentences;
+  @override
+  @JsonKey(name: 'total_videos')
+  int get totalVideos;
+  @override
+  @JsonKey(name: 'total_cards')
+  int get totalCards;
+  @override
+  @JsonKey(ignore: true)
+  _$$_UserStatsCopyWith<_$_UserStats> get copyWith =>
+      throw _privateConstructorUsedError;
 }

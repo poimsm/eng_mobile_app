@@ -99,7 +99,7 @@ class LibraryPageState extends ConsumerState<LibraryPage> {
                                       ),
                                 duration: Duration(milliseconds: 200),
                                 child: Text(
-                                    '${libraryState.sentenceCounter} Sentences'),
+                                    '${libraryState.sentenceCounter} Words'),
                               ),
                             ),
                           )

@@ -35,3 +35,15 @@ class InfoCard with _$InfoCard {
   factory InfoCard.fromJson(Map<String, Object?> json) =>
       _$InfoCardFromJson(json);
 }
+
+@freezed
+class Favorite with _$Favorite {
+  const factory Favorite({
+    required int id,
+    @JsonKey(name: 'image_url') required String imageUrl,
+    @JsonKey(name: 'source_type') required int sourceType,
+  }) = _Favorite;
+
+  factory Favorite.fromJson(Map<String, Object?> json) =>
+      _$FavoriteFromJson(json);
+}

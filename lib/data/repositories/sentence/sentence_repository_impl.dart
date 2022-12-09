@@ -37,7 +37,7 @@ class SentenceRepositoryImpl implements SentenceRepository {
         localSentencesMap.add(lw.toJson());
       }
 
-      final resp = await _network.post('/convert-local-sentences',
+      final resp = await _network.post('/local-sentences-to-sentences',
           data: {'local_sentences': localSentencesMap});
       if (!resp.ok) return [];
       return (resp.data as List).map((x) => Sentence.fromJson(x)).toList();

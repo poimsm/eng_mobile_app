@@ -12,6 +12,8 @@ class SentenceDetailState {
     this.enableToSaveOrEdit = false,
     this.showVideo = false,
     this.showBanner = false,
+    this.wordTextFieldActive = false,
+    this.meaningTextFieldActive = false,
   });
 
   bool isLoading;
@@ -19,6 +21,8 @@ class SentenceDetailState {
   bool enableToSaveOrEdit;
   bool showVideo;
   bool showBanner;
+  bool wordTextFieldActive;
+  bool meaningTextFieldActive;
 
   SentenceDetailState copyWith({
     isLoading,
@@ -26,6 +30,8 @@ class SentenceDetailState {
     enableToSaveOrEdit,
     showVideo,
     showBanner,
+    wordTextFieldActive,
+    meaningTextFieldActive,
   }) {
     return SentenceDetailState(
       isLoading: isLoading ?? this.isLoading,
@@ -34,6 +40,9 @@ class SentenceDetailState {
       enableToSaveOrEdit: enableToSaveOrEdit ?? this.enableToSaveOrEdit,
       showVideo: showVideo ?? this.showVideo,
       showBanner: showBanner ?? this.showBanner,
+      wordTextFieldActive: wordTextFieldActive ?? this.wordTextFieldActive,
+      meaningTextFieldActive:
+          meaningTextFieldActive ?? this.meaningTextFieldActive,
     );
   }
 }
@@ -59,6 +68,14 @@ class SentenceDetailNotifier extends StateNotifier<SentenceDetailState> {
     if (state.enableToSaveOrEdit != enable) {
       state = state.copyWith(enableToSaveOrEdit: enable);
     }
+  }
+
+  setWordTextFieldActive(bool val) {
+    state = state.copyWith(wordTextFieldActive: val);
+  }
+
+  setMeaningTextFieldActive(bool val) {
+    state = state.copyWith(meaningTextFieldActive: val);
   }
 
   setShowVideo(bool val) {

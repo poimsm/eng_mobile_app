@@ -42,7 +42,7 @@ class HomeState {
       this.showNextBtn = true,
       this.activityCounter = 1,
       this.showQuizScreen = true,
-      this.activityRoundCounter = 1,
+      this.activityRoundCounter = 2,
       this.readyForNextActivity = true,
       this.showVideo = false,
       this.shortVideo,

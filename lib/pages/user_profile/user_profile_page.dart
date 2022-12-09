@@ -1,9 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:eng_mobile_app/pages/layout/controller.dart';
+import 'package:eng_mobile_app/pages/user_profile/user_profile_controller.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
+import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import 'login_popup.dart';
 
@@ -17,20 +21,31 @@ class UserProfilePage extends ConsumerStatefulWidget {
 class UserProfilePageState extends ConsumerState<UserProfilePage> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 1), () {
-      showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          builder: (_) => LoginPopup());
+    Future.delayed(Duration(seconds: 0), () async {
+      context.read<Screen>().startLoading();
+      final authService = GetIt.I.get<AuthService>();
+      await ref.read(userProfileProvider.notifier).getPageData();
+      context.read<Screen>().stopLoading();
+      if (!authService.isAuthenticated) {
+        await sleep(500);
+        showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (_) => LoginPopup());
+      }
     });
     super.initState();
   }
 
-  final user = GetIt.I.get<AuthService>().user;
+  late UserProfileState userProfileState;
+  late UserProfileNotifier userProfileNotifier;
   Size size = Size.zero;
   @override
   Widget build(BuildContext context) {
+    userProfileState = ref.watch(userProfileProvider);
+    userProfileNotifier = ref.read(userProfileProvider.notifier);
+    size = MediaQuery.of(context).size;
     return Scaffold(
         body: CustomScrollView(
       slivers: [
@@ -44,7 +59,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
           floating: true,
           pinned: false,
           snap: true,
-          expandedHeight: 30,
+          // expandedHeight: 30,
           collapsedHeight: 240,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
@@ -62,9 +77,15 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          'assets/user_17.png',
-                          width: 60,
+                        InkWell(
+                          onTap: (() {
+                            userProfileNotifier.getPageData();
+                            // userProfileNotifier.getContentById(1);
+                          }),
+                          child: Image.asset(
+                            'assets/user_17.png',
+                            width: 60,
+                          ),
                         ),
                         SizedBox(
                           height: 5,
@@ -73,16 +94,18 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Guess',
+                              userProfileState.user.email,
+                              // 'poimsm@gmail.com',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              width: 20,
+                              width: userProfileState.user.id < 0 ? 35 : 15,
                             ),
-                            _signUpBtn()
+                            if (userProfileState.user.id > 0) _checkIcon(),
+                            if (userProfileState.user.id < 0) _signUpBtn()
                           ],
                         )
                       ],
@@ -94,9 +117,10 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _itemTotal(53, 'WORDS'),
-                      _itemTotal(5, 'CARDS'),
-                      _itemTotal(3, 'VIDEOS'),
+                      _itemTotal(
+                          userProfileState.stats.totalSentences, 'WORDS'),
+                      _itemTotal(userProfileState.stats.totalCards, 'CARDS'),
+                      _itemTotal(userProfileState.stats.totalVideos, 'VIDEOS'),
                     ],
                   )
                 ],
@@ -104,28 +128,56 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
             ),
           ),
         ),
-        SliverPadding(
-          padding: EdgeInsets.only(top: 10),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1.0,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Container(
-                  height: 150,
-                  color: Colors.amber[100],
+        userProfileState.favorites.isEmpty
+            ? SliverToBoxAdapter(
+                child: Container(
+                  height: size.height - 240,
                   alignment: Alignment.center,
-                  child: Text(index.toString()),
-                );
-              },
-              childCount: 15,
-            ),
-          ),
-        ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/folder.png',
+                        width: 120,
+                      ),
+                      Text(
+                        'You have no card or video yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.2,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : SliverPadding(
+                padding:
+                    EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 10),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.8,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12)),
+                        child: Image.network(
+                            userProfileState.favorites[index].imageUrl,
+                            fit: BoxFit.cover),
+                      );
+                    },
+                    childCount: userProfileState.favorites.length,
+                  ),
+                ),
+              ),
         // SliverList(
         //   delegate: SliverChildBuilderDelegate(
         //     (BuildContext context, int index) {
@@ -149,6 +201,20 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
     ));
   }
 
+  _checkIcon() {
+    return Container(
+      height: 30,
+      width: 30,
+      decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.3), shape: BoxShape.circle),
+      child: Icon(
+        Icons.check,
+        color: Colors.white,
+        size: 20,
+      ),
+    );
+  }
+
   _itemTotal(int total, String type) {
     return SizedBox(
       width: 100,
@@ -162,7 +228,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
           Text(
             type,
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 color: Colors.white,
                 fontWeight: FontWeight.normal),
           ),

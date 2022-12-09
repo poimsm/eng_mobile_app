@@ -3,6 +3,7 @@ import 'package:eng_mobile_app/data/repositories/screen_flow/screen_flow_reposit
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:uuid/uuid.dart';
 
 class ScreenFlowRepositoryImpl implements ScreenFlowRepository {
   final Network _network;
@@ -14,8 +15,13 @@ class ScreenFlowRepositoryImpl implements ScreenFlowRepository {
 
   @override
   Future<void> addType(String type) async {
+    final uuid = Uuid();
     if (_authService.isAuthenticated && _authService.user.screenFlow) {
-      await _network.post('/screen-flow', data: {'type': type});
+      _network
+          .post('user/screen-flow', data: {'type': type, 'uuid': uuid.v4()});
+    } else {
+      _network
+          .post('screen-flow-limited', data: {'type': type, 'uuid': uuid.v4()});
     }
   }
 }

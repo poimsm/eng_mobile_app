@@ -62,7 +62,7 @@ class LocalDBService {
   Future updateLocalSentence(Map payload) async {
     await _database!.rawUpdate(
         'UPDATE sentences SET sentence = ?, meaning = ? WHERE id = ?',
-        [payload['id'], payload['sentence'], payload['meaning']]);
+        [payload['sentence'], payload['meaning'], payload['id']]);
   }
 
   Future deleteAllLocalSentences() async {
@@ -96,4 +96,44 @@ class LocalDBService {
         await _database!.rawQuery('SELECT * FROM sentences where id = ?', [id]);
     return list[0];
   }
+
+  Future<List<LocalSentence>> getVideoAndCardSentencesOnly() async {
+    List list = await _database!.rawQuery('''SELECT * FROM sentences
+           WHERE short_video IS NOT NULL OR info_card IS NOT NULL
+           GROUP BY short_video, info_card
+           ORDER BY id DESC
+        ''');
+    List<LocalSentence> sentences =
+        list.map((e) => LocalSentence.fromJson(e)).toList();
+    return sentences;
+  }
+
+  Future<int> getTotalVideos() async {
+    List list = await _database!.rawQuery('''SELECT short_video FROM sentences
+           WHERE short_video IS NOT NULL
+           GROUP BY short_video
+           ORDER BY id DESC
+        ''');
+    return list.length;
+  }
+
+  Future<int> getTotalCards() async {
+    List list = await _database!.rawQuery('''SELECT info_card FROM sentences
+           WHERE info_card IS NOT NULL
+           GROUP BY info_card
+           ORDER BY id DESC
+        ''');
+    return list.length;
+  }
+
+  Future<int> getTotalSentences() async {
+    List list = await _database!.rawQuery('SELECT * FROM sentences');
+    return list.length;
+  }
+
+  // Future<Map<String, int>> getTotalVideosCardsAndSentences() async {
+  //   List list =
+  //       await _database!.rawQuery('SELECT * FROM sentences where id = ?', [id]);
+  //   return list[0];
+  // }
 }

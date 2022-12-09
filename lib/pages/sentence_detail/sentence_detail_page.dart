@@ -28,6 +28,8 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
 
   late TextEditingController sentenceCtrl;
   late TextEditingController meaningCtrl;
+  final _focusWord = FocusNode();
+  final _focusMeaning = FocusNode();
 
   @override
   void initState() {
@@ -35,6 +37,9 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
 
     sentenceCtrl = TextEditingController();
     meaningCtrl = TextEditingController();
+
+    _focusWord.addListener(_onFocusWordChange);
+    _focusMeaning.addListener(_onFocusMeaningChange);
 
     if (!widget.isNewSentence) {
       if (widget.sentence!.type == SentenceType.group) {
@@ -51,7 +56,21 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
   void dispose() {
     sentenceCtrl.dispose();
     meaningCtrl.dispose();
+    _focusWord.dispose();
+    _focusMeaning.dispose();
     super.dispose();
+  }
+
+  void _onFocusWordChange() {
+    ref
+        .read(sentenceDetailProvider.notifier)
+        .setWordTextFieldActive(_focusWord.hasFocus);
+  }
+
+  void _onFocusMeaningChange() {
+    ref
+        .read(sentenceDetailProvider.notifier)
+        .setMeaningTextFieldActive(_focusMeaning.hasFocus);
   }
 
   Size size = Size.zero;
@@ -182,7 +201,7 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
                           fontWeight: FontWeight.bold,
                         )),
                     TextSpan(
-                        text: ' sentences',
+                        text: ' words',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
@@ -204,7 +223,11 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
         children: [
           Row(children: [
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () async {
+                FocusScope.of(context).unfocus();
+                await sleep(50);
+                Navigator.pop(context);
+              },
               icon: Icon(Icons.close, size: 30, color: Colors.black87),
             )
           ]),
@@ -274,10 +297,14 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
           width: size.width * 0.85,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: BoxDecoration(
-            color: Color(0xffEEEEEE),
-            borderRadius: BorderRadius.circular(15),
-          ),
+              color: Color(0xffF1F1F1F1),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                  color: Colors.greenAccent.withOpacity(
+                      sentenceDetailState.wordTextFieldActive ? 1 : 0),
+                  width: 2)),
           child: TextField(
+            focusNode: _focusWord,
             enabled: widget.sentence == null ||
                 (widget.sentence != null &&
                     widget.sentence!.origin != SentenceOrigin.resource),
@@ -500,10 +527,14 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
-              color: Color(0xffEEEEEE),
-              borderRadius: BorderRadius.circular(15),
-            ),
+                color: Color(0xffF1F1F1F1),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                    color: Colors.greenAccent.withOpacity(
+                        sentenceDetailState.meaningTextFieldActive ? 1 : 0),
+                    width: 2)),
             child: TextField(
+              focusNode: _focusMeaning,
               maxLines: 12,
               // maxLength: 200,
               textCapitalization: TextCapitalization.sentences,
@@ -547,13 +578,15 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             .addUserSentence(sentence.sentence);
 
         if (!mounted) return;
+        FocusScope.of(context).unfocus();
+        await sleep(50);
         Navigator.pop(context, {'toast': 'Word added'});
       },
       child: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 17),
           decoration: BoxDecoration(
-              color: Color(0xff6E5AA0).withOpacity(
+              color: Color(0xff444444).withOpacity(
                   sentenceDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
@@ -585,13 +618,15 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
         ref.read(sentenceListProvider.notifier).editSentenceUI(sentence);
 
         if (!mounted) return;
+        FocusScope.of(context).unfocus();
+        await sleep(50);
         Navigator.pop(context, {'toast': 'Saved'});
       },
       child: Container(
           height: 40,
           padding: EdgeInsets.symmetric(horizontal: 17),
           decoration: BoxDecoration(
-              color: Color(0xff6E5AA0).withOpacity(
+              color: Color(0xff444444).withOpacity(
                   sentenceDetailState.enableToSaveOrEdit ? 1 : 0.2),
               borderRadius: BorderRadius.circular(8)),
           child: Center(
@@ -618,6 +653,8 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             .deleteSentenceUI(widget.sentence!.id);
 
         if (!mounted) return;
+        FocusScope.of(context).unfocus();
+        await sleep(50);
         Navigator.pop(context, {'toast': 'Deleted'});
       },
       child: Container(

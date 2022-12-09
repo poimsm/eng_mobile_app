@@ -7,8 +7,7 @@ User _fakeUser = User(
   id: -1,
   verified: false,
   screenFlow: false,
-  email: 'fake@fake.com',
-  totalSentences: 0,
+  email: 'Visitor',
 );
 
 class AuthService {
@@ -141,6 +140,17 @@ class AuthService {
       printError(s.toString());
       return Response(ok: false);
     }
+  }
+
+  Future<User> getProfile() async {
+    if (_user.id != -1) {
+      final config = NetworkConfigWithJWBToken(_token).config();
+      final resp = await Network(config).get('/user/data');
+      if (!resp.ok) return _user;
+      _user = User.fromJson(resp.data);
+      return _user;
+    }
+    return _user;
   }
 
   // Future<bool> deleteUser(int id) async {

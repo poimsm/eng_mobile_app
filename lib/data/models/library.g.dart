@@ -52,3 +52,16 @@ Map<String, dynamic> _$$_InfoCardToJson(_$_InfoCard instance) =>
       'sentences': instance.sentences,
       'collocations': instance.collocations,
     };
+
+_$_Favorite _$$_FavoriteFromJson(Map<String, dynamic> json) => _$_Favorite(
+      id: json['id'] as int,
+      imageUrl: json['image_url'] as String,
+      sourceType: json['source_type'] as int,
+    );
+
+Map<String, dynamic> _$$_FavoriteToJson(_$_Favorite instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'image_url': instance.imageUrl,
+      'source_type': instance.sourceType,
+    };

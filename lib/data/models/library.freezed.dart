@@ -546,3 +546,189 @@ abstract class _InfoCard implements InfoCard {
   _$$_InfoCardCopyWith<_$_InfoCard> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+Favorite _$FavoriteFromJson(Map<String, dynamic> json) {
+  return _Favorite.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Favorite {
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image_url')
+  String get imageUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'source_type')
+  int get sourceType => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $FavoriteCopyWith<Favorite> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FavoriteCopyWith<$Res> {
+  factory $FavoriteCopyWith(Favorite value, $Res Function(Favorite) then) =
+      _$FavoriteCopyWithImpl<$Res, Favorite>;
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'image_url') String imageUrl,
+      @JsonKey(name: 'source_type') int sourceType});
+}
+
+/// @nodoc
+class _$FavoriteCopyWithImpl<$Res, $Val extends Favorite>
+    implements $FavoriteCopyWith<$Res> {
+  _$FavoriteCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? imageUrl = null,
+    Object? sourceType = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      sourceType: null == sourceType
+          ? _value.sourceType
+          : sourceType // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_FavoriteCopyWith<$Res> implements $FavoriteCopyWith<$Res> {
+  factory _$$_FavoriteCopyWith(
+          _$_Favorite value, $Res Function(_$_Favorite) then) =
+      __$$_FavoriteCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id,
+      @JsonKey(name: 'image_url') String imageUrl,
+      @JsonKey(name: 'source_type') int sourceType});
+}
+
+/// @nodoc
+class __$$_FavoriteCopyWithImpl<$Res>
+    extends _$FavoriteCopyWithImpl<$Res, _$_Favorite>
+    implements _$$_FavoriteCopyWith<$Res> {
+  __$$_FavoriteCopyWithImpl(
+      _$_Favorite _value, $Res Function(_$_Favorite) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? imageUrl = null,
+    Object? sourceType = null,
+  }) {
+    return _then(_$_Favorite(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      sourceType: null == sourceType
+          ? _value.sourceType
+          : sourceType // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_Favorite implements _Favorite {
+  const _$_Favorite(
+      {required this.id,
+      @JsonKey(name: 'image_url') required this.imageUrl,
+      @JsonKey(name: 'source_type') required this.sourceType});
+
+  factory _$_Favorite.fromJson(Map<String, dynamic> json) =>
+      _$$_FavoriteFromJson(json);
+
+  @override
+  final int id;
+  @override
+  @JsonKey(name: 'image_url')
+  final String imageUrl;
+  @override
+  @JsonKey(name: 'source_type')
+  final int sourceType;
+
+  @override
+  String toString() {
+    return 'Favorite(id: $id, imageUrl: $imageUrl, sourceType: $sourceType)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Favorite &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.sourceType, sourceType) ||
+                other.sourceType == sourceType));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, imageUrl, sourceType);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_FavoriteCopyWith<_$_Favorite> get copyWith =>
+      __$$_FavoriteCopyWithImpl<_$_Favorite>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_FavoriteToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Favorite implements Favorite {
+  const factory _Favorite(
+          {required final int id,
+          @JsonKey(name: 'image_url') required final String imageUrl,
+          @JsonKey(name: 'source_type') required final int sourceType}) =
+      _$_Favorite;
+
+  factory _Favorite.fromJson(Map<String, dynamic> json) = _$_Favorite.fromJson;
+
+  @override
+  int get id;
+  @override
+  @JsonKey(name: 'image_url')
+  String get imageUrl;
+  @override
+  @JsonKey(name: 'source_type')
+  int get sourceType;
+  @override
+  @JsonKey(ignore: true)
+  _$$_FavoriteCopyWith<_$_Favorite> get copyWith =>
+      throw _privateConstructorUsedError;
+}
