@@ -7,6 +7,7 @@ import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import 'login_popup.dart';
@@ -22,20 +23,29 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 0), () async {
-      context.read<Screen>().startLoading();
+      await fetchInitData();
+
       final authService = GetIt.I.get<AuthService>();
-      await ref.read(userProfileProvider.notifier).getPageData();
-      context.read<Screen>().stopLoading();
       if (!authService.isAuthenticated) {
         await sleep(500);
-        showModalBottomSheet(
+        final refresh = await showModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
             builder: (_) => LoginPopup());
+
+        if (refresh != null && refresh) {
+          await fetchInitData();
+        }
       }
     });
     super.initState();
+  }
+
+  Future fetchInitData() async {
+    context.read<Screen>().startLoading();
+    await ref.read(userProfileProvider.notifier).getPageData();
+    context.read<Screen>().stopLoading();
   }
 
   late UserProfileState userProfileState;
@@ -52,7 +62,12 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
         SliverAppBar(
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final refresh = await _presentActionSheet();
+                  if (refresh != null && refresh) {
+                    await fetchInitData();
+                  }
+                },
                 icon: Icon(Icons.more_horiz, color: Colors.white, size: 30))
           ],
           backgroundColor: Color(0xff6E5AA0),
@@ -239,12 +254,16 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
 
   _signUpBtn() {
     return InkWell(
-      onTap: () {
-        showModalBottomSheet(
+      onTap: () async {
+        final refresh = await showModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
             builder: (_) => LoginPopup());
+
+        if (refresh != null && refresh) {
+          await fetchInitData();
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -256,5 +275,50 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
         ),
       ),
     );
+  }
+
+  Future _presentActionSheet() async {
+    return showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (context) {
+          return Container(
+              width: size.width,
+              height: 130,
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(13),
+                      topRight: Radius.circular(13))),
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: () {
+                  userProfileNotifier.logout();
+                  Navigator.pop(context, true);
+                },
+                child: SizedBox(
+                  width: 150,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LineIcons.powerOff,
+                        size: 25,
+                        color: Colors.black87,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Log out',
+                        style: TextStyle(color: Colors.black87, fontSize: 19),
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+        });
   }
 }

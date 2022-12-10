@@ -23,7 +23,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<List<Favorite>> getFavoriteResources() async {
     if (_authService.isAuthenticated) {
-      final resp = await _network.get('user/favorites');
+      final resp = await _network.get('/user/favorites');
       if (!resp.ok) return [];
       List<Favorite> favorites =
           (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
@@ -44,7 +44,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<FavoriteResponse?> getCardOrVideoByFavoriteId(int id) async {
-    final resp = await _network.get('user/favorites?id=$id');
+    final resp = await _network.get('/user/favorites?id=$id');
     if (!resp.ok) return null;
 
     FavoriteResponse favResp;
@@ -68,7 +68,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<UserStats> getStats() async {
     if (_authService.isAuthenticated) {
-      final resp = await _network.get('user/stats');
+      final resp = await _network.get('/user/stats');
       if (!resp.ok) {
         return UserStats(
             id: -1, totalSentences: 0, totalCards: 0, totalVideos: 0);

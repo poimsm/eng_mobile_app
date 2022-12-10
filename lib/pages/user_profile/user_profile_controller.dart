@@ -3,13 +3,14 @@ import 'package:eng_mobile_app/data/models/user.dart';
 import 'package:eng_mobile_app/data/repositories/user/enums.dart';
 import 'package:eng_mobile_app/data/repositories/user/user_repository.dart';
 import 'package:eng_mobile_app/data/repositories/user/user_repository_impl.dart';
+import 'package:eng_mobile_app/services/auth/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
 class UserProfileState {
   UserProfileState({
-    this.isLoading = false,
-    this.user =
-        const User(id: -1, email: 'Visitor', screenFlow: false, verified: false),
+    this.user = const User(
+        id: -1, email: 'Visitor', screenFlow: false, verified: false),
     this.favorites = const [],
     this.stats = const UserStats(
       id: -1,
@@ -19,19 +20,16 @@ class UserProfileState {
     ),
   });
 
-  bool isLoading;
   User user;
   List<Favorite> favorites;
   UserStats stats;
 
   UserProfileState copyWith({
-    isLoading,
     user,
     favorites,
     stats,
   }) {
     return UserProfileState(
-      isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
       favorites: favorites ?? this.favorites,
       stats: stats ?? this.stats,
@@ -40,25 +38,27 @@ class UserProfileState {
 }
 
 class UserProfileNotifier extends StateNotifier<UserProfileState> {
-  UserProfileNotifier(this._userRepository) : super(UserProfileState());
+  UserProfileNotifier(this._userRepository, this._authService)
+      : super(UserProfileState());
 
   final UserRepository _userRepository;
+  final AuthService _authService;
 
   Future<bool> getPageData() async {
-    state = state.copyWith(isLoading: true);
     final stats = await _userRepository.getStats();
     final user = await _userRepository.getProfile();
     final favorites = await _userRepository.getFavoriteResources();
-    state = state.copyWith(isLoading: false);
     state = state.copyWith(user: user, favorites: favorites, stats: stats);
     return true;
   }
 
   Future<FavoriteResponse?> getContentById(int id) async {
-    state = state.copyWith(isLoading: true);
     final resp = await _userRepository.getCardOrVideoByFavoriteId(id);
-    state = state.copyWith(isLoading: false);
     return resp;
+  }
+
+  void logout() async {
+    _authService.loginOut();
   }
 
   void screenFlow() async {
@@ -72,5 +72,6 @@ final userProfileProvider =
     StateNotifierProvider.autoDispose<UserProfileNotifier, UserProfileState>(
         (ref) {
   final userRepository = ref.watch(userRepositoryProvider);
-  return UserProfileNotifier(userRepository);
+  final authService = GetIt.I.get<AuthService>();
+  return UserProfileNotifier(userRepository, authService);
 });

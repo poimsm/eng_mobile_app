@@ -457,10 +457,9 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
         if (!respOk) return;
 
         final screen = context.read<Screen>();
-        screen.showToast('Welcome to FALOU!');
+        screen.showToast('Welcome!');
 
-        Navigator.pop(context);
-        Navigator.pushNamed(context, Routes.USER_PROFILE);
+        Navigator.pop(context, true);
       }),
     ];
   }
@@ -571,10 +570,9 @@ class LoginPopupState extends ConsumerState<LoginPopup> {
         if (!respOk) return;
 
         final screen = context.read<Screen>();
-        screen.showToast('Welcome to FALOU!');
+        screen.showToast('Welcome!');
 
-        Navigator.pop(context);
-        Navigator.pushNamed(context, Routes.USER_PROFILE);
+        Navigator.pop(context, true);
       }),
       SizedBox(
         height: 25,
