@@ -130,7 +130,7 @@ class Network {
       if (_config['auth_service'] != null) {
         final authService = _config['auth_service'] as AuthService;
         String token = authService.token;
-        if (token != 'None') {
+        if (token.length > 10) {
           request.headers.set('Authorization', 'Bearer $token');
         }
       }

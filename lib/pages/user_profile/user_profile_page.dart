@@ -75,7 +75,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
           pinned: false,
           snap: true,
           // expandedHeight: 30,
-          collapsedHeight: 240,
+          collapsedHeight: 230,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
               padding: EdgeInsets.symmetric(horizontal: 15),

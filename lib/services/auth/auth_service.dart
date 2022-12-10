@@ -2,6 +2,7 @@ import 'package:eng_mobile_app/utils/helpers.dart';
 import 'package:eng_mobile_app/data/models/user.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 User _fakeUser = User(
   id: -1,
@@ -121,8 +122,13 @@ class AuthService {
   Future<Response> signUp(SignUpPayload payload) async {
     try {
       final config = NetworkConfigWithJWBToken('None').config();
-      Response response =
-          await Network(config).post('/user/sign-up', data: payload.toMap());
+
+      final uuid = Uuid();
+      Response response = await Network(config).post('/user/sign-up', data: {
+        'uuid': uuid.v4(),
+        'email': payload.email,
+        'password': payload.password
+      });
 
       if (!response.ok) return response;
 
