@@ -95,7 +95,14 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
   Future toggleFavoriteCard(InfoCard card) async {
     bool isFavoriteFlag = !card.isFavorite!;
     card = card.copyWith(isFavorite: isFavoriteFlag);
-    final ids = await _libraryRepository.toggleCardFavorite(card);
+
+    List<int> ids = [];
+
+    if (isFavoriteFlag) {
+      ids = await _libraryRepository.addCardToFavorites(card);
+    } else {
+      ids = await _libraryRepository.removeCardFromFavorites(card);
+    }
 
     if (ids.isEmpty) return;
 
@@ -167,10 +174,19 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
     toggleAnimatedCardFavBtn();
   }
 
-  void toggleFavoriteVideo(ShortVideo video) {
+  void toggleFavoriteVideo(ShortVideo video) async {
     bool isFavoriteFlag = !video.isFavorite!;
     video = video.copyWith(isFavorite: isFavoriteFlag);
-    _libraryRepository.toggleVideoFavorite(video);
+
+    List<int> ids = [];
+
+    if (isFavoriteFlag) {
+      ids = await _libraryRepository.addVideoToFavorites(video);
+    } else {
+      ids = await _libraryRepository.removeVideoFromFavorites(video);
+    }
+
+    if (ids.isEmpty) return;
 
     List<ShortVideo> videos = state.videos;
 

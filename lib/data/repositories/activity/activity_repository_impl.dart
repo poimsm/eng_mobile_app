@@ -20,15 +20,15 @@ class ActivityRepositoryImpl implements ActivityRepository {
   @override
   Future<List<Activity>> getActivities() async {
     if (_authService.isAuthenticated) {
-      final resp = await _network.get('/daily-activities');
+      final resp = await _network.get('/activities/user/pack');
       if (!resp.ok) return [];
       return (resp.data as List).map((x) => Activity.fromJson(x)).toList();
     }
 
     final localSentences = await _localDB.getLocalSentences();
 
-    final resp = await _network.post('/daily-activities-limited',
-        data: {'local_sentences': localSentences});
+    final resp = await _network
+        .post('/activities/pack', data: {'local_sentences': localSentences});
     if (!resp.ok) return [];
     return (resp.data as List).map((x) => Activity.fromJson(x)).toList();
   }

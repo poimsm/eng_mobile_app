@@ -1,8 +1,5 @@
-import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/models/user.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
-import 'package:eng_mobile_app/data/repositories/user/enums.dart';
-import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
 import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,46 +16,6 @@ class UserRepositoryImpl implements UserRepository {
   final Network _network;
   final LocalDBService _localDB;
   final AuthService _authService;
-
-  @override
-  Future<List<Favorite>> getFavoriteResources() async {
-    if (_authService.isAuthenticated) {
-      final resp = await _network.get('/user/favorites');
-      if (!resp.ok) return [];
-      List<Favorite> favorites =
-          (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
-
-      return favorites;
-    }
-
-    final localSentences = await _localDB.getVideoAndCardSentencesOnly();
-    final localSentencesMap =
-        localSentences.map((local) => local.toJson()).toList();
-
-    final resp = await _network.post('/local-sentences-to-favorites',
-        data: {'local_sentences': localSentencesMap});
-
-    if (!resp.ok) return [];
-    return (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
-  }
-
-  @override
-  Future<FavoriteResponse?> getCardOrVideoByFavoriteId(int id) async {
-    final resp = await _network.get('/user/favorites?id=$id');
-    if (!resp.ok) return null;
-
-    FavoriteResponse favResp;
-
-    if (resp.data['type'] == SourceType.infoCard) {
-      favResp = FavoriteResponse(SourceType.infoCard,
-          card: InfoCard.fromJson(resp.data));
-    } else {
-      favResp = FavoriteResponse(SourceType.shortVideo,
-          video: ShortVideo.fromJson(resp.data));
-    }
-
-    return favResp;
-  }
 
   @override
   Future<User> getProfile() async {
@@ -86,6 +43,11 @@ class UserRepositoryImpl implements UserRepository {
       totalVideos: totalVideos,
       totalCards: totalCards,
     );
+  }
+
+  @override
+  Future<void> logout() async {
+    _authService.loginOut();
   }
 }
 

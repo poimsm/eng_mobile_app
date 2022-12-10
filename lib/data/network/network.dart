@@ -65,7 +65,9 @@ class Network {
 
   Future<Response> _builder(String path, HttpMethod method, bool absolutePath,
       Map<String, dynamic>? data) async {
-    final url = Uri.parse(absolutePath ? path : Config.API_URL + path);
+    final url = Uri.parse(absolutePath
+        ? path
+        : Config.API_URL + (path[0] == '/' ? path : '/$path'));
 
     printInfo(
         'REQUEST -->>> | ${method.toString().toUpperCase()} | $path | $data');

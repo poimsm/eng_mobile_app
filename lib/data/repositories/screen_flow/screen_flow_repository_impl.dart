@@ -17,11 +17,11 @@ class ScreenFlowRepositoryImpl implements ScreenFlowRepository {
   Future<void> addType(String type) async {
     final uuid = Uuid();
     if (_authService.isAuthenticated && _authService.user.screenFlow) {
-      _network
-          .post('user/screen-flow', data: {'type': type, 'uuid': uuid.v4()});
+      _network.post('flow/user/screen-flow',
+          data: {'type': type, 'uuid': uuid.v4()});
     } else {
       _network
-          .post('screen-flow-limited', data: {'type': type, 'uuid': uuid.v4()});
+          .post('flow/screen-flow', data: {'type': type, 'uuid': uuid.v4()});
     }
   }
 }

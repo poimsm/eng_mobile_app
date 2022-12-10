@@ -22,7 +22,7 @@ class SentenceRepositoryImpl implements SentenceRepository {
   Future<List<Sentence>> getSentences() async {
     try {
       if (_authService.isAuthenticated) {
-        final resp = await _network.get('/sentence/?page=1');
+        final resp = await _network.get('user/sentence/?page=1');
         if (!resp.ok) return [];
 
         return (resp.data['data'] as List)
@@ -37,7 +37,7 @@ class SentenceRepositoryImpl implements SentenceRepository {
         localSentencesMap.add(lw.toJson());
       }
 
-      final resp = await _network.post('/local-sentences-to-sentences',
+      final resp = await _network.post('/local-sentence/convert-to-sentence',
           data: {'local_sentences': localSentencesMap});
       if (!resp.ok) return [];
       return (resp.data as List).map((x) => Sentence.fromJson(x)).toList();
@@ -50,7 +50,8 @@ class SentenceRepositoryImpl implements SentenceRepository {
   @override
   Future<Sentence?> createSentence(Sentence sentence) async {
     if (_authService.isAuthenticated) {
-      final resp = await _network.post('/sentence/', data: sentence.toJson());
+      final resp =
+          await _network.post('user/sentence/', data: sentence.toJson());
       if (!resp.ok) return null;
       return Sentence.fromJson(resp.data);
     }
@@ -63,7 +64,7 @@ class SentenceRepositoryImpl implements SentenceRepository {
   @override
   Future<Sentence?> updateSentence(Map payload) async {
     if (_authService.isAuthenticated) {
-      final resp = await _network.put('/sentence/', data: payload);
+      final resp = await _network.put('user/sentence/', data: payload);
       if (!resp.ok) return null;
       return Sentence.fromJson(resp.data);
     }
@@ -78,7 +79,7 @@ class SentenceRepositoryImpl implements SentenceRepository {
   @override
   Future<bool> deleteSentence(int id) async {
     if (_authService.isAuthenticated) {
-      await _network.delete('/sentence/', data: {'id': id});
+      await _network.delete('user/sentence/', data: {'id': id});
       return true;
     }
     await _localDatabase.deleteLocalSentenceById(id);
@@ -89,8 +90,8 @@ class SentenceRepositoryImpl implements SentenceRepository {
   Future<void> migrateLocalSentencesToUser() async {
     final localSentences = await _localDatabase.getLocalSentences(desc: false);
 
-    await _network.post('/save-local-sentences',
-        data: {'local_sentences': localSentences});
+    await _network
+        .post('local-sentence/save', data: {'local_sentences': localSentences});
 
     _localDatabase.deleteAllLocalSentences();
   }

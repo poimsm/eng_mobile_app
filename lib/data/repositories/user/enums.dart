@@ -4,10 +4,10 @@ import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
 class FavoriteResponse {
   ShortVideo? shortVideo;
   InfoCard? infoCard;
-  int type;
+  int sourceType;
 
-  FavoriteResponse(this.type, {InfoCard? card, ShortVideo? video}) {
-    if (type == SourceType.shortVideo) {
+  FavoriteResponse(this.sourceType, {InfoCard? card, ShortVideo? video}) {
+    if (sourceType == SourceType.shortVideo) {
       shortVideo = video;
     } else {
       infoCard = card;

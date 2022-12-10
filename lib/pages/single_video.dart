@@ -18,7 +18,7 @@ class SingleVideo extends ConsumerStatefulWidget {
   final bool enableFavoriteBtn;
   final ShortVideo video;
   final VoidCallback? onToggleFavorite;
-  final Function(bool) onBack;
+  final void Function(bool) onBack;
 
   @override
   SingleVideoState createState() => SingleVideoState();
