@@ -42,6 +42,8 @@ class Favorite with _$Favorite {
     required int id,
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'source_type') required int sourceType,
+    @JsonKey(name: 'info_card') int? infoCard,
+    @JsonKey(name: 'short_video') int? shortVideo,
   }) = _Favorite;
 
   factory Favorite.fromJson(Map<String, Object?> json) =>

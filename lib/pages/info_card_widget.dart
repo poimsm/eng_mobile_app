@@ -32,7 +32,7 @@ class InfoCardState extends ConsumerState<InfoCardWidget> {
 
   void toggleAnimatedCardSpeakBtn() async {
     setState(() => animateCardSpeakBtn = true);
-    await sleep(80);
+    await sleep(100);
     setState(() => animateCardSpeakBtn = false);
   }
 
@@ -57,7 +57,7 @@ class InfoCardState extends ConsumerState<InfoCardWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset('assets/dev/card06.png', width: size.width * 0.8),
+              Image.network(widget.card.imageUrl, width: size.width * 0.8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -98,6 +98,10 @@ class InfoCardState extends ConsumerState<InfoCardWidget> {
 
   _speakBtn(String url) {
     return InkWell(
+      splashColor: Colors.transparent,
+      customBorder: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
       onTap: () {
         if (blocker) return;
         toggleAnimatedCardSpeakBtn();
@@ -116,7 +120,7 @@ class InfoCardState extends ConsumerState<InfoCardWidget> {
             borderRadius: BorderRadius.circular(7),
           ),
           child: AnimatedContainer(
-              duration: const Duration(milliseconds: 30),
+              duration: const Duration(milliseconds: 60),
               curve: Curves.bounceInOut,
               child: Icon(LineIcons.volumeUp,
                   color: Colors.black87, size: animateCardSpeakBtn ? 26 : 33)),

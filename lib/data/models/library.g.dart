@@ -57,6 +57,8 @@ _$_Favorite _$$_FavoriteFromJson(Map<String, dynamic> json) => _$_Favorite(
       id: json['id'] as int,
       imageUrl: json['image_url'] as String,
       sourceType: json['source_type'] as int,
+      infoCard: json['info_card'] as int?,
+      shortVideo: json['short_video'] as int?,
     );
 
 Map<String, dynamic> _$$_FavoriteToJson(_$_Favorite instance) =>
@@ -64,4 +66,6 @@ Map<String, dynamic> _$$_FavoriteToJson(_$_Favorite instance) =>
       'id': instance.id,
       'image_url': instance.imageUrl,
       'source_type': instance.sourceType,
+      'info_card': instance.infoCard,
+      'short_video': instance.shortVideo,
     };

@@ -297,7 +297,7 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
           width: size.width * 0.85,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: BoxDecoration(
-              color: Color(0xffF1F1F1F1),
+              color: Color(0xffF0F0F0F0),
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
                   color: Colors.greenAccent.withOpacity(
@@ -494,7 +494,7 @@ class SentenceDetailPageState extends ConsumerState<SentenceDetailPage> {
     String exampleMeaning = '''
  Add a definition, an example sentence or any text that help you to remember! ✌️
 
-Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
+Example: Yeah, I'll give it a shot, it means to try to do
                 ''';
     return Column(
       children: [
@@ -527,7 +527,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
             margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
-                color: Color(0xffF1F1F1F1),
+                color: Color(0xffF0F0F0F0),
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
                     color: Colors.greenAccent.withOpacity(
@@ -535,7 +535,7 @@ Example: Yeah, I'll give it a shot, it means to try to do 🖍️🖍️
                     width: 2)),
             child: TextField(
               focusNode: _focusMeaning,
-              maxLines: 12,
+              maxLines: 10,
               // maxLength: 200,
               textCapitalization: TextCapitalization.sentences,
               style: TextStyle(fontSize: 20),

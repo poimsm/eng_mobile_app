@@ -1,7 +1,6 @@
 import 'package:eng_mobile_app/data/models/activity.dart';
 import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/network/network.dart';
-import 'package:eng_mobile_app/data/repositories/user/enums.dart';
 import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
 import 'package:eng_mobile_app/services/auth/auth_service.dart';
 import 'package:eng_mobile_app/services/local_db/local_db_service.dart';
@@ -80,7 +79,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
           final cardSentence = sentence.copyWith(
               infoCard: card, sourceType: SourceType.infoCard);
           final id = await _localDB
-              .createLocalSentence(convertSentenceToLocal(cardSentence));
+              .createLocalSentence(_convertSentenceToLocal(cardSentence));
           ids.add(id);
         }
       } else {
@@ -111,7 +110,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
           final cardSentence = sentence.copyWith(
               infoCard: card, sourceType: SourceType.infoCard);
           final id = await _localDB
-              .createLocalSentence(convertSentenceToLocal(cardSentence));
+              .createLocalSentence(_convertSentenceToLocal(cardSentence));
           ids.add(id);
         }
       } else {
@@ -142,7 +141,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
         final videoSentence = sentence.copyWith(
             shortVideo: video, sourceType: SourceType.shortVideo);
         final id = await _localDB
-            .createLocalSentence(convertSentenceToLocal(videoSentence));
+            .createLocalSentence(_convertSentenceToLocal(videoSentence));
         ids.add(id);
       }
     } else {
@@ -168,7 +167,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
         final videoSentence = sentence.copyWith(
             shortVideo: video, sourceType: SourceType.shortVideo);
         final id = await _localDB
-            .createLocalSentence(convertSentenceToLocal(videoSentence));
+            .createLocalSentence(_convertSentenceToLocal(videoSentence));
         ids.add(id);
       }
     } else {
@@ -177,7 +176,45 @@ class LibraryRepositoryImpl implements LibraryRepository {
     return ids;
   }
 
-  LocalSentence convertSentenceToLocal(Sentence sentence) {
+  @override
+  Future<List<Favorite>> getFavoriteResources() async {
+    if (_authService.isAuthenticated) {
+      final resp = await _network.get('/user/favorites');
+      if (!resp.ok) return [];
+      List<Favorite> favorites =
+          (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
+
+      return favorites;
+    }
+
+    final localSentences = await _localDB.getVideoAndCardSentencesOnly();
+    final localSentencesMap =
+        localSentences.map((local) => local.toJson()).toList();
+
+    if (localSentencesMap.isEmpty) return [];
+
+    final resp = await _network.post('/local-sentence/convert-to-favorite',
+        data: {'local_sentences': localSentencesMap});
+
+    if (!resp.ok) return [];
+    return (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
+  }
+
+  @override
+  Future<InfoCard?> getInfoCardById(int id) async {
+    final resp = await _network.get('/library/info-card?id=$id');
+    if (!resp.ok) return null;
+    return InfoCard.fromJson(resp.data);
+  }
+
+  @override
+  Future<ShortVideo?> getShortVideoById(int id) async {
+    final resp = await _network.get('/library/short-video?id=$id');
+    if (!resp.ok) return null;
+    return ShortVideo.fromJson(resp.data);
+  }
+
+  LocalSentence _convertSentenceToLocal(Sentence sentence) {
     LocalSentence localSentence = LocalSentence(
       id: sentence.id,
       sentence: sentence.sentence,
@@ -248,46 +285,6 @@ class LibraryRepositoryImpl implements LibraryRepository {
     }
 
     return result;
-  }
-
-  @override
-  Future<List<Favorite>> getFavoriteResources() async {
-    if (_authService.isAuthenticated) {
-      final resp = await _network.get('/user/favorites');
-      if (!resp.ok) return [];
-      List<Favorite> favorites =
-          (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
-
-      return favorites;
-    }
-
-    final localSentences = await _localDB.getVideoAndCardSentencesOnly();
-    final localSentencesMap =
-        localSentences.map((local) => local.toJson()).toList();
-
-    final resp = await _network.post('/local-sentence/convert-to-favorite',
-        data: {'local_sentences': localSentencesMap});
-
-    if (!resp.ok) return [];
-    return (resp.data as List).map((x) => Favorite.fromJson(x)).toList();
-  }
-
-  @override
-  Future<FavoriteResponse?> getCardOrVideoByFavoriteId(int id) async {
-    final resp = await _network.get('/user/favorites?id=$id');
-    if (!resp.ok) return null;
-
-    FavoriteResponse favResp;
-
-    if (resp.data['type'] == SourceType.infoCard) {
-      favResp = FavoriteResponse(SourceType.infoCard,
-          card: InfoCard.fromJson(resp.data['card']));
-    } else {
-      favResp = FavoriteResponse(SourceType.shortVideo,
-          video: ShortVideo.fromJson(resp.data['video']));
-    }
-
-    return favResp;
   }
 }
 

@@ -2,7 +2,6 @@ import 'package:eng_mobile_app/data/models/library.dart';
 import 'package:eng_mobile_app/data/models/user.dart';
 import 'package:eng_mobile_app/data/repositories/library/library_repository.dart';
 import 'package:eng_mobile_app/data/repositories/library/library_repository_impl.dart';
-import 'package:eng_mobile_app/data/repositories/user/enums.dart';
 import 'package:eng_mobile_app/data/repositories/user/user_repository.dart';
 import 'package:eng_mobile_app/data/repositories/user/user_repository_impl.dart';
 import 'package:eng_mobile_app/pages/sentence_list/enums.dart';
@@ -24,6 +23,7 @@ class UserProfileState {
     this.screen = Screens.userProfile,
     this.infoCard,
     this.shortVideo,
+    this.isAuthenticated = false,
   });
 
   User user;
@@ -32,6 +32,7 @@ class UserProfileState {
   Screens screen;
   InfoCard? infoCard;
   ShortVideo? shortVideo;
+  bool isAuthenticated;
 
   UserProfileState copyWith({
     user,
@@ -40,6 +41,7 @@ class UserProfileState {
     screen,
     infoCard,
     shortVideo,
+    isAuthenticated,
   }) {
     return UserProfileState(
       user: user ?? this.user,
@@ -48,6 +50,7 @@ class UserProfileState {
       screen: screen ?? this.screen,
       infoCard: infoCard ?? this.infoCard,
       shortVideo: shortVideo ?? this.shortVideo,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
     );
   }
 }
@@ -63,20 +66,27 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
     final stats = await _userRepository.getStats();
     final user = await _userRepository.getProfile();
     final favorites = await _libraryRepository.getFavoriteResources();
-    state = state.copyWith(user: user, favorites: favorites, stats: stats);
+    bool isAuth = _userRepository.isAuthenticated();
+    state = state.copyWith(
+        user: user,
+        favorites: favorites,
+        stats: stats,
+        isAuthenticated: isAuth);
     return true;
   }
 
   Future<void> openContent(Favorite favorite) async {
-    final resp =
-        await _libraryRepository.getCardOrVideoByFavoriteId(favorite.id);
-    if (resp == null) return;
-    if (resp.sourceType == SourceType.infoCard) {
-      state = state.copyWith(infoCard: resp.infoCard, screen: Screens.infoCard);
+    if (favorite.sourceType == SourceType.infoCard) {
+      final card = await _libraryRepository.getInfoCardById(favorite.infoCard!);
+      if (card == null) return;
+      state = state.copyWith(infoCard: card, screen: Screens.infoCard);
       return;
     }
-    state =
-        state.copyWith(shortVideo: resp.infoCard, screen: Screens.shortVideo);
+
+    final video =
+        await _libraryRepository.getShortVideoById(favorite.shortVideo!);
+    if (video == null) return;
+    state = state.copyWith(shortVideo: video, screen: Screens.shortVideo);
     return;
   }
 
@@ -84,13 +94,9 @@ class UserProfileNotifier extends StateNotifier<UserProfileState> {
     state = state.copyWith(screen: val);
   }
 
-  Future<FavoriteResponse?> getContentById(int id) async {
-    final resp = await _libraryRepository.getCardOrVideoByFavoriteId(id);
-    return resp;
-  }
-
   void logout() async {
     _userRepository.logout();
+    state = state.copyWith(isAuthenticated: false);
   }
 
   void screenFlow() async {

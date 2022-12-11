@@ -49,6 +49,11 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> logout() async {
     _authService.loginOut();
   }
+
+  @override
+  bool isAuthenticated() {
+    return _authService.isAuthenticated;
+  }
 }
 
 /// Provider used by rest of the app

@@ -73,7 +73,9 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
       widget = SingleVideo(
           enableFavoriteBtn: false,
           video: userProfileState.shortVideo!,
-          onBack: (_) {});
+          onBack: (_) {
+            userProfileNotifier.setScreen(Screens.userProfile);
+          });
     }
 
     return SafeArea(child: widget);
@@ -108,7 +110,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 70,
+                      height: userProfileState.isAuthenticated ? 70 : 60,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 30),
@@ -119,7 +121,6 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                           InkWell(
                             onTap: (() {
                               userProfileNotifier.getPageData();
-                              // userProfileNotifier.getContentById(1);
                             }),
                             child: Image.asset(
                               'assets/user_17.png',
@@ -134,7 +135,6 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                             children: [
                               Text(
                                 userProfileState.user.email,
-                                // 'poimsm@gmail.com',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -196,14 +196,14 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                 )
               : SliverPadding(
                   padding:
-                      EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 10),
+                      EdgeInsets.only(top: 20, left: 12, right: 12, bottom: 10),
                   sliver: SliverGrid(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.8,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      childAspectRatio: 0.9,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -346,6 +346,67 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
         builder: (context) {
+          Widget logout = InkWell(
+            onTap: () {
+              userProfileNotifier.logout();
+              Navigator.pop(context, true);
+            },
+            child: SizedBox(
+              width: 150,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    LineIcons.powerOff,
+                    size: 25,
+                    color: Colors.black87,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Log out',
+                    style: TextStyle(color: Colors.black87, fontSize: 19),
+                  ),
+                ],
+              ),
+            ),
+          );
+
+          Widget signUp = InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+              final refresh = await showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: true,
+                  builder: (_) => LoginPopup());
+
+              if (refresh != null && refresh) {
+                await fetchInitData();
+              }
+            },
+            child: SizedBox(
+              width: 150,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    LineIcons.user,
+                    size: 25,
+                    color: Colors.black87,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Sign up',
+                    style: TextStyle(color: Colors.black87, fontSize: 19),
+                  ),
+                ],
+              ),
+            ),
+          );
           return Container(
               width: size.width,
               height: 130,
@@ -356,32 +417,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                       topLeft: Radius.circular(13),
                       topRight: Radius.circular(13))),
               alignment: Alignment.centerLeft,
-              child: InkWell(
-                onTap: () {
-                  userProfileNotifier.logout();
-                  Navigator.pop(context, true);
-                },
-                child: SizedBox(
-                  width: 150,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        LineIcons.powerOff,
-                        size: 25,
-                        color: Colors.black87,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Log out',
-                        style: TextStyle(color: Colors.black87, fontSize: 19),
-                      ),
-                    ],
-                  ),
-                ),
-              ));
+              child: userProfileState.isAuthenticated ? logout : signUp);
         });
   }
 }

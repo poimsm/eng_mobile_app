@@ -558,6 +558,10 @@ mixin _$Favorite {
   String get imageUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'source_type')
   int get sourceType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'info_card')
+  int? get infoCard => throw _privateConstructorUsedError;
+  @JsonKey(name: 'short_video')
+  int? get shortVideo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -573,7 +577,9 @@ abstract class $FavoriteCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'image_url') String imageUrl,
-      @JsonKey(name: 'source_type') int sourceType});
+      @JsonKey(name: 'source_type') int sourceType,
+      @JsonKey(name: 'info_card') int? infoCard,
+      @JsonKey(name: 'short_video') int? shortVideo});
 }
 
 /// @nodoc
@@ -592,6 +598,8 @@ class _$FavoriteCopyWithImpl<$Res, $Val extends Favorite>
     Object? id = null,
     Object? imageUrl = null,
     Object? sourceType = null,
+    Object? infoCard = freezed,
+    Object? shortVideo = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -606,6 +614,14 @@ class _$FavoriteCopyWithImpl<$Res, $Val extends Favorite>
           ? _value.sourceType
           : sourceType // ignore: cast_nullable_to_non_nullable
               as int,
+      infoCard: freezed == infoCard
+          ? _value.infoCard
+          : infoCard // ignore: cast_nullable_to_non_nullable
+              as int?,
+      shortVideo: freezed == shortVideo
+          ? _value.shortVideo
+          : shortVideo // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -620,7 +636,9 @@ abstract class _$$_FavoriteCopyWith<$Res> implements $FavoriteCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'image_url') String imageUrl,
-      @JsonKey(name: 'source_type') int sourceType});
+      @JsonKey(name: 'source_type') int sourceType,
+      @JsonKey(name: 'info_card') int? infoCard,
+      @JsonKey(name: 'short_video') int? shortVideo});
 }
 
 /// @nodoc
@@ -637,6 +655,8 @@ class __$$_FavoriteCopyWithImpl<$Res>
     Object? id = null,
     Object? imageUrl = null,
     Object? sourceType = null,
+    Object? infoCard = freezed,
+    Object? shortVideo = freezed,
   }) {
     return _then(_$_Favorite(
       id: null == id
@@ -651,6 +671,14 @@ class __$$_FavoriteCopyWithImpl<$Res>
           ? _value.sourceType
           : sourceType // ignore: cast_nullable_to_non_nullable
               as int,
+      infoCard: freezed == infoCard
+          ? _value.infoCard
+          : infoCard // ignore: cast_nullable_to_non_nullable
+              as int?,
+      shortVideo: freezed == shortVideo
+          ? _value.shortVideo
+          : shortVideo // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -661,7 +689,9 @@ class _$_Favorite implements _Favorite {
   const _$_Favorite(
       {required this.id,
       @JsonKey(name: 'image_url') required this.imageUrl,
-      @JsonKey(name: 'source_type') required this.sourceType});
+      @JsonKey(name: 'source_type') required this.sourceType,
+      @JsonKey(name: 'info_card') this.infoCard,
+      @JsonKey(name: 'short_video') this.shortVideo});
 
   factory _$_Favorite.fromJson(Map<String, dynamic> json) =>
       _$$_FavoriteFromJson(json);
@@ -674,10 +704,16 @@ class _$_Favorite implements _Favorite {
   @override
   @JsonKey(name: 'source_type')
   final int sourceType;
+  @override
+  @JsonKey(name: 'info_card')
+  final int? infoCard;
+  @override
+  @JsonKey(name: 'short_video')
+  final int? shortVideo;
 
   @override
   String toString() {
-    return 'Favorite(id: $id, imageUrl: $imageUrl, sourceType: $sourceType)';
+    return 'Favorite(id: $id, imageUrl: $imageUrl, sourceType: $sourceType, infoCard: $infoCard, shortVideo: $shortVideo)';
   }
 
   @override
@@ -689,12 +725,17 @@ class _$_Favorite implements _Favorite {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.sourceType, sourceType) ||
-                other.sourceType == sourceType));
+                other.sourceType == sourceType) &&
+            (identical(other.infoCard, infoCard) ||
+                other.infoCard == infoCard) &&
+            (identical(other.shortVideo, shortVideo) ||
+                other.shortVideo == shortVideo));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, imageUrl, sourceType);
+  int get hashCode =>
+      Object.hash(runtimeType, id, imageUrl, sourceType, infoCard, shortVideo);
 
   @JsonKey(ignore: true)
   @override
@@ -712,10 +753,11 @@ class _$_Favorite implements _Favorite {
 
 abstract class _Favorite implements Favorite {
   const factory _Favorite(
-          {required final int id,
-          @JsonKey(name: 'image_url') required final String imageUrl,
-          @JsonKey(name: 'source_type') required final int sourceType}) =
-      _$_Favorite;
+      {required final int id,
+      @JsonKey(name: 'image_url') required final String imageUrl,
+      @JsonKey(name: 'source_type') required final int sourceType,
+      @JsonKey(name: 'info_card') final int? infoCard,
+      @JsonKey(name: 'short_video') final int? shortVideo}) = _$_Favorite;
 
   factory _Favorite.fromJson(Map<String, dynamic> json) = _$_Favorite.fromJson;
 
@@ -727,6 +769,12 @@ abstract class _Favorite implements Favorite {
   @override
   @JsonKey(name: 'source_type')
   int get sourceType;
+  @override
+  @JsonKey(name: 'info_card')
+  int? get infoCard;
+  @override
+  @JsonKey(name: 'short_video')
+  int? get shortVideo;
   @override
   @JsonKey(ignore: true)
   _$$_FavoriteCopyWith<_$_Favorite> get copyWith =>

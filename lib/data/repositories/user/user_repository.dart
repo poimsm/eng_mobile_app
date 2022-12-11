@@ -4,4 +4,5 @@ abstract class UserRepository {
   Future<User> getProfile();
   Future<UserStats> getStats();
   Future<void> logout();
+  bool isAuthenticated();
 }
